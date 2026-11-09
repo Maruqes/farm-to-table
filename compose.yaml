@@ -1,0 +1,67 @@
+# Production-like stack. For hot reload add: -f compose.dev.yaml (see Makefile).
+# Web :8080 (nginx also proxies /api, /api-docs, /socket.io to api) · API :3000 · Backoffice :8081
+services:
+  web:
+    build: { context: ./apps/web, target: prod }
+    ports: ["8080:80"]
+    depends_on: [api]
+
+  api:
+    build: { context: ./apps/api, target: prod }
+    ports: ["3000:3000"]
+    environment:
+      MONGO_URL: mongodb://mongo:27017/farm_to_table
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      S3_ENDPOINT: http://silo:9000
+      S3_BUCKET: ${S3_BUCKET:-farm-to-table}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY in .env}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY in .env}
+    depends_on: [mongo, silo-init]
+
+  backoffice:
+    # network: host works around GitHub downloads timing out on the default build network on some hosts.
+    build: { context: ./apps/backoffice, network: host }
+    ports: ["8081:8000"]
+    environment:
+      APP_KEY: ${BACKOFFICE_APP_KEY:?set BACKOFFICE_APP_KEY in .env}
+      DB_CONNECTION: mongodb
+      MONGODB_URI: mongodb://mongo:27017
+      MONGODB_DATABASE: farm_to_table
+      SESSION_DRIVER: file
+      CACHE_STORE: file
+      QUEUE_CONNECTION: sync
+    depends_on: [mongo]
+
+  mongo:
+    image: mongo:8
+    volumes: [mongo_data:/data/db]
+
+  # Silo = MinIO-compatible S3 storage (pgsty/silo). Console :9001, S3 API :9000. Pin a release for real deployments.
+  silo:
+    image: pgsty/silo:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY in .env}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:?set S3_SECRET_KEY in .env}
+    volumes: [silo_data:/data]
+    healthcheck:
+      test: ["CMD", "mcli", "ready", "local"]
+      interval: 5s
+      retries: 12
+
+  # One-shot: creates the bucket (idempotent) once silo is healthy.
+  silo-init:
+    image: pgsty/silo:latest
+    depends_on:
+      silo: { condition: service_healthy }
+    restart: "no"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - mcli alias set s http://silo:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD" && mcli mb --ignore-existing s/${S3_BUCKET:-farm-to-table}
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY}
+
+volumes:
+  mongo_data:
+  silo_data:

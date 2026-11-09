@@ -1,0 +1,16 @@
+# Dev override: hot reload, source mounted, Mongo reachable from the host. Web on :5173.
+services:
+  web:
+    build: { context: ./apps/web, target: dev }
+    volumes: ["./apps/web:/app", "/app/node_modules"]
+    environment: { API_TARGET: "http://api:3000" }
+    ports: ["5173:5173"]
+  api:
+    build: { context: ./apps/api, target: dev }
+    volumes: ["./apps/api:/app", "/app/node_modules"]
+  backoffice:
+    volumes: ["./apps/backoffice:/app", "/app/vendor"]
+  mongo:
+    ports: ["27017:27017"]
+  silo:
+    ports: ["9000:9000", "9001:9001"]

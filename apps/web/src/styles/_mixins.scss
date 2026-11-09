@@ -1,0 +1,8 @@
+// Mobile first: breakpoints 768 / 1024 / 1280 via min-width.
+$breakpoints: (md: 768px, lg: 1024px, xl: 1280px);
+
+@mixin up($name) {
+  @media (min-width: map-get($breakpoints, $name)) {
+    @content;
+  }
+}

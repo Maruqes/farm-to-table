@@ -1,7 +1,7 @@
 ---
 id: FE-13
 title: Producer product manager
-status: review
+status: done
 depends_on: [FE-12]
 route: /producer/products
 roles: [producer]

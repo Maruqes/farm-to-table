@@ -1,7 +1,7 @@
 ---
 id: CT-16
 title: API contract — producer reviews
-status: review
+status: done
 depends_on: [FE-16]
 source: [FE-16, SCOPE.md §0 ratings]
 consumers: [apps/web/src/features/producer/producer-reviews/producer-reviews.http.ts, apps/web/src/features/producer/producer-reviews/producer-reviews.dto.ts]

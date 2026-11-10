@@ -1,7 +1,7 @@
 ---
 id: FE-16
 title: Reviews received
-status: review
+status: done
 depends_on: [FE-08]
 route: /producer/reviews
 roles: [producer]

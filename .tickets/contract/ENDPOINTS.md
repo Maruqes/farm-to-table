@@ -16,7 +16,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 ## Products
 - [x] GET /api/products — FE-03 — CT-03
 - [x] GET /api/products/:id — FE-04 — CT-04
-- [x] GET /api/products?producer=me — FE-13 — CT-13
+- [x] GET /api/products?producer=me — FE-13, FE-15 — CT-13
 - [x] POST /api/products — FE-13 — CT-13
 - [x] PUT /api/products/:id — FE-13 — CT-13
 - [x] DELETE /api/products/:id — FE-13 — CT-13
@@ -47,6 +47,11 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] GET /api/auctions?status=active — FE-03 — CT-03
 - [x] GET /api/auctions/:id — FE-11 — CT-11
 - [x] POST /api/auctions/:id/bids — FE-11 — CT-11
+- [x] GET /api/auctions?producer=me — FE-15 — CT-15
+- [x] POST /api/auctions — FE-15 — CT-15
+- [x] PUT /api/auctions/:id — FE-15 — CT-15
+- [x] POST /api/auctions/:id/publish — FE-15 — CT-15
+- [x] POST /api/auctions/:id/cancel — FE-15 — CT-15
 
 ## Realtime events (CT-00)
 - [x] order-updated — FE-08, FE-14 — CT-00, CT-08, CT-14

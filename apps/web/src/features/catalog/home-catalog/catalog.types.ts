@@ -34,6 +34,7 @@ export interface LiveAuction {
   id: string
   productId: string
   productName: string
+  category: string
   currentPrice: number
   endsAt: string
 }

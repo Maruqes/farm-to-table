@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { Clock, Gavel } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { CategoryIcon } from './CategoryIcon'
 import { formatMoney } from '@/services/format'
 import type { LiveAuction } from '../catalog.types'
 import { useNow } from '../useNow'
+import { useLiveAuctions } from '../useLiveAuctions'
 
 function remainingLabel(endsAt: string, now: number): string {
   const end = new Date(endsAt).getTime()
@@ -20,46 +20,54 @@ function remainingLabel(endsAt: string, now: number): string {
   return `${minutes}m ${String(seconds).padStart(2, '0')}s left`
 }
 
-export function LiveAuctionsStrip({ auctions }: { auctions: LiveAuction[] }) {
+function AuctionChip({ auction, now, hidden }: { auction: LiveAuction; now: number; hidden?: boolean }) {
+  return (
+    <li className="shrink-0" aria-hidden={hidden || undefined}>
+      <Link
+        to={`/auctions/${auction.id}`}
+        tabIndex={hidden ? -1 : undefined}
+        className="flex items-center gap-2 rounded-full border bg-card py-1 pr-3 pl-1 text-sm transition-colors hover:border-live"
+      >
+        <span className="grid size-6 place-items-center rounded-full bg-live text-live-foreground">
+          <CategoryIcon category={auction.category} className="size-3.5 text-current" />
+        </span>
+        <span className="max-w-40 truncate font-medium">{auction.productName}</span>
+        <data value={auction.currentPrice} className="tabular font-semibold">
+          {formatMoney(auction.currentPrice)}
+        </data>
+        <time dateTime={auction.endsAt} className="tabular text-xs text-muted-foreground">
+          {remainingLabel(auction.endsAt, now)}
+        </time>
+      </Link>
+    </li>
+  )
+}
+
+// Fixed ticker at the bottom of every page (mounted by AppShell).
+export function LiveAuctionsBar() {
+  const auctions = useLiveAuctions(10)
   const now = useNow()
 
   if (auctions.length === 0) return null
 
-  return (
-    <section aria-labelledby="live-auctions-title">
-      <div className="flex items-center gap-2">
-        <Gavel className="size-5 text-live" aria-hidden="true" />
-        <h2 id="live-auctions-title" className="text-2xl font-semibold md:text-3xl">
-          Live auctions
-        </h2>
-      </div>
-      <p className="mt-1 text-sm text-muted-foreground">Bidding is open now — join before the clock runs out.</p>
+  // Repeat short lists so one copy is wider than the screen; the loop scrolls exactly one copy.
+  const copy = Array.from({ length: Math.ceil(8 / auctions.length) }, () => auctions).flat()
 
-      <ul className="mt-4 grid list-none gap-3 p-0 md:grid-cols-2 lg:grid-cols-3">
-        {auctions.map((auction) => (
-          <li key={auction.id}>
-            <Link
-              to={`/auctions/${auction.id}`}
-              className="flex h-full flex-col gap-2 rounded-xl border bg-card p-4 transition-colors hover:bg-accent"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <Badge className="bg-live text-live-foreground">Live</Badge>
-                <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Clock className="size-3.5" aria-hidden="true" />
-                  <time dateTime={auction.endsAt}>{remainingLabel(auction.endsAt, now)}</time>
-                </span>
-              </div>
-              <p className="font-medium leading-snug">{auction.productName}</p>
-              <div className="mt-auto flex items-baseline justify-between gap-2 pt-1">
-                <span className="text-sm text-muted-foreground">Current bid</span>
-                <data value={auction.currentPrice} className="tabular font-semibold">
-                  {formatMoney(auction.currentPrice)}
-                </data>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+  return (
+    <section
+      aria-label="Live auctions"
+      className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t bg-background py-1.5"
+    >
+      <div className="marquee min-w-0 flex-1 overflow-hidden">
+        <ul className="marquee-track flex w-max list-none gap-2 p-0">
+          {copy.map((auction, i) => (
+            <AuctionChip key={`a${i}`} auction={auction} now={now} hidden={i >= auctions.length} />
+          ))}
+          {copy.map((auction, i) => (
+            <AuctionChip key={`b${i}`} auction={auction} now={now} hidden />
+          ))}
+        </ul>
+      </div>
     </section>
   )
 }

@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom'
 import { LogOut, Sprout } from 'lucide-react'
+import { ThemeToggle } from './ThemeToggle'
 import { useSession, type Role } from '@/context/session'
 import { ROLE_LABELS } from '@/context/roles'
 import { Button } from '@/components/ui/button'
@@ -35,7 +36,7 @@ const ROLE_LINKS: Record<Role, NavItem[]> = {
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
   return cn(
-    'relative inline-flex min-h-10 items-center px-3 text-sm font-medium transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:transition-colors',
+    'relative inline-flex min-h-10 items-center px-3 text-sm font-medium transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:transition-colors',
     isActive ? 'text-foreground after:bg-primary' : 'text-muted-foreground after:bg-transparent hover:text-foreground',
   )
 }
@@ -48,8 +49,10 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b bg-background">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-wrap items-center gap-3 py-3">
-          <Link to="/" className="flex items-center gap-2 rounded-md font-display text-lg font-semibold tracking-tight">
-            <Sprout className="size-5 text-primary" aria-hidden="true" />
+          <Link to="/" className="flex items-center gap-2.5 rounded-md font-display text-xl font-extrabold tracking-tight">
+            <span className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground">
+              <Sprout className="size-4.5" aria-hidden="true" />
+            </span>
             Farm to Table
           </Link>
 
@@ -58,6 +61,7 @@ export function SiteHeader() {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle />
             {isAuthenticated && user ? (
               <>
                 <span className="hidden text-sm text-muted-foreground md:inline">

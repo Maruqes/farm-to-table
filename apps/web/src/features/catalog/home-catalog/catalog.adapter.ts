@@ -48,6 +48,7 @@ export function adaptLiveAuction(dto: AuctionSummaryDto | null | undefined): Liv
     id: asString(dto?.id || dto?._id),
     productId,
     productName,
+    category: typeof product === 'string' ? 'other' : asString(product?.category, 'other'),
     currentPrice: asNumber(dto?.currentPrice),
     endsAt: asString(dto?.endsAt),
   }

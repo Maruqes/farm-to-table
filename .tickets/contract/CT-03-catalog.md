@@ -23,7 +23,7 @@ ProductListItem = {
 }
 AuctionSummary = {
   id: string,
-  product: { id: string, name: string },
+  product: { id: string, name: string, category: string }, // category: same values as Product.category
   currentPrice: number,     // euros
   endsAt: string            // ISO 8601 UTC
 }

@@ -8,6 +8,11 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] POST /api/auth/login — FE-01 — CT-01
 - [x] POST /api/auth/register — FE-01 — CT-01
 
+## Users
+- [x] GET /api/users/me — FE-10 — CT-10
+- [x] PUT /api/users/me — FE-10 — CT-10
+- [x] PUT /api/users/me/card — FE-10 — CT-10
+
 ## Products
 - [x] GET /api/products — FE-03 — CT-03
 - [x] GET /api/products/:id — FE-04 — CT-04

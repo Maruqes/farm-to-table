@@ -1,7 +1,7 @@
 ---
 id: FE-10
 title: Profile and mock card
-status: todo
+status: done
 depends_on: [FE-01]
 route: /profile
 roles: [buyer, producer]
@@ -20,7 +20,7 @@ verify: cd apps/web && npm run lint && npm run build
 - `PUT /api/users/me/card` {number, holder, expiry, simulateInvalid} → 200; 400
 
 ## Done when
-- [ ] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
-- [ ] Route registered in `app/routes.tsx` with the right role guard
-- [ ] Usable at 375 / 768 / 1280 px and by keyboard
-- [ ] `verify` passes
+- [x] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
+- [x] Route registered in `app/routes.tsx` with the right role guard
+- [x] Usable at 375 / 768 / 1280 px and by keyboard
+- [x] `verify` passes

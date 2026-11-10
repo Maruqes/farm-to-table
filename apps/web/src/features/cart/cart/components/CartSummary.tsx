@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { formatMoney } from '@/services/format'
 
@@ -35,12 +36,9 @@ export function CartSummary({ total, producerCount, saving }: CartSummaryProps) 
         </data>
       </div>
 
-      <Button type="button" disabled className="mt-5 w-full" aria-describedby="checkout-note">
-        Checkout
+      <Button asChild className="mt-5 w-full">
+        <Link to="/checkout">Checkout</Link>
       </Button>
-      <p id="checkout-note" className="mt-2 text-xs text-muted-foreground">
-        Checkout arrives in the next step. Your cart is saved to this account.
-      </p>
 
       <p className="mt-3 text-xs text-muted-foreground">
         {producerCount === 1

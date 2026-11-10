@@ -5,6 +5,8 @@ import ProducerPublicPage from '@/pages/ProducerPublicPage'
 import AuthPage from '@/pages/AuthPage'
 import ProducerStatusPage from '@/pages/ProducerStatusPage'
 import CartPage from '@/pages/CartPage'
+import CheckoutPage from '@/pages/CheckoutPage'
+import MyOrdersPage from '@/pages/MyOrdersPage'
 import { AUTHENTICATED_ROLES } from '@/context/roles'
 import { RequireRole } from './RequireRole'
 import AccountPage from './AccountPage'
@@ -21,6 +23,8 @@ export function AppRoutes() {
       <Route path="/producer/status" element={<RequireRole roles={['producer']}><ProducerStatusPage /></RequireRole>} />
       <Route path="/account" element={<RequireRole roles={[...AUTHENTICATED_ROLES]}><AccountPage /></RequireRole>} />
       <Route path="/cart" element={<RequireRole roles={['buyer']}><CartPage /></RequireRole>} />
+      <Route path="/checkout" element={<RequireRole roles={['buyer']}><CheckoutPage /></RequireRole>} />
+      <Route path="/orders" element={<RequireRole roles={['buyer']}><MyOrdersPage /></RequireRole>} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )

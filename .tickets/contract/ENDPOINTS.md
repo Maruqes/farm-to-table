@@ -16,12 +16,19 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] GET /api/producers/:id — FE-05 — CT-05
 
 ## Cart
-- [x] GET /api/cart — FE-06 — CT-06
-- [x] PUT /api/cart — FE-06 — CT-06
+- [x] GET /api/cart — FE-06, FE-07 — CT-06
+- [x] PUT /api/cart — FE-06, FE-07 — CT-06
+
+## Orders
+- [x] POST /api/orders — FE-07 — CT-07
+- [x] GET /api/orders/mine — FE-08 — CT-08
+
+## Reviews
+- [x] POST /api/reviews — FE-08 — CT-08
 
 ## Auctions
 - [x] GET /api/auctions?status=active — FE-03 — CT-03
 
 ## Realtime events (CT-00)
-- [ ] order-updated — — CT-00
+- [x] order-updated — FE-08 — CT-00, CT-08
 - [ ] auction-updated — — CT-00

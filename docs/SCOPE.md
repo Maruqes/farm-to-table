@@ -1,4 +1,4 @@
-# Farm to Table ("Do Campo à Mesa") — Scoped Requirements & Tech Stack
+# Farm to Table — Scoped Requirements & Tech Stack
 
 Digital marketplace for local producers with real-time auctions. Individual university project (IPVC-ESTG, Web & Cloud Development, 7 weeks). This file is the distilled, decided scope: everything not listed here is **not built**.
 
@@ -34,14 +34,14 @@ A pending or rejected producer can log in but sees only a "waiting for approval"
 - **Catalog**: only products from **approved** producers, not hidden, with stock > 0, are listed as buyable. Search by name/ingredient/producer; filters by category, locality, season and organic; sort by nearest/price/rating (nearest only if cheap to do, otherwise cut).
 - **Cart**: one cart per logged-in buyer; may mix producers **(assumed)**. Checkout splits it into **one order per producer**, because each producer prepares and updates their own part **(assumed)**.
 - **Order**: buyer chooses **pickup** (at the farm) or **delivery** (address). Payment is on pickup/delivery; there is no online payment in the normal shop. Order lines keep a copy of name and price at purchase time, so later price changes do not alter old orders.
-- **Stock**: reduced when the order is placed; a product cannot be ordered above its stock. If the order is cancelled stock returns **(assumed; cancel by producer only while `pendente`)**.
-- **Order states**, in one direction only: `pendente → confirmada → pronta → entregue`. Only the owning producer changes the state; each change instantly notifies that buyer (live toast, and also visible next time they log in). The producer's own views (orders table, dashboard) also update live, including when the same producer has several tabs open (PDF slide 2: "comprador e produtor veem as mudanças de estado no momento").
-- **Ratings**: a buyer can rate a product/producer only for an order that reached `entregue`, once per order **(assumed)**. Anyone can read ratings. Producer or other users can **report** a review; the admin then **keeps** or **hides** it. Hidden reviews disappear from public pages and from the average.
+- **Stock**: reduced when the order is placed; a product cannot be ordered above its stock. If the order is cancelled stock returns **(assumed; cancel by producer only while `pending`)**.
+- **Order states**, in one direction only: `pending → confirmed → ready → delivered`. Only the owning producer changes the state; each change instantly notifies that buyer (live toast, and also visible next time they log in). The producer's own views (orders table, dashboard) also update live, including when the same producer has several tabs open (PDF slide 2: "buyer and producer see state changes as they happen").
+- **Ratings**: a buyer can rate a product/producer only for an order that reached `delivered`, once per order **(assumed)**. Anyone can read ratings. Producer or other users can **report** a review; the admin then **keeps** or **hides** it. Hidden reviews disappear from public pages and from the average.
 
 ### Rules of the auction
 
 - **Who can create**: approved producers, for their own product. Fields: product, lot quantity, base price, minimum increment, duration (15 min / 30 min / 1 h / custom), start time. It can be saved as a draft, then published.
-- **States**: `rascunho` (draft) → `agendado` (scheduled) → `ativo` (running) → `terminado` (ended).
+- **States**: `draft` → `scheduled` → `active` → `ended`.
 - **Who can bid**: only logged-in buyers, not the producer who owns the lot. Bid must be at least current price + increment. Quick buttons +5 / +10 / +25 € add to the current price.
 - **What everybody sees in the room**: current price and who leads (highest bidder name), countdown (same for all), number of people watching, history of bids updating live. A bid that arrives too late or too low is refused and only that bidder gets an error.
 - **Simultaneous bids**: the server accepts only one; the other is rejected, and everyone sees the same final state. The server is the single source of truth, not the browser.
@@ -89,18 +89,18 @@ Compose services: `web` (SPA static), `api` (Express + Socket.io), `mongo`, `bac
 ## 2. Roles and features (in scope)
 
 - **Visitor**: browse catalog (filter by category, producer, locality, season, organic; search by name/ingredient/producer); public producer page with Leaflet map, ratings and products; register as buyer or producer.
-- **Buyer**: cart and orders (pickup or delivery); follow order states `pendente → confirmada → pronta → entregue`; rate products and producers; bid in live auctions.
+- **Buyer**: cart and orders (pickup or delivery); follow order states `pending → confirmed → ready → delivered`; rate products and producers; bid in live auctions.
 - **Producer**: manage catalog (price, stock, photos, public page); update order status (buyer notified in real time); create and follow auctions; sales statistics.
-- **Admin**: approve/reject new producers; moderate reported reviews (keep/hide); **moderate content** (PDF slide 4 "avaliações e conteúdos"): hide or unhide any product or producer public page, which removes it from the public catalog without deleting it or editing its text; global dashboard of users, orders, live auctions.
-- **Admin service status panel** (PDF slide 12, adapted to our stack): one card per service with a status (`operacional` / `lento` / `em baixo`) and a short detail. Services: **API** (always up if it answers), **Socket.io** (number of connected sockets), **MongoDB** (ping + latency), **Image storage (Silo)** (reachability check on the bucket), **Swagger UI** (`/api-docs` responds). Served by `GET /api/admin/status` (admin only), each check with a short timeout; a check slower than ~1 s is `lento`, a failed or timed-out check is `em baixo`. The PDF's Azure/Atlas/Blob names are replaced by our own services.
+- **Admin**: approve/reject new producers; moderate reported reviews (keep/hide); **moderate content** (PDF slide 4 "reviews and content"): hide or unhide any product or producer public page, which removes it from the public catalog without deleting it or editing its text; global dashboard of users, orders, live auctions.
+- **Admin service status panel** (PDF slide 12, adapted to our stack): one card per service with a status (`operational` / `degraded` / `down`) and a short detail. Services: **API** (always up if it answers), **Socket.io** (number of connected sockets), **MongoDB** (ping + latency), **Image storage (Silo)** (reachability check on the bucket), **Swagger UI** (`/api-docs` responds). Served by `GET /api/admin/status` (admin only), each check with a short timeout; a check slower than ~1 s is `degraded`, a failed or timed-out check is `down`. The PDF's Azure/Atlas/Blob names are replaced by our own services.
 - **Dashboards with charts** (user decision): producer sales stats and admin overview use charts (sales over time, orders by state, etc.), not only counters. Low-stock alert list on the producer dashboard.
 
 ## 3. Auctions (core technical challenge)
 
 - Each auction = a Socket.io room `auction:<id>`; every user also joins `user:<id>`.
-- Server is the source of truth. A bid is validated with **one atomic `findOneAndUpdate`**: auction `ativo`, not past `terminaEm`, and `valor >= current + increment`. Only then is a `Bid` stored and the new state broadcast to the room. Losing racer gets a `recusada` event.
-- `currentBid.value` starts at the base price. Presence count updated on join and on `disconnecting`.
-- Server sends `terminaEm`; clients compute the countdown locally.
+- Server is the source of truth. A bid is validated with **one atomic `findOneAndUpdate`**: auction `active`, not past `endsAt`, and `amount >= currentPrice + increment`. Only then is a `Bid` stored and the new state broadcast to the room. Losing racer gets a `bid-rejected` event.
+- `currentBid.amount` starts at the base price. Presence count updated on join and on `disconnecting`.
+- Server sends `endsAt`; clients compute the countdown locally.
 - Producer creates an auction: product, lot quantity, base price, minimum increment, duration (15 min / 30 min / 1 h / **custom**), start time, and may save it as a **draft** (user decision).
 - Client hook `useAuction(id, token)`: joins on mount, disconnects on unmount, shows rejected-bid errors; quick bid buttons (+5 / +10 / +25 €) with validated minimum.
 - **Winner payment (mock, user addition)**: at close, the highest bidder is charged via a mock card form. Pass/fail is decided by a "simulate invalid card" checkbox or a simple card-number validity check (e.g. 4×4 digits / Luhn). On failure the bidder is skipped and the next-highest distinct bidder is charged, repeating down the bid list until one succeeds, otherwise the auction ends with no winner. The winning payment creates an order.
@@ -108,7 +108,7 @@ Compose services: `web` (SPA static), `api` (Express + Socket.io), `mongo`, `bac
 
 ## 4. Real-time notifications
 
-- When a producer `PATCH /api/orders/:id/estado`, the server emits `encomenda-atualizada` to the buyer's `user:<id>` room **and** to the producer's own `user:<id>` room.
+- When a producer `PATCH /api/orders/:id/status`, the server emits `order-updated` to the buyer's `user:<id>` room **and** to the producer's own `user:<id>` room.
 - Buyer sees the live toast and updated state without refresh; the producer's orders table and dashboard update without refresh too.
 
 ## 5. Data model (MongoDB)
@@ -123,8 +123,8 @@ Collections: `users`, `products`, `orders`, `auctions`, `bids`.
 
 ## 6. REST API (minimum)
 
-- `GET /api/products` (200, filters `q`, `categoria`, `precoMax`, `bio`), `POST` (201 + `Location`), `PUT` (200), `DELETE` (204).
-- Producers, orders (`POST /api/orders`, `PATCH /api/orders/:id/estado`), reviews, auctions, auth (`/registo`, `/login`).
+- `GET /api/products` (200, filters `q`, `category`, `maxPrice`, `organic`), `POST` (201 + `Location`), `PUT` (200), `DELETE` (204).
+- Producers, orders (`POST /api/orders`, `PATCH /api/orders/:id/status`), reviews, auctions, auth (`/register`, `/login`).
 - `GET /api/admin/status` (admin only): per-service status for the admin panel (§2).
 - Errors: 400 invalid data, 401, 403, 404.
 
@@ -136,8 +136,8 @@ From the PDF, removed as slop or mockup-only detail:
 - All PDF code samples as a source of truth (re-implement in TypeScript instead).
 - Follower notifications and "delivery to winner" surcharge on auctions.
 - Producer document upload for validation (admin just approves/rejects).
-- Distance from user ("32 km de si") and geocoding.
-- Marketing/pitch decor: hero copy, producer-count banners, category tags like "ÉPOCA/NOVO", pixel-level mockup fidelity.
+- Distance from user ("32 km from you") and geocoding.
+- Marketing/pitch decor: hero copy, producer-count banners, category tags like "SEASON/NEW", pixel-level mockup fidelity.
 - Real payments (only the mock card in §3; the normal cart checkout is pay on pickup/delivery).
 - Plagiarism/AI-usage rules, calendar and grading weights are course logistics, not product scope (the AI-use declaration still goes in the report).
 

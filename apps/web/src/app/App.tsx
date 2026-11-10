@@ -1,12 +1,18 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from '../pages/Home'
+import { BrowserRouter } from 'react-router-dom'
+import { AppShell } from '@/components/layout/AppShell'
+import { Toaster } from '@/components/ui/sonner'
+import { SessionProvider } from '@/context/SessionProvider'
+import { AppRoutes } from './routes'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <SessionProvider>
+        <AppShell>
+          <AppRoutes />
+        </AppShell>
+      </SessionProvider>
+      <Toaster />
     </BrowserRouter>
   )
 }

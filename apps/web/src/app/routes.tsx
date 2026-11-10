@@ -3,6 +3,7 @@ import HomePage from '@/pages/HomePage'
 import ProductDetailPage from '@/pages/ProductDetailPage'
 import ProducersPage from '@/pages/ProducersPage'
 import ProducerPublicPage from '@/pages/ProducerPublicPage'
+import AuctionsPage from '@/pages/AuctionsPage'
 import AuctionRoomPage from '@/pages/AuctionRoomPage'
 import AuthPage from '@/pages/AuthPage'
 import ProducerStatusPage from '@/pages/ProducerStatusPage'
@@ -36,6 +37,7 @@ export function AppRoutes() {
       <Route path="/products/:id" element={<ProductDetailPage />} />
       <Route path="/producers" element={<ProducersPage />} />
       <Route path="/producers/:id" element={<ProducerPublicPage />} />
+      <Route path="/auctions" element={<AuctionsPage />} />
       <Route path="/auctions/:id" element={<AuctionRoomPage />} />
       <Route path="/login" element={<AuthPage mode="login" />} />
       <Route path="/register" element={<AuthPage mode="register" />} />

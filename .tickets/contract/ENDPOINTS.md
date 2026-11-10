@@ -53,6 +53,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 
 ## Auctions
 - [x] GET /api/auctions?status=active — FE-03 — CT-03
+- [x] GET /api/auctions?status=active|scheduled|ended — FE-27 — CT-27
 - [x] GET /api/auctions/:id — FE-11 — CT-11
 - [x] POST /api/auctions/:id/bids — FE-11 — CT-11
 - [x] GET /api/auctions?producer=me — FE-15 — CT-15

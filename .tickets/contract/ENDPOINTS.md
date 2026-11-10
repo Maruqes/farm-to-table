@@ -69,6 +69,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] PATCH /api/admin/content/:type/:id — FE-21 — CT-21
 - [x] GET /api/admin/users?q&role&page — FE-22 — CT-22
 - [x] GET /api/admin/orders?status&page — FE-23 — CT-23
+- [x] GET /api/admin/auctions?status&page — FE-24 — CT-24
 
 ## Realtime events (CT-00)
 - [x] order-updated — FE-08, FE-14 — CT-00, CT-08, CT-14

@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 import { LogOut, Sprout } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
+import { Notifications } from '@/components/Notifications'
 import { useSession, type Role } from '@/context/session'
 import { ROLE_LABELS } from '@/context/roles'
 import { Button } from '@/components/ui/button'
@@ -62,6 +63,7 @@ export function SiteHeader() {
 
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
+            <Notifications />
             {isAuthenticated && user ? (
               <>
                 <span className="hidden text-sm text-muted-foreground md:inline">

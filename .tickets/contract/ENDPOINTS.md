@@ -37,8 +37,14 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 
 ## Auctions
 - [x] GET /api/auctions?status=active — FE-03 — CT-03
+- [x] GET /api/auctions/:id — FE-11 — CT-11
+- [x] POST /api/auctions/:id/bids — FE-11 — CT-11
 
 ## Realtime events (CT-00)
 - [x] order-updated — FE-08 — CT-00, CT-08
 - [ ] auction-updated — — CT-00
 - [x] notification — FE-09 — CT-09
+- [x] bid-placed — FE-11 — CT-11
+- [x] bid-rejected — FE-11 — CT-11
+- [x] viewers — FE-11 — CT-11
+- [x] auction-ended — FE-11 — CT-11

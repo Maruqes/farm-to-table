@@ -1,7 +1,7 @@
 ---
 id: FE-11
 title: Auction room
-status: todo
+status: review
 depends_on: [FE-01]
 route: /auctions/:id
 roles: [visitor, buyer]
@@ -23,7 +23,7 @@ verify: cd apps/web && npm run lint && npm run build
 - socket on `auction:<id>`: `bid-placed`, `bid-rejected` (to bidder), `viewers`, `auction-ended`
 
 ## Done when
-- [ ] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
-- [ ] Route registered in `app/routes.tsx` with the right role guard
-- [ ] Usable at 375 / 768 / 1280 px and by keyboard
-- [ ] `verify` passes
+- [x] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
+- [x] Route registered in `app/routes.tsx` with the right role guard
+- [x] Usable at 375 / 768 / 1280 px and by keyboard
+- [x] `verify` passes

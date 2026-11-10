@@ -9,6 +9,7 @@ Format: `- route — roles (guard) — FE ticket`
 - `/` — all (public) — FE-03
 - `/products/:id` — all (public) — FE-04
 - `/producers/:id` — all (public) — FE-05
+- `/auctions/:id` — all (public; visitors watch read-only) — FE-11
 - `/login` — visitor — FE-01
 - `/register` — visitor — FE-01
 - `/account` — any signed-in role (`RequireRole`) — FE-00

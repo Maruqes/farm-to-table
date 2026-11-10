@@ -7,6 +7,7 @@ import AuthPage from '@/pages/AuthPage'
 import ProducerStatusPage from '@/pages/ProducerStatusPage'
 import ProducerDashboardPage from '@/pages/ProducerDashboardPage'
 import ProducerProductsPage from '@/pages/ProducerProductsPage'
+import ProducerPageEditPage from '@/pages/ProducerPageEditPage'
 import ProducerOrdersPage from '@/pages/ProducerOrdersPage'
 import ProducerReviewsPage from '@/pages/ProducerReviewsPage'
 import ProducerAuctionsPage from '@/pages/ProducerAuctionsPage'
@@ -30,6 +31,7 @@ export function AppRoutes() {
       <Route path="/register" element={<AuthPage mode="register" />} />
       <Route path="/producer" element={<RequireRole roles={['producer']}><ProducerDashboardPage /></RequireRole>} />
       <Route path="/producer/products" element={<RequireRole roles={['producer']}><ProducerProductsPage /></RequireRole>} />
+      <Route path="/producer/page" element={<RequireRole roles={['producer']}><ProducerPageEditPage /></RequireRole>} />
       <Route path="/producer/orders" element={<RequireRole roles={['producer']}><ProducerOrdersPage /></RequireRole>} />
       <Route path="/producer/reviews" element={<RequireRole roles={['producer']}><ProducerReviewsPage /></RequireRole>} />
       <Route path="/producer/auctions" element={<RequireRole roles={['producer']}><ProducerAuctionsPage /></RequireRole>} />

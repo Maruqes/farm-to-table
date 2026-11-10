@@ -24,6 +24,8 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 
 ## Producers
 - [x] GET /api/producers/:id — FE-05 — CT-05
+- [x] GET /api/producers/me — FE-17 — CT-17
+- [x] PUT /api/producers/me — FE-17 — CT-17
 - [x] GET /api/producers/me/stats — FE-12 — CT-12
 
 ## Cart

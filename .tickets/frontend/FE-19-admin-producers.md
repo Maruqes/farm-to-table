@@ -1,7 +1,7 @@
 ---
 id: FE-19
 title: Producer approvals
-status: review
+status: done
 depends_on: [FE-01]
 route: /admin/producers
 roles: [admin]

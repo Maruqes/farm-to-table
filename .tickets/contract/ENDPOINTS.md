@@ -42,6 +42,9 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] POST /api/reviews — FE-08 — CT-08
 - [x] GET /api/reviews?producer=me — FE-16 — CT-16
 - [x] POST /api/reviews/:id/report — FE-16 — CT-16
+- [x] GET /api/admin/reviews?reported=true — FE-20 — CT-20
+- [x] POST /api/admin/reviews/:id/keep — FE-20 — CT-20
+- [x] POST /api/admin/reviews/:id/hide — FE-20 — CT-20
 
 ## Notifications
 - [x] GET /api/notifications — FE-09 — CT-09

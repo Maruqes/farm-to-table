@@ -1,7 +1,7 @@
 ---
 id: CT-19
 title: API contract — admin producer approvals
-status: review
+status: done
 depends_on: [FE-19]
 source: [FE-19, SCOPE.md §0]
 consumers: [apps/web/src/features/admin/admin-producers/admin-producers.http.ts]

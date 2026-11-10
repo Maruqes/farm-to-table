@@ -1,7 +1,7 @@
 ---
 id: FE-21
 title: Content moderation
-status: review
+status: done
 depends_on: [FE-01]
 route: /admin/moderation
 roles: [admin]

@@ -15,6 +15,7 @@ import AdminOverviewPage from '@/pages/AdminOverviewPage'
 import AdminProducersPage from '@/pages/AdminProducersPage'
 import AdminReviewsPage from '@/pages/AdminReviewsPage'
 import AdminModerationPage from '@/pages/AdminModerationPage'
+import AdminUsersPage from '@/pages/AdminUsersPage'
 import CartPage from '@/pages/CartPage'
 import CheckoutPage from '@/pages/CheckoutPage'
 import MyOrdersPage from '@/pages/MyOrdersPage'
@@ -44,6 +45,7 @@ export function AppRoutes() {
       <Route path="/admin/producers" element={<RequireRole roles={['admin']}><AdminProducersPage /></RequireRole>} />
       <Route path="/admin/reviews" element={<RequireRole roles={['admin']}><AdminReviewsPage /></RequireRole>} />
       <Route path="/admin/moderation" element={<RequireRole roles={['admin']}><AdminModerationPage /></RequireRole>} />
+      <Route path="/admin/users" element={<RequireRole roles={['admin']}><AdminUsersPage /></RequireRole>} />
       <Route path="/account" element={<RequireRole roles={[...AUTHENTICATED_ROLES]}><AccountPage /></RequireRole>} />
       <Route path="/cart" element={<RequireRole roles={['buyer']}><CartPage /></RequireRole>} />
       <Route path="/checkout" element={<RequireRole roles={['buyer']}><CheckoutPage /></RequireRole>} />

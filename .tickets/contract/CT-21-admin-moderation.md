@@ -1,7 +1,7 @@
 ---
 id: CT-21
 title: API contract — admin content moderation
-status: review
+status: done
 depends_on: [FE-21]
 source: [FE-21, SCOPE.md §2 moderate content]
 consumers: [apps/web/src/features/admin/admin-moderation/admin-moderation.http.ts]

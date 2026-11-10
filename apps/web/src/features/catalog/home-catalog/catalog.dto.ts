@@ -23,6 +23,7 @@ export interface AuctionProductDto {
   id?: string
   _id?: string
   name?: string
+  category?: string
 }
 
 export interface AuctionSummaryDto {

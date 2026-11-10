@@ -1,34 +1,26 @@
 import { Link } from 'react-router-dom'
-import { Apple, Carrot, Flower2, Milk, Star, Wheat, Wine } from 'lucide-react'
+import { Star } from 'lucide-react'
+import { CategoryIcon } from './CategoryIcon'
 import { formatMoney } from '@/services/format'
 import { categoryLabel } from '../catalog-options'
 import type { Product } from '../catalog.types'
 
-function CategoryIcon({ category }: { category: string }) {
-  const props = { className: 'size-10 text-primary/60', 'aria-hidden': true } as const
-  switch (category) {
-    case 'fruit':
-      return <Apple {...props} />
-    case 'honey':
-      return <Flower2 {...props} />
-    case 'wine':
-      return <Wine {...props} />
-    case 'cheese':
-      return <Milk {...props} />
-    case 'bakery':
-      return <Wheat {...props} />
-    default:
-      return <Carrot {...props} />
-  }
+const TILE: Record<string, string> = {
+  fruit: 'bg-tile-fruit',
+  honey: 'bg-tile-honey',
+  wine: 'bg-tile-wine',
+  cheese: 'bg-tile-cheese',
+  bakery: 'bg-tile-bakery',
 }
+
 
 export function ProductCard({ product }: { product: Product }) {
   const productHref = `/products/${product.id}`
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl border bg-card">
+    <article className="flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/30">
       <Link to={productHref} className="block">
-        <div className="aspect-[4/3] bg-secondary">
+        <div className={`aspect-[16/9] ${TILE[product.category] ?? 'bg-tile-veg'}`}>
           {product.imageUrl ? (
             <img
               src={product.imageUrl}
@@ -46,12 +38,12 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-base font-semibold leading-snug">
+          <h3 className="text-lg leading-snug">
             <Link to={productHref} className="hover:text-primary">
               {product.name}
             </Link>
           </h3>
-          <data value={product.price} className="tabular shrink-0 text-base font-semibold">
+          <data value={product.price} className="tabular shrink-0 font-display text-lg font-extrabold">
             {formatMoney(product.price)}
           </data>
         </div>

@@ -27,7 +27,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
         </p>
       </div>
 
-      <div className="mt-6 rounded-xl border bg-card p-5 sm:p-6">
+      <div className="mt-6 rounded-lg border bg-card p-5 sm:p-6">
         {isLogin ? <LoginForm /> : <RegisterForm />}
       </div>
 

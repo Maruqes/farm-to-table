@@ -6,7 +6,7 @@ import type { CatalogSort } from '../catalog.types'
 import type { CatalogFilterDraft } from '../useCatalogFilters'
 
 const selectClassName =
-  'h-10 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+  'h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
 
 interface CatalogFiltersProps {
   initial: CatalogFilterDraft
@@ -40,11 +40,11 @@ export function CatalogFilters({
     <form
       onSubmit={handleSubmit}
       aria-label="Catalog filters"
-      className="rounded-xl border bg-card p-4 md:p-5"
+      className="rounded-xl border bg-card p-3"
     >
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="md:col-span-2">
-          <label htmlFor="catalog-q" className="mb-1.5 block text-sm font-medium">
+      <div className="grid grid-cols-2 items-end gap-x-2 gap-y-2 md:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))_auto_auto]">
+        <div className="col-span-2 md:col-span-1">
+          <label htmlFor="catalog-q" className="mb-1 block text-xs font-medium text-muted-foreground">
             Search
           </label>
           <Input
@@ -55,12 +55,12 @@ export function CatalogFilters({
             onChange={(event) => update('q', event.target.value)}
             placeholder="Name, ingredient or producer"
             autoComplete="off"
-            className="h-10"
+            className="h-9"
           />
         </div>
 
         <div>
-          <label htmlFor="catalog-location" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="catalog-location" className="mb-1 block text-xs font-medium text-muted-foreground">
             Locality
           </label>
           <Input
@@ -71,12 +71,12 @@ export function CatalogFilters({
             onChange={(event) => update('location', event.target.value)}
             placeholder="e.g. Minho"
             autoComplete="off"
-            className="h-10"
+            className="h-9"
           />
         </div>
 
         <div>
-          <label htmlFor="catalog-category" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="catalog-category" className="mb-1 block text-xs font-medium text-muted-foreground">
             Category
           </label>
           <select
@@ -96,7 +96,7 @@ export function CatalogFilters({
         </div>
 
         <div>
-          <label htmlFor="catalog-season" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="catalog-season" className="mb-1 block text-xs font-medium text-muted-foreground">
             Season
           </label>
           <select
@@ -116,7 +116,7 @@ export function CatalogFilters({
         </div>
 
         <div>
-          <label htmlFor="catalog-sort" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="catalog-sort" className="mb-1 block text-xs font-medium text-muted-foreground">
             Sort by
           </label>
           <select
@@ -135,8 +135,8 @@ export function CatalogFilters({
           </select>
         </div>
 
-        <div className="flex items-end pb-1.5">
-          <label htmlFor="catalog-organic" className="flex min-h-10 cursor-pointer items-center gap-2 text-sm font-medium">
+        <div className="flex items-end">
+          <label htmlFor="catalog-organic" className="flex h-9 whitespace-nowrap cursor-pointer items-center gap-2 text-sm font-medium">
             <input
               id="catalog-organic"
               name="organic"
@@ -148,16 +148,18 @@ export function CatalogFilters({
             Organic only
           </label>
         </div>
+        <div className="flex items-end gap-1">
+          <Button type="submit" size="sm">
+            Apply
+          </Button>
+          <Button type="button" variant="ghost" size="sm" onClick={onClear} disabled={!hasActiveFilters}>
+            Clear
+          </Button>
+        </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-t pt-4">
-        <Button type="submit" size="lg">
-          Apply filters
-        </Button>
-        <Button type="button" variant="outline" onClick={onClear} disabled={!hasActiveFilters}>
-          Clear filters
-        </Button>
-        {producer && (
+      {producer && (
+        <div className="mt-2 flex flex-wrap items-center gap-2">
           <p className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>
               Producer filter: <strong className="font-medium text-foreground">{producer}</strong>
@@ -170,8 +172,8 @@ export function CatalogFilters({
               Remove
             </button>
           </p>
-        )}
-      </div>
+        </div>
+      )}
     </form>
   )
 }

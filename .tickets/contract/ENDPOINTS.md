@@ -16,6 +16,11 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 ## Products
 - [x] GET /api/products — FE-03 — CT-03
 - [x] GET /api/products/:id — FE-04 — CT-04
+- [x] GET /api/products?producer=me — FE-13 — CT-13
+- [x] POST /api/products — FE-13 — CT-13
+- [x] PUT /api/products/:id — FE-13 — CT-13
+- [x] DELETE /api/products/:id — FE-13 — CT-13
+- [x] POST /api/products/:id/image — FE-13 — CT-13
 
 ## Producers
 - [x] GET /api/producers/:id — FE-05 — CT-05

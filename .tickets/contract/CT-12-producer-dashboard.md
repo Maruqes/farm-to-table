@@ -1,7 +1,7 @@
 ---
 id: CT-12
 title: API contract — producer dashboard stats
-status: review
+status: done
 depends_on: [FE-12]
 source: [FE-12, SCOPE.md §0, §2]
 consumers: [apps/web/src/features/producer/producer-dashboard/producer-dashboard.http.ts, apps/web/src/features/producer/producer-dashboard/producer-dashboard.realtime.ts]

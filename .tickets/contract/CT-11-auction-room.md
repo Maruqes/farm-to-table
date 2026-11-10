@@ -1,7 +1,7 @@
 ---
 id: CT-11
 title: API contract — auction room
-status: review
+status: done
 depends_on: [FE-11]
 source: [FE-11, SCOPE.md §0 Rules of the auction, §3]
 consumers: [apps/web/src/features/auctions/auction-room/auction-room.http.ts, apps/web/src/features/auctions/auction-room/auction-room.dto.ts, apps/web/src/features/auctions/auction-room/auction-room.realtime.ts]

@@ -1,7 +1,7 @@
 ---
 id: FE-12
 title: Producer dashboard
-status: review
+status: done
 depends_on: [FE-01, FE-02]
 route: /producer
 roles: [producer]

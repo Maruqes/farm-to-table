@@ -1,7 +1,7 @@
 ---
 id: CT-06
 title: API contract — cart
-status: review
+status: done
 depends_on: [FE-06]
 source: [FE-06, SCOPE.md §0 cart]
 consumers: [apps/web/src/features/cart/cart/cart.http.ts, apps/web/src/features/cart/cart/cart.dto.ts]

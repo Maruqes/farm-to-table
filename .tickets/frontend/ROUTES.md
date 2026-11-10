@@ -18,5 +18,6 @@ Format: `- route — roles (guard) — FE ticket`
 - `/orders` — buyer (`RequireRole`) — FE-08
 - `/profile` — buyer, producer (`RequireRole`) — FE-10
 - `/producer` — producer (`RequireRole`) — FE-12
+- `/producer/products` — producer (`RequireRole`) — FE-13
 - `/producer/status` — producer (`RequireRole`; pending/rejected producers land here) — FE-02
 - `*` (404) — all — FE-00

@@ -84,7 +84,7 @@ export function SiteHeader() {
 
         <nav aria-label="Main navigation" className="-mx-3 -mb-px flex gap-1 overflow-x-auto">
           {links.map((link) => (
-            <NavLink key={link.to} to={link.to} end={link.to === '/'} className={navLinkClass}>
+            <NavLink key={link.to} to={link.to} end={link.to === '/' || link.to === '/producer'} className={navLinkClass}>
               {link.label}
             </NavLink>
           ))}

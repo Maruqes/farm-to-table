@@ -1,7 +1,7 @@
 ---
 id: CT-04
 title: API contract — product detail with reviews
-status: review
+status: done
 depends_on: [FE-04]
 source: [FE-04, SCOPE.md §0]
 consumers: [apps/web/src/features/catalog/product-detail/product-detail.http.ts, apps/web/src/features/catalog/product-detail/product-detail.dto.ts]

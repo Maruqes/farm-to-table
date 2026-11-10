@@ -1,7 +1,7 @@
 ---
 id: FE-11
 title: Auction room
-status: review
+status: done
 depends_on: [FE-01]
 route: /auctions/:id
 roles: [visitor, buyer]

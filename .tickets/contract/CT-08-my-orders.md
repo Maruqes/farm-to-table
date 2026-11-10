@@ -1,7 +1,7 @@
 ---
 id: CT-08
 title: API contract — my orders and ratings
-status: review
+status: done
 depends_on: [FE-08]
 source: [FE-08, SCOPE.md §0 order states + ratings]
 consumers: [apps/web/src/features/orders/my-orders/my-orders.http.ts, apps/web/src/features/orders/my-orders/my-orders.dto.ts]

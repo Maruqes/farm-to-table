@@ -1,7 +1,7 @@
 ---
 id: CT-10
 title: API contract — profile and mock card
-status: review
+status: done
 depends_on: [FE-10]
 source: [FE-10, SCOPE.md §0 §3]
 consumers: [apps/web/src/features/auth/profile/profile.http.ts, apps/web/src/features/auth/profile/profile.dto.ts]

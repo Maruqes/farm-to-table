@@ -1,7 +1,7 @@
 ---
 id: CT-05
 title: API contract — public producer page
-status: review
+status: done
 depends_on: [FE-05]
 source: [FE-05, SCOPE.md §0, §1 maps]
 consumers: [apps/web/src/features/producer/producer-public/producer-public.http.ts, apps/web/src/features/producer/producer-public/producer-public.dto.ts]

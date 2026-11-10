@@ -5,6 +5,7 @@ import ProducerPublicPage from '@/pages/ProducerPublicPage'
 import AuctionRoomPage from '@/pages/AuctionRoomPage'
 import AuthPage from '@/pages/AuthPage'
 import ProducerStatusPage from '@/pages/ProducerStatusPage'
+import ProducerDashboardPage from '@/pages/ProducerDashboardPage'
 import CartPage from '@/pages/CartPage'
 import CheckoutPage from '@/pages/CheckoutPage'
 import MyOrdersPage from '@/pages/MyOrdersPage'
@@ -23,6 +24,7 @@ export function AppRoutes() {
       <Route path="/auctions/:id" element={<AuctionRoomPage />} />
       <Route path="/login" element={<AuthPage mode="login" />} />
       <Route path="/register" element={<AuthPage mode="register" />} />
+      <Route path="/producer" element={<RequireRole roles={['producer']}><ProducerDashboardPage /></RequireRole>} />
       <Route path="/producer/status" element={<RequireRole roles={['producer']}><ProducerStatusPage /></RequireRole>} />
       <Route path="/account" element={<RequireRole roles={[...AUTHENTICATED_ROLES]}><AccountPage /></RequireRole>} />
       <Route path="/cart" element={<RequireRole roles={['buyer']}><CartPage /></RequireRole>} />

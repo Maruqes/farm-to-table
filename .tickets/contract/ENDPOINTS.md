@@ -19,6 +19,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 
 ## Producers
 - [x] GET /api/producers/:id — FE-05 — CT-05
+- [x] GET /api/producers/me/stats — FE-12 — CT-12
 
 ## Cart
 - [x] GET /api/cart — FE-06, FE-07 — CT-06
@@ -43,7 +44,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 ## Realtime events (CT-00)
 - [x] order-updated — FE-08 — CT-00, CT-08
 - [ ] auction-updated — — CT-00
-- [x] notification — FE-09 — CT-09
+- [x] notification — FE-09, FE-12 — CT-09, CT-12
 - [x] bid-placed — FE-11 — CT-11
 - [x] bid-rejected — FE-11 — CT-11
 - [x] viewers — FE-11 — CT-11

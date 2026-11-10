@@ -7,8 +7,11 @@ Every page URL that exists in the web app (`http://localhost:5173<route>`), i.e.
 Format: `- route — roles (guard) — FE ticket`
 
 - `/` — all (public) — FE-03
+- `/products/:id` — all (public) — FE-04
+- `/producers/:id` — all (public) — FE-05
 - `/login` — visitor — FE-01
 - `/register` — visitor — FE-01
 - `/account` — any signed-in role (`RequireRole`) — FE-00
+- `/cart` — buyer (`RequireRole`) — FE-06
 - `/producer/status` — producer (`RequireRole`; pending/rejected producers land here) — FE-02
 - `*` (404) — all — FE-00

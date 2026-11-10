@@ -10,6 +10,14 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 
 ## Products
 - [x] GET /api/products — FE-03 — CT-03
+- [x] GET /api/products/:id — FE-04 — CT-04
+
+## Producers
+- [x] GET /api/producers/:id — FE-05 — CT-05
+
+## Cart
+- [x] GET /api/cart — FE-06 — CT-06
+- [x] PUT /api/cart — FE-06 — CT-06
 
 ## Auctions
 - [x] GET /api/auctions?status=active — FE-03 — CT-03

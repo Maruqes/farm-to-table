@@ -1,0 +1,14 @@
+# Frontend routes
+
+Every page URL that exists in the web app (`http://localhost:5173<route>`), i.e. every route registered in `apps/web/src/app/routes.tsx`. Nothing planned goes here.
+
+- Whenever a route is added to `routes.tsx`, add its line here in the same change. When one is removed, remove its line.
+
+Format: `- route — roles (guard) — FE ticket`
+
+- `/` — all (public) — FE-03
+- `/login` — visitor — FE-01
+- `/register` — visitor — FE-01
+- `/account` — any signed-in role (`RequireRole`) — FE-00
+- `/producer/status` — producer (`RequireRole`; pending/rejected producers land here) — FE-02
+- `*` (404) — all — FE-00

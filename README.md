@@ -1,4 +1,4 @@
-# Farm to Table ("Do Campo à Mesa")
+# Farm to Table
 
 Marketplace for local producers with real-time auctions (IPVC-ESTG university project).
 

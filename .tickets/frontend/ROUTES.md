@@ -27,4 +27,5 @@ Format: `- route — roles (guard) — FE ticket`
 - `/admin` — admin (`RequireRole`) — FE-18
 - `/admin/producers` — admin (`RequireRole`) — FE-19
 - `/admin/reviews` — admin (`RequireRole`) — FE-20
+- `/admin/moderation` — admin (`RequireRole`) — FE-21
 - `*` (404) — all — FE-00

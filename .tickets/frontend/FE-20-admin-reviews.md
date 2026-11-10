@@ -1,7 +1,7 @@
 ---
 id: FE-20
 title: Reported reviews
-status: review
+status: done
 depends_on: [FE-01]
 route: /admin/reviews
 roles: [admin]

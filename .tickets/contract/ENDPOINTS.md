@@ -65,6 +65,8 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] GET /api/admin/producers?status=pending — FE-19 — CT-19
 - [x] POST /api/admin/producers/:id/approve — FE-19 — CT-19
 - [x] POST /api/admin/producers/:id/reject — FE-19 — CT-19
+- [x] GET /api/admin/content?type=product|producer — FE-21 — CT-21
+- [x] PATCH /api/admin/content/:type/:id — FE-21 — CT-21
 
 ## Realtime events (CT-00)
 - [x] order-updated — FE-08, FE-14 — CT-00, CT-08, CT-14

@@ -1,7 +1,7 @@
 ---
 id: CT-20
 title: API contract — admin reported reviews
-status: review
+status: done
 depends_on: [FE-20]
 source: [FE-20, SCOPE.md §0 ratings]
 consumers: [apps/web/src/features/admin/admin-reviews/admin-reviews.http.ts]

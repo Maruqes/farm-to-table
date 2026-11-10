@@ -23,6 +23,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] POST /api/products/:id/image — FE-13 — CT-13
 
 ## Producers
+- [x] GET /api/producers?q&location — FE-26 — CT-26
 - [x] GET /api/producers/:id — FE-05 — CT-05
 - [x] GET /api/producers/me — FE-17 — CT-17
 - [x] PUT /api/producers/me — FE-17 — CT-17

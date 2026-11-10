@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import HomePage from '@/pages/HomePage'
 import ProductDetailPage from '@/pages/ProductDetailPage'
+import ProducersPage from '@/pages/ProducersPage'
 import ProducerPublicPage from '@/pages/ProducerPublicPage'
 import AuctionRoomPage from '@/pages/AuctionRoomPage'
 import AuthPage from '@/pages/AuthPage'
@@ -33,6 +34,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/products/:id" element={<ProductDetailPage />} />
+      <Route path="/producers" element={<ProducersPage />} />
       <Route path="/producers/:id" element={<ProducerPublicPage />} />
       <Route path="/auctions/:id" element={<AuctionRoomPage />} />
       <Route path="/login" element={<AuthPage mode="login" />} />

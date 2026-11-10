@@ -8,6 +8,7 @@ import ProducerStatusPage from '@/pages/ProducerStatusPage'
 import ProducerDashboardPage from '@/pages/ProducerDashboardPage'
 import ProducerProductsPage from '@/pages/ProducerProductsPage'
 import ProducerOrdersPage from '@/pages/ProducerOrdersPage'
+import ProducerReviewsPage from '@/pages/ProducerReviewsPage'
 import ProducerAuctionsPage from '@/pages/ProducerAuctionsPage'
 import CartPage from '@/pages/CartPage'
 import CheckoutPage from '@/pages/CheckoutPage'
@@ -30,6 +31,7 @@ export function AppRoutes() {
       <Route path="/producer" element={<RequireRole roles={['producer']}><ProducerDashboardPage /></RequireRole>} />
       <Route path="/producer/products" element={<RequireRole roles={['producer']}><ProducerProductsPage /></RequireRole>} />
       <Route path="/producer/orders" element={<RequireRole roles={['producer']}><ProducerOrdersPage /></RequireRole>} />
+      <Route path="/producer/reviews" element={<RequireRole roles={['producer']}><ProducerReviewsPage /></RequireRole>} />
       <Route path="/producer/auctions" element={<RequireRole roles={['producer']}><ProducerAuctionsPage /></RequireRole>} />
       <Route path="/producer/status" element={<RequireRole roles={['producer']}><ProducerStatusPage /></RequireRole>} />
       <Route path="/account" element={<RequireRole roles={[...AUTHENTICATED_ROLES]}><AccountPage /></RequireRole>} />

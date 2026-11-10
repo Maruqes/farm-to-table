@@ -1,7 +1,7 @@
 ---
 id: FE-15
 title: Producer auction manager
-status: review
+status: done
 depends_on: [FE-11, FE-13]
 route: /producer/auctions
 roles: [producer]

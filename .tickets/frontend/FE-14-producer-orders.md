@@ -1,7 +1,7 @@
 ---
 id: FE-14
 title: Producer orders table
-status: review
+status: done
 depends_on: [FE-08]
 route: /producer/orders
 roles: [producer]

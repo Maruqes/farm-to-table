@@ -1,7 +1,7 @@
 ---
 id: CT-14
 title: API contract — producer orders
-status: review
+status: done
 depends_on: [FE-14]
 source: [FE-14, SCOPE.md §0 order states, §4]
 consumers: [apps/web/src/features/producer/producer-orders/producer-orders.http.ts, apps/web/src/features/producer/producer-orders/producer-orders.dto.ts, apps/web/src/features/producer/producer-orders/producer-orders.realtime.ts]

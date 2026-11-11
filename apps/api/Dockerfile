@@ -18,6 +18,8 @@ ENV NODE_ENV=production
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
+# Seed photos, read by dist/db/seed.js when the seed is run inside this image.
+COPY pics ./pics
 USER node
 EXPOSE 3000
 CMD ["npm", "start"]

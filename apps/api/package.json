@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
+    "seed": "tsx --env-file-if-exists=../../.env src/db/seed.ts",
     "test": "NODE_ENV=test node --import tsx --test --test-concurrency=1 \"src/**/*.test.ts\""
   },
   "dependencies": {

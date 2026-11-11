@@ -29,6 +29,10 @@ export const env = {
   nodeEnv,
   mongoUrl: nodeEnv === 'test' ? testMongoUrl(process.env.MONGO_URL) : rawMongoUrl,
   jwtSecret,
+  seed: {
+    adminPassword: process.env.SEED_ADMIN_PASSWORD ?? '',
+    userPassword: process.env.SEED_USER_PASSWORD ?? '',
+  },
   s3: {
     endpoint: process.env.S3_ENDPOINT ?? 'http://localhost:9000',
     bucket: process.env.S3_BUCKET ?? 'farm-to-table',

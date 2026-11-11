@@ -7,6 +7,7 @@ import { producersRouter } from './modules/producers/producers.routes.js'
 import { productsRouter } from './modules/products/products.routes.js'
 import { cartRouter } from './modules/cart/cart.routes.js'
 import { notificationsRouter } from './modules/notifications/notifications.routes.js'
+import { ordersRouter } from './modules/orders/orders.routes.js'
 
 // Express app only (no listen) so tests can import it. Routers are mounted from src/modules/*.
 export const app = express()
@@ -24,6 +25,7 @@ app.use('/api/producers', producersRouter)
 app.use('/api/products', productsRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/notifications', notificationsRouter)
+app.use('/api/orders', ordersRouter)
 
 app.use(notFound)
 app.use(errorHandler)

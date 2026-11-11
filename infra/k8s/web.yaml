@@ -1,0 +1,33 @@
+# Web (nginx serving the SPA; also proxies /api, /api-docs, /socket.io to the "api" Service).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels: { app: web }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: web }
+  template:
+    metadata:
+      labels: { app: web }
+    spec:
+      containers:
+        - name: web
+          image: farm-to-table/web:latest
+          imagePullPolicy: IfNotPresent # built on the node by infra/jenkins/Jenkinsfile, never pulled
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            tcpSocket: { port: 80 }
+---
+# The public entry point: put an Ingress (or type: LoadBalancer) in front of this one.
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector: { app: web }
+  ports:
+    - port: 80
+      targetPort: 80

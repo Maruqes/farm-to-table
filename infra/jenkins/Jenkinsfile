@@ -1,0 +1,59 @@
+// Deploys on the cluster node itself over SSH: pull, check .env, build images, apply infra/k8s, check.
+// Jenkins job: Pipeline from SCM, Script Path = infra/jenkins/Jenkinsfile. Needs the "SSH Agent" plugin.
+// The node needs git, docker and kubectl, and a populated .env in the project folder.
+
+// Runs one command on the node, inside the project folder. Commands must not contain single quotes.
+def remote(String cmd) {
+  sshagent(credentials: ['d28eafc4-23e5-431d-bd07-1b921e2b5616']) {
+    sh "ssh -o StrictHostKeyChecking=accept-new marques2673sv@marques2673sv.machine 'cd /home/marques2673sv/farm-to-table && ${cmd}'"
+  }
+}
+
+pipeline {
+  agent any
+
+  stages {
+    stage('Pull') {
+      steps { script { remote('git pull --ff-only') } }
+    }
+
+    stage('Check .env') {
+      // No .env on the node: stop here, before anything is built or changed.
+      steps { script { remote('test -s .env') } }
+    }
+
+    stage('Build images') {
+      // Plain docker build with the exact names the manifests use (compose would name them after the folder).
+      steps {
+        script {
+          remote('docker build --target prod -t farm-to-table/api:latest apps/api')
+          remote('docker build --target prod -t farm-to-table/web:latest apps/web')
+          remote('docker build -t farm-to-table/backoffice:latest apps/backoffice')
+        }
+      }
+    }
+
+    stage('Apply') {
+      steps {
+        script {
+          // Create or update the Secret from .env.
+          remote('kubectl create secret generic farm-to-table --from-env-file=.env --dry-run=client -o yaml | kubectl apply -f -')
+          // silo-init is a finished Job; its spec is immutable, so recreate it instead of applying over it.
+          remote('kubectl delete job silo-init --ignore-not-found')
+          remote('kubectl apply -f infra/k8s/')
+          // The tag is always "latest", so apply alone would not pick up the new images.
+          remote('kubectl rollout restart deployment/api deployment/web deployment/backoffice')
+        }
+      }
+    }
+
+    stage('Check') {
+      steps {
+        script {
+          remote('for s in api web backoffice; do kubectl rollout status deployment/$s --timeout=180s || exit 1; done')
+          remote('kubectl get pods')
+        }
+      }
+    }
+  }
+}

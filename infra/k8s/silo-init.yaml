@@ -1,0 +1,21 @@
+# One-shot: creates the bucket (idempotent). Retries until silo is reachable.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: silo-init
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: silo-init
+          image: pgsty/silo:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - mcli alias set s http://silo:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD" && mcli mb --ignore-existing s/farm-to-table
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom: { secretKeyRef: { name: farm-to-table, key: S3_ACCESS_KEY } }
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom: { secretKeyRef: { name: farm-to-table, key: S3_SECRET_KEY } }

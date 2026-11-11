@@ -1,0 +1,49 @@
+# Silo = MinIO-compatible S3 storage (pgsty/silo). S3 API :9000, console :9001.
+# Root credentials are S3_ACCESS_KEY / S3_SECRET_KEY from the "farm-to-table" Secret (see api.yaml).
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: silo
+  labels: { app: silo }
+spec:
+  serviceName: silo
+  replicas: 1
+  selector:
+    matchLabels: { app: silo }
+  template:
+    metadata:
+      labels: { app: silo }
+    spec:
+      containers:
+        - name: silo
+          image: pgsty/silo:latest # pin a release for real deployments
+          args: ["server", "/data", "--console-address", ":9001"]
+          ports:
+            - containerPort: 9000
+            - containerPort: 9001
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom: { secretKeyRef: { name: farm-to-table, key: S3_ACCESS_KEY } }
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom: { secretKeyRef: { name: farm-to-table, key: S3_SECRET_KEY } }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+          readinessProbe:
+            exec: { command: ["mcli", "ready", "local"] }
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests: { storage: 5Gi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: silo
+spec:
+  selector: { app: silo }
+  ports:
+    - { name: s3, port: 9000, targetPort: 9000 }
+    - { name: console, port: 9001, targetPort: 9001 }

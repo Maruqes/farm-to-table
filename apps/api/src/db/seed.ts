@@ -1,3 +1,4 @@
+import { existsSync, readFileSync } from 'node:fs'
 import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 import { env } from '../config/env.js'
@@ -9,6 +10,7 @@ import { ProductModel } from '../modules/products/products.model.js'
 import { ReviewModel } from '../modules/reviews/reviews.model.js'
 import { recomputeRatings } from '../modules/reviews/reviews.service.js'
 import { UserModel } from '../modules/users/users.model.js'
+import { putObject } from '../lib/storage.js'
 import { SEED_BUYERS, SEED_PRODUCERS, SEED_PRODUCTS } from './seed-data.js'
 
 const BCRYPT_COST = 12
@@ -115,6 +117,28 @@ async function seedProducts(): Promise<void> {
     if ((result.upsertedCount ?? 0) > 0) created += 1
   }
   console.log(`products: ${SEED_PRODUCTS.length} checked, ${created} created`)
+}
+
+// Seed photos: pics/pics.json maps a product-name slug to a JPEG under apps/api
+// (the seed runs from there). Products without an entry keep the category icon.
+// A photo a producer uploaded (key outside seed/) is never replaced.
+async function seedProductImages(): Promise<void> {
+  if (!existsSync('pics/pics.json')) return
+  const pics = JSON.parse(readFileSync('pics/pics.json', 'utf8')) as Record<string, string>
+  let set = 0
+  for (const { name } of SEED_PRODUCTS) {
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    const file = pics[slug]
+    if (!file || !existsSync(file)) continue
+    const key = `seed/${slug}.jpg`
+    await putObject(key, readFileSync(file), 'image/jpeg')
+    const r = await ProductModel.updateMany(
+      { name, $or: [{ imageKey: { $exists: false } }, { imageKey: /^seed\// }] },
+      { imageKey: key },
+    )
+    set += r.matchedCount
+  }
+  console.log(`product images: ${set} set`)
 }
 
 async function tryReserve(productId: unknown, quantity: number): Promise<void> {
@@ -341,6 +365,7 @@ async function main(): Promise<void> {
   try {
     await seedUsers()
     await seedProducts()
+    await seedProductImages()
     await seedOrdersAndReviews()
     await seedAuctions()
   } finally {

@@ -74,10 +74,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script>
         const services = @json($services);
-        const beet = '#a3174a';
+        const beet = cssVar('--beet');
 
         Chart.defaults.font.family = 'Figtree, system-ui, sans-serif';
-        Chart.defaults.color = '#6b5f5c';
+        Chart.defaults.color = cssVar('--bs-secondary-color');
         Chart.defaults.maintainAspectRatio = false;
         Chart.defaults.plugins.legend.display = false;
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) Chart.defaults.animation = false;
@@ -89,7 +89,7 @@
             new Chart(el, {
                 data: { labels: hours.map(h => h.label), datasets: [
                     { type: 'line', label: 'Response time', data: hours.map(h => h.latency), borderColor: beet, borderWidth: 2,
-                      backgroundColor: 'rgba(163, 23, 74, .08)', fill: true, tension: .3, pointHoverRadius: 4, pointBackgroundColor: beet,
+                      backgroundColor: beet + '14', fill: true, tension: .3, pointHoverRadius: 4, pointBackgroundColor: beet,
                       // An hour with no recorded neighbours has no line to sit on, so it gets a dot.
                       pointRadius: c => hours[c.dataIndex - 1]?.latency == null && hours[c.dataIndex + 1]?.latency == null ? 3 : 0 },
                     // Full-height band on its own hidden 0..1 axis: it marks the hour, it is not a measurement.
@@ -100,7 +100,7 @@
                     interaction: { mode: 'index', intersect: false },
                     scales: {
                         x: { grid: { display: false }, ticks: { maxTicksLimit: 7, maxRotation: 0, callback(v) { return this.getLabelForValue(v).split(',')[0]; } } },
-                        y: { beginAtZero: true, grid: { color: '#eceae4' }, ticks: { maxTicksLimit: 5, callback: v => v + ' ms' } },
+                        y: { beginAtZero: true, grid: { color: cssVar('--bs-border-color') }, ticks: { maxTicksLimit: 5, callback: v => v + ' ms' } },
                         band: { display: false, min: 0, max: 1 },
                     },
                     plugins: { tooltip: { callbacks: { label: c => {

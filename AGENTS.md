@@ -10,7 +10,8 @@ apps/
   api/         Express + TS REST, Mongoose, Socket.io
   backoffice/  Laravel 13 admin (bonus), mongodb/laravel-mongodb, same Mongo as the API
 infra/
-  k8s/         Kubernetes manifests (later)
+  k8s/         Kubernetes manifests, one file per service
+  jenkins/     Jenkinsfile: build images, push, deploy infra/k8s
 docs/          SCOPE.md (requirements), add ADRs/report notes here
 .tickets/      work orders, one markdown file each (see "Work from tickets")
 compose.yaml       production-like stack (web, api, backoffice, mongo); nginx in web proxies /api, /api-docs, /socket.io
@@ -30,8 +31,11 @@ Standard Laravel layout. Models extend `MongoDB\Laravel\Eloquent\Model`; session
 ## Commands
 ```bash
 cp .env.example .env     # the only env file, read by every app via compose (fill BACKOFFICE_APP_KEY, S3_*)
+make setup      # first run: host deps, dev stack, container deps, seed demo data
 make dev        # hot reload: web :5173, api :3000, backoffice :8081, mongo :27017, silo :9000 (console :9001)
 make up         # production-like, detached: web :8080
+make seed       # (re)seed demo users/products/orders/auctions; fills blank SEED_* passwords in .env
+make sync-deps  # reinstall deps inside running containers after adding a dependency (node_modules volumes survive --build)
 ```
 Outside Docker: `cd apps/api && node --env-file=../../.env --import tsx src/server.ts` (set `MONGO_URL` to a reachable Mongo); web: `npm install && npm run dev`.
 

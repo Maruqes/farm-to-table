@@ -141,21 +141,21 @@
         const perDay = @json($ordersPerDay);
         const byStatus = @json($ordersByStatus);
         const producers = @json($topProducers);
-        const beet = '#a3174a';
+        const beet = cssVar('--beet');
 
         Chart.defaults.font.family = 'Figtree, system-ui, sans-serif';
-        Chart.defaults.color = '#6b5f5c';
+        Chart.defaults.color = cssVar('--bs-secondary-color');
         Chart.defaults.maintainAspectRatio = false;
         Chart.defaults.plugins.legend.display = false;
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) Chart.defaults.animation = false;
-        const grid = { color: '#eceae4' };
+        const grid = { color: cssVar('--bs-border-color') };
         const draw = (id, config) => { const el = document.getElementById(id); if (el) new Chart(el, config); };
 
         draw('orders-per-day', {
             type: 'line',
             data: { labels: perDay.map(d => d.label), datasets: [{
                 label: 'Orders', data: perDay.map(d => d.count),
-                borderColor: beet, borderWidth: 2, backgroundColor: 'rgba(163, 23, 74, .08)', fill: true,
+                borderColor: beet, borderWidth: 2, backgroundColor: beet + '14', fill: true,
                 tension: .3, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: beet,
             }] },
             options: {
@@ -167,7 +167,7 @@
         draw('orders-by-status', {
             type: 'pie',
             data: { labels: @json(array_map(fn ($s) => $statusLabels[$s], array_keys($ordersByStatus))), datasets: [{
-                data: Object.values(byStatus), backgroundColor: @json(array_values($statusColors)), borderColor: '#fff', borderWidth: 2,
+                data: Object.values(byStatus), backgroundColor: @json(array_values($statusColors)), borderColor: cssVar('--panel'), borderWidth: 2,
             }] },
         });
 

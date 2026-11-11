@@ -20,13 +20,15 @@ spec:
           readinessProbe:
             tcpSocket: { port: 80 }
 ---
-# The public entry point: put an Ingress (or type: LoadBalancer) in front of this one.
+# The public entry point.
 apiVersion: v1
 kind: Service
 metadata:
   name: web
 spec:
+  type: NodePort
   selector: { app: web }
   ports:
     - port: 80
       targetPort: 80
+      nodePort: 30080 # reachable on every node; overridden by K8S_WEB_PORT in .env at deploy

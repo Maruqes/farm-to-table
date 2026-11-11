@@ -1,4 +1,4 @@
-// Deploys on the cluster node itself over SSH: pull, check .env, apply infra/k8s, check.
+// Deploys on the cluster node itself over SSH: wait for images, pull, check .env, apply infra/k8s, check.
 // Images are built and pushed by .github/workflows/images.yml, not here.
 // Jenkins job: Pipeline from SCM, Script Path = infra/jenkins/Jenkinsfile. Needs sshpass on the Jenkins agent.
 // The node needs git and kubectl, and a populated .env in the project folder.
@@ -14,7 +14,27 @@ def remote(String cmd) {
 pipeline {
   agent any
 
+  // Check GitHub for new commits every 2 minutes (Jenkins asks GitHub, so GitHub never has to reach Jenkins).
+  triggers { pollSCM('H/2 * * * *') }
+
   stages {
+    stage('Wait for images') {
+      // Wait until .github/workflows/images.yml has pushed the images for this commit (up to 20 minutes).
+      steps {
+        sh '''
+          for i in $(seq 40); do
+            r=$(curl -fsS "https://api.github.com/repos/Maruqes/farm-to-table/actions/workflows/images.yml/runs?head_sha=$GIT_COMMIT&per_page=1" | tr -d ' \n')
+            case "$r" in
+              *'"conclusion":"success"'*) exit 0 ;;
+              *'"conclusion":"failure"'*|*'"conclusion":"cancelled"'*) echo "Image build failed on GitHub"; exit 1 ;;
+            esac
+            sleep 30
+          done
+          echo "Timed out waiting for the image build"; exit 1
+        '''
+      }
+    }
+
     stage('Pull') {
       steps { script { remote('git pull --ff-only') } }
     }
@@ -31,7 +51,8 @@ pipeline {
           remote('kubectl create secret generic farm-to-table --from-env-file=.env --dry-run=client -o yaml | kubectl apply -f -')
           // silo-init is a finished Job; its spec is immutable, so recreate it instead of applying over it.
           remote('kubectl delete job silo-init --ignore-not-found')
-          remote('kubectl apply -f infra/k8s/')
+          // Apply a rendered copy: the two public ports come from .env (defaults 30080 / 30081 stay if unset).
+          remote('W=$(grep ^K8S_WEB_PORT= .env | cut -d= -f2); B=$(grep ^K8S_BACKOFFICE_PORT= .env | cut -d= -f2); D=$(mktemp -d) && cp infra/k8s/*.yaml $D/ && sed -i "s/nodePort: 30080/nodePort: ${W:-30080}/; s/nodePort: 30081/nodePort: ${B:-30081}/" $D/*.yaml && kubectl apply -f $D/ && rm -rf $D')
           // The tag is always "latest", so apply alone would not pick up the new images.
           remote('kubectl rollout restart deployment/api deployment/web deployment/backoffice')
         }

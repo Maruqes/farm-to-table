@@ -30,7 +30,7 @@ async function main(): Promise<void> {
         passwordHash: '',
         role: 'admin',
         address: '',
-        card: '',
+        card: null,
       },
     },
     {
@@ -42,7 +42,7 @@ async function main(): Promise<void> {
         passwordHash: '',
         role: 'buyer',
         address: 'Rua das Flores 12, Lisboa',
-        card: '',
+        card: null,
       },
     },
     {
@@ -54,7 +54,7 @@ async function main(): Promise<void> {
         passwordHash: '',
         role: 'producer',
         address: '',
-        card: '',
+        card: null,
         producer: {
           farmName: 'Quinta do Vale Verde',
           status: 'approved',
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
         passwordHash: '',
         role: 'producer',
         address: '',
-        card: '',
+        card: null,
         producer: {
           farmName: 'Horta da Ribeira',
           status: 'pending',

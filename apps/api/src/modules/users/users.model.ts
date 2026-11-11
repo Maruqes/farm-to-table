@@ -20,13 +20,20 @@ export interface CartItem {
   quantity: number
 }
 
+export interface CardEmbedded {
+  last4: string
+  holder: string
+  expiry: string
+  simulateInvalid: boolean
+}
+
 export interface UserDoc {
   name: string
   email: string
   passwordHash: string
   role: UserRole
   address: string
-  card: string
+  card: CardEmbedded | null
   cart: CartItem[]
   producer?: ProducerEmbedded
 }
@@ -60,7 +67,19 @@ const userSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true, select: false },
   role: { type: String, required: true, enum: ['buyer', 'producer', 'admin'] },
   address: { type: String, default: '' },
-  card: { type: String, default: '' },
+  card: {
+    type: new mongoose.Schema(
+      {
+        last4: { type: String, required: true },
+        holder: { type: String, required: true },
+        expiry: { type: String, required: true },
+        simulateInvalid: { type: Boolean, required: true, default: false },
+      },
+      { _id: false },
+    ),
+    default: null,
+    required: false,
+  },
   cart: { type: [cartItemSchema], default: [] },
   producer: { type: producerSchema, required: false },
 })

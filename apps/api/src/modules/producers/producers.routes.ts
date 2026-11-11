@@ -3,6 +3,7 @@ import { requireApprovedProducer, requireAuth, requireRole } from '../../middlew
 import { validate } from '../../middleware/validate.js'
 import {
   getMyPageController,
+  getMyStatsController,
   getProducerController,
   listProducersController,
   updateMyPageController,
@@ -16,5 +17,6 @@ const approvedProducer = [requireAuth, requireRole('producer'), requireApprovedP
 producersRouter.get('/', validate({ query: listProducersQuerySchema }), listProducersController)
 // /me must be registered before /:id.
 producersRouter.get('/me', ...approvedProducer, getMyPageController)
+producersRouter.get('/me/stats', ...approvedProducer, getMyStatsController)
 producersRouter.put('/me', ...approvedProducer, validate({ body: saveProducerPageSchema }), updateMyPageController)
 producersRouter.get('/:id', getProducerController)

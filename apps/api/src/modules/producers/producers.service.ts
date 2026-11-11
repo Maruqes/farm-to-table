@@ -1,6 +1,9 @@
 import mongoose from 'mongoose'
 import { ApiError } from '../../lib/api-error.js'
 import { escapeRegex } from '../../lib/escape-regex.js'
+import { round2 } from '../../lib/money.js'
+import { ProductModel, type ProductDoc } from '../products/products.model.js'
+import { imageUrl } from '../products/products.service.js'
 import { UserModel, type UserDoc } from '../users/users.model.js'
 import type { ListProducersQuery, SaveProducerPageInput } from './producers.schemas.js'
 
@@ -14,9 +17,20 @@ export interface CatalogStats {
   averageRating: number
 }
 
-// shortcut: stub until BE-05 (products) and reviews exist; fill in here only.
 export async function getProducerCatalogStats(producerIds: string[]): Promise<Map<string, CatalogStats>> {
-  return new Map(producerIds.map((id) => [id, { products: [], productCount: 0, averageRating: 0 }]))
+  const docs: (ProductDoc & { _id: unknown })[] = await ProductModel.find({ producer: { $in: producerIds }, hidden: { $ne: true } }).sort({ name: 1 }).lean()
+  return new Map(producerIds.map((id) => {
+    const mine = docs.filter((p) => String(p.producer) === id)
+    const rated = mine.filter((p) => p.ratingCount > 0)
+    return [id, {
+      products: mine.map((p) => ({
+        id: String(p._id), name: p.name, price: p.price, unit: p.unit, stock: p.stock, category: p.category,
+        ...imageUrl(p.imageKey), averageRating: p.averageRating,
+      })),
+      productCount: mine.length,
+      averageRating: rated.length ? round2(rated.reduce((n, p) => n + p.averageRating, 0) / rated.length) : 0,
+    }]
+  }))
 }
 
 function coords(p: UserDoc['producer']): { lat?: number, lng?: number } {

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import { ApiError } from '../../lib/api-error.js'
 import { escapeRegex } from '../../lib/escape-regex.js'
+import { listProductReviews } from '../reviews/reviews.service.js'
 import { UserModel } from '../users/users.model.js'
 import { ProductModel, type ProductDoc } from './products.model.js'
 import { deleteObject } from '../../lib/storage.js'
@@ -79,7 +80,7 @@ export async function getProduct(id: string) {
     producer: { id: String(producer._id), name: producer.name, location: producer.producer?.location ?? '' },
     averageRating: p.averageRating,
     description: p.description,
-    reviews: [],
+    reviews: await listProductReviews(id),
   }
 }
 

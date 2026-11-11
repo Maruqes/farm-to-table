@@ -5,6 +5,7 @@ import { emitToUser } from '../../realtime/emit.js'
 import { clearCart, getCartLines } from '../cart/cart.service.js'
 import { notify } from '../notifications/notifications.service.js'
 import { ProductModel } from '../products/products.model.js'
+import { reviewsByOrder, type MyReviewDto } from '../reviews/reviews.service.js'
 import { UserModel } from '../users/users.model.js'
 import { OrderModel, type Fulfilment, type OrderStatus } from './orders.model.js'
 import type { CheckoutInput } from './orders.schemas.js'
@@ -45,6 +46,7 @@ export interface MyOrderDto {
   items: OrderItemDto[]
   total: number
   reviewed: boolean
+  review?: MyReviewDto
 }
 
 export interface ProducerOrderDto {
@@ -133,7 +135,7 @@ function toOrderDto(order: OrderLike, producer: OrderProducerDto): OrderDto {
   }
 }
 
-function toMyOrderDto(order: OrderLike, producer: MyOrderProducerDto): MyOrderDto {
+function toMyOrderDto(order: OrderLike, producer: MyOrderProducerDto, review?: MyReviewDto): MyOrderDto {
   return {
     id: String(order._id),
     status: order.status,
@@ -141,7 +143,8 @@ function toMyOrderDto(order: OrderLike, producer: MyOrderProducerDto): MyOrderDt
     producer,
     items: order.items.map(toItem),
     total: order.total,
-    reviewed: false,
+    reviewed: Boolean(review),
+    ...(review ? { review } : {}),
   }
 }
 
@@ -300,6 +303,31 @@ export async function changeOrderStatus(producerId: string, id: string, status: 
   return order
 }
 
+export interface BuyerOrderForReview {
+  producer: string
+  status: OrderStatus
+  items: { productId: string, name: string }[]
+}
+
+type ReviewOrder = {
+  producer: unknown
+  status: OrderStatus
+  items: OrderItemLike[]
+}
+
+// The order lookup for a review is ownership-filtered in the query itself; reviews.service adds the rules.
+export async function getBuyerOrderForReview(buyerId: string, orderId: string): Promise<BuyerOrderForReview | null> {
+  const order: ReviewOrder | null = mongoose.isValidObjectId(orderId)
+    ? await OrderModel.findOne({ _id: orderId, buyer: buyerId }).select('producer status items').lean()
+    : null
+  if (!order) return null
+  return {
+    producer: String(order.producer),
+    status: order.status,
+    items: order.items.map((item) => ({ productId: String(item.productId), name: item.name })),
+  }
+}
+
 export async function listMyOrders(buyerId: string): Promise<MyOrderDto[]> {
   const orders: OrderLike[] = await OrderModel.find({ buyer: buyerId }).sort({ createdAt: -1, _id: -1 }).lean()
   if (!orders.length) return []
@@ -307,15 +335,20 @@ export async function listMyOrders(buyerId: string): Promise<MyOrderDto[]> {
     .select('name email producer')
     .lean()
   const byId = new Map(producers.map((p) => [String(p._id), p]))
+  const reviews = await reviewsByOrder(buyerId, orders.map((order) => String(order._id)))
   return orders.map((order) => {
     const producer = byId.get(String(order.producer))
     const embedded = producer?.producer
-    return toMyOrderDto(order, {
-      id: producer ? String(producer._id) : String(order.producer),
-      name: producer?.name ?? '',
-      location: embedded?.location ?? '',
-      ...(producer?.email ? { email: producer.email } : {}),
-      ...(typeof embedded?.lat === 'number' && typeof embedded?.lng === 'number' ? { lat: embedded.lat, lng: embedded.lng } : {}),
-    })
+    return toMyOrderDto(
+      order,
+      {
+        id: producer ? String(producer._id) : String(order.producer),
+        name: producer?.name ?? '',
+        location: embedded?.location ?? '',
+        ...(producer?.email ? { email: producer.email } : {}),
+        ...(typeof embedded?.lat === 'number' && typeof embedded?.lng === 'number' ? { lat: embedded.lat, lng: embedded.lng } : {}),
+      },
+      reviews.get(String(order._id)),
+    )
   })
 }

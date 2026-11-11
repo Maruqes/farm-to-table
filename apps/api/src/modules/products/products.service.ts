@@ -4,7 +4,7 @@ import { escapeRegex } from '../../lib/escape-regex.js'
 import { env } from '../../config/env.js'
 import { UserModel } from '../users/users.model.js'
 import { ProductModel, type ProductDoc } from './products.model.js'
-import type { ListProductsQuery } from './products.schemas.js'
+import type { ListProductsQuery, SaveProductInput } from './products.schemas.js'
 
 const LIMIT = 200
 
@@ -80,4 +80,50 @@ export async function getProduct(id: string) {
     description: p.description,
     reviews: [],
   }
+}
+
+const toOwn = (p: Product) => ({
+  id: String(p._id),
+  name: p.name,
+  category: p.category,
+  price: p.price,
+  unit: p.unit,
+  stock: p.stock,
+  season: p.season,
+  organic: p.organic,
+  ...imageUrl(p.imageKey),
+})
+
+export async function listOwnProducts(sub: string) {
+  const products: Product[] = await ProductModel.find({ producer: sub }).sort({ name: 1 }).lean()
+  return products.map(toOwn)
+}
+
+export async function createProduct(sub: string, input: SaveProductInput) {
+  return toOwn((await ProductModel.create({ ...input, producer: sub })).toObject() as Product)
+}
+
+// 404 if the id does not exist, 403 if it belongs to someone else. Looked up only after the owner filter missed.
+async function notOwned(id: string): Promise<never> {
+  const exists = mongoose.isValidObjectId(id) && (await ProductModel.exists({ _id: id }))
+  throw exists ? new ApiError(403, 'FORBIDDEN', 'Not your product') : new ApiError(404, 'NOT_FOUND', 'Product not found')
+}
+
+export async function updateProduct(sub: string, id: string, input: SaveProductInput) {
+  const doc: Product | null = mongoose.isValidObjectId(id)
+    ? await ProductModel.findOneAndUpdate({ _id: id, producer: sub }, input, { new: true, runValidators: true }).lean()
+    : null
+  return doc ? toOwn(doc) : notOwned(id)
+}
+
+// Stub until BE-14 (auctions): true when a scheduled or active auction uses the product.
+async function hasLiveAuction(_productId: string): Promise<boolean> {
+  return false
+}
+
+export async function deleteProduct(sub: string, id: string): Promise<void> {
+  const doc = mongoose.isValidObjectId(id) ? await ProductModel.findOne({ _id: id, producer: sub }).select('_id').lean() : null
+  if (!doc) return notOwned(id)
+  if (await hasLiveAuction(id)) throw new ApiError(409, 'PRODUCT_IN_AUCTION', 'Product is used by an auction')
+  await ProductModel.deleteOne({ _id: id, producer: sub })
 }

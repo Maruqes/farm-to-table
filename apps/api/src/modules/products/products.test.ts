@@ -133,9 +133,8 @@ test('sorts: price-asc, price-desc, rating-desc', async () => {
 })
 
 test('list 400s name the bad parameter', async () => {
-  for (const f of ['category', 'season', 'sort', 'organic', 'producer']) {
-    const qs = f === 'producer' ? 'producer=me' : `${f}=bogus`
-    const res = await call(`/api/products?${qs}`)
+  for (const f of ['category', 'season', 'sort', 'organic']) {
+    const res = await call(`/api/products?${f}=bogus`)
     assert.equal(res.status, 400, f)
     assert.equal(res.body.error.code, 'VALIDATION_ERROR')
     assert.ok(res.body.error.fields[f], f)

@@ -1,4 +1,5 @@
 import { Router, type NextFunction, type Request, type Response } from 'express'
+import { rateLimit } from 'express-rate-limit'
 import { requireApprovedProducer, requireAuth, requireRole } from '../../middleware/auth.js'
 import { validate } from '../../middleware/validate.js'
 import {
@@ -16,10 +17,24 @@ import {
   producerAuctionsQuerySchema,
   saveAuctionSchema,
 } from './auctions.schemas.js'
+import { placeBidController } from './bids.controller.js'
+import { placeBidSchema } from './bids.schemas.js'
 
 export const auctionsRouter = Router()
 
 const approvedProducer = [requireAuth, requireRole('producer'), requireApprovedProducer]
+
+// Bids are limited per authenticated user, so the limiter runs after requireAuth.
+const bidLimiter = rateLimit({
+  windowMs: 1000,
+  limit: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.user?.sub ?? 'anonymous',
+  handler: (_req, res) => {
+    res.status(429).json({ error: { code: 'TOO_MANY_REQUESTS', message: 'Too many bids, slow down' } })
+  },
+})
 
 // Same path is public unless `?producer=me`: only then are the guards applied, otherwise fall through.
 auctionsRouter.get(
@@ -48,5 +63,13 @@ auctionsRouter.post(
   ...approvedProducer,
   validate({ params: auctionIdParamsSchema }),
   cancelAuctionController,
+)
+auctionsRouter.post(
+  '/:id/bids',
+  requireAuth,
+  requireRole('buyer', 'producer'),
+  bidLimiter,
+  validate({ params: auctionIdParamsSchema, body: placeBidSchema }),
+  placeBidController,
 )
 auctionsRouter.get('/:id', validate({ params: auctionIdParamsSchema }), getPublicAuctionController)

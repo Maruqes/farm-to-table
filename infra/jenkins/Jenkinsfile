@@ -1,11 +1,12 @@
 // Deploys on the cluster node itself over SSH: pull, check .env, build images, apply infra/k8s, check.
-// Jenkins job: Pipeline from SCM, Script Path = infra/jenkins/Jenkinsfile. Needs the "SSH Agent" plugin.
+// Jenkins job: Pipeline from SCM, Script Path = infra/jenkins/Jenkinsfile. Needs sshpass on the Jenkins agent.
 // The node needs git, docker and kubectl, and a populated .env in the project folder.
 
 // Runs one command on the node, inside the project folder. Commands must not contain single quotes.
 def remote(String cmd) {
-  sshagent(credentials: ['d28eafc4-23e5-431d-bd07-1b921e2b5616']) {
-    sh "ssh -o StrictHostKeyChecking=accept-new marques2673sv@marques2673sv.machine 'cd /home/marques2673sv/farm-to-table && ${cmd}'"
+  // sshpass -e reads the password from the SSHPASS variable, so it never appears in the command line or the log.
+  withCredentials([usernamePassword(credentialsId: 'd28eafc4-23e5-431d-bd07-1b921e2b5616', usernameVariable: 'SSH_USER', passwordVariable: 'SSHPASS')]) {
+    sh "sshpass -e ssh -o StrictHostKeyChecking=accept-new \$SSH_USER@marques2673sv.machine 'cd /home/marques2673sv/farm-to-table && ${cmd}'"
   }
 }
 

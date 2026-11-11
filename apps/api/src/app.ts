@@ -9,6 +9,7 @@ import { cartRouter } from './modules/cart/cart.routes.js'
 import { notificationsRouter } from './modules/notifications/notifications.routes.js'
 import { ordersRouter } from './modules/orders/orders.routes.js'
 import { reviewsRouter } from './modules/reviews/reviews.routes.js'
+import { auctionsRouter } from './modules/auctions/auctions.routes.js'
 
 // Express app only (no listen) so tests can import it. Routers are mounted from src/modules/*.
 export const app = express()
@@ -28,6 +29,7 @@ app.use('/api/cart', cartRouter)
 app.use('/api/notifications', notificationsRouter)
 app.use('/api/orders', ordersRouter)
 app.use('/api/reviews', reviewsRouter)
+app.use('/api/auctions', auctionsRouter)
 
 app.use(notFound)
 app.use(errorHandler)

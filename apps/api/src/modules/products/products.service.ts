@@ -4,6 +4,7 @@ import { escapeRegex } from '../../lib/escape-regex.js'
 import { listProductReviews } from '../reviews/reviews.service.js'
 import { UserModel } from '../users/users.model.js'
 import { ProductModel, type ProductDoc } from './products.model.js'
+import { productHasLiveAuction } from '../auctions/auctions.service.js'
 import { deleteObject } from '../../lib/storage.js'
 import type { ListProductsQuery, SaveProductInput } from './products.schemas.js'
 
@@ -118,15 +119,10 @@ export async function updateProduct(sub: string, id: string, input: SaveProductI
   return doc ? toOwn(doc) : notOwned(id)
 }
 
-// Stub until BE-14 (auctions): true when a scheduled or active auction uses the product.
-async function hasLiveAuction(_productId: string): Promise<boolean> {
-  return false
-}
-
 export async function deleteProduct(sub: string, id: string): Promise<void> {
   const doc = mongoose.isValidObjectId(id) ? await ProductModel.findOne({ _id: id, producer: sub }).select('imageKey').lean() : null
   if (!doc) return notOwned(id)
-  if (await hasLiveAuction(id)) throw new ApiError(409, 'PRODUCT_IN_AUCTION', 'Product is used by an auction')
+  if (await productHasLiveAuction(id)) throw new ApiError(409, 'PRODUCT_IN_AUCTION', 'Product is used by an auction')
   await ProductModel.deleteOne({ _id: id, producer: sub })
   if (doc.imageKey) await deleteObject(doc.imageKey).catch(() => {})
 }

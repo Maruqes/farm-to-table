@@ -105,6 +105,12 @@ type ProducerUser = {
   producer?: { location?: string, lat?: number, lng?: number }
 }
 
+type BuyerUser = {
+  _id: unknown
+  name: string
+  email?: string
+}
+
 type StockLine = { productId: string, quantity: number }
 
 function toItem(item: OrderItemLike): OrderItemDto {
@@ -238,6 +244,60 @@ export async function checkout(buyerId: string, input: CheckoutInput): Promise<O
     if (created.length) await OrderModel.deleteMany({ _id: { $in: created } })
     throw err
   }
+}
+
+// Only the next step forward; cancelling is the one way out of pending.
+const PREVIOUS_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
+  confirmed: 'pending',
+  ready: 'confirmed',
+  delivered: 'ready',
+  cancelled: 'pending',
+}
+
+export async function listProducerOrders(producerId: string): Promise<ProducerOrderDto[]> {
+  const orders: OrderLike[] = await OrderModel.find({ producer: producerId }).sort({ createdAt: -1, _id: -1 }).lean()
+  if (!orders.length) return []
+  const buyers: BuyerUser[] = await UserModel.find({ _id: { $in: orders.map((o) => o.buyer) } })
+    .select('name email')
+    .lean()
+  const byId = new Map(buyers.map((b) => [String(b._id), b]))
+  return orders.map((order) =>
+    toProducerOrderDto(order, byId.get(String(order.buyer)) ?? { _id: order.buyer, name: '' }),
+  )
+}
+
+// One conditional update: it only matches the expected previous status, so a racing request cannot double-apply.
+export async function changeOrderStatus(producerId: string, id: string, status: OrderStatus): Promise<ProducerOrderDto> {
+  const previous = PREVIOUS_STATUS[status]
+  const updated: OrderLike | null =
+    previous && mongoose.isValidObjectId(id)
+      ? await OrderModel.findOneAndUpdate(
+          { _id: id, producer: producerId, status: previous },
+          { $set: { status }, $push: { history: { status, date: new Date() } } },
+          { returnDocument: 'after' },
+        ).lean()
+      : null
+
+  if (!updated) {
+    const existing = mongoose.isValidObjectId(id)
+      ? await OrderModel.findOne({ _id: id }).select('producer').lean()
+      : null
+    if (!existing) throw new ApiError(404, 'ORDER_NOT_FOUND', 'Order not found')
+    if (String(existing.producer) !== producerId) throw new ApiError(403, 'FORBIDDEN', 'Not your order')
+    throw new ApiError(400, 'INVALID_STATUS_TRANSITION', 'Invalid status transition')
+  }
+
+  if (status === 'cancelled') {
+    await restoreStock(updated.items.map((item) => ({ productId: String(item.productId), quantity: item.quantity })))
+  }
+
+  const buyer: BuyerUser | null = await UserModel.findById(updated.buyer).select('name email').lean()
+  const order = toProducerOrderDto(updated, buyer ?? { _id: updated.buyer, name: '' })
+  const event = { orderId: order.id, status: order.status, updatedAt: order.updatedAt }
+  emitToUser(String(updated.buyer), 'order-updated', event)
+  emitToUser(producerId, 'order-updated', event)
+  await notify(String(updated.buyer), 'order-status-changed', `Your order is now ${status}`)
+  return order
 }
 
 export async function listMyOrders(buyerId: string): Promise<MyOrderDto[]> {

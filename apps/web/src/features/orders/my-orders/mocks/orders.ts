@@ -95,6 +95,28 @@ export const MOCK_ORDERS: MyOrderDto[] = [
     reviewed: false,
   },
   {
+    id: 'order-6',
+    status: 'cancelled',
+    producer: {
+      id: 'producer-quinta-das-laranjeiras',
+      name: 'Quinta das Laranjeiras',
+      location: 'Silves, Algarve',
+      email: 'citrus@laranjeiras.example',
+      phone: '+351 282 000 606',
+      lat: 37.1918,
+      lng: -8.4386,
+    },
+    history: [
+      { status: 'pending', date: '2026-11-04T09:10:00.000Z' },
+      { status: 'cancelled', date: '2026-11-04T11:35:00.000Z' },
+    ],
+    items: [
+      { productId: 'prod-winter-oranges', name: 'Winter oranges', price: 2.8, quantity: 4, unit: 'kg' },
+    ],
+    total: 11.2,
+    reviewed: false,
+  },
+  {
     id: 'order-5',
     status: 'delivered',
     producer: {

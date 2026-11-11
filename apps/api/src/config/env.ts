@@ -23,10 +23,14 @@ function testMongoUrl(raw: string | undefined): string {
 }
 
 const rawMongoUrl = process.env.MONGO_URL ?? 'mongodb://localhost:27017/farm_to_table'
+const trustProxyHops = Number(process.env.TRUST_PROXY)
 
 export const env = {
   port: Number(process.env.PORT ?? 3000),
   nodeEnv,
+  // Number of trusted reverse-proxy hops. Compose sets 1 (nginx/Vite); when the
+  // API is called directly this stays false so a client cannot spoof its IP.
+  trustProxy: Number.isInteger(trustProxyHops) && trustProxyHops > 0 ? trustProxyHops : false,
   mongoUrl: nodeEnv === 'test' ? testMongoUrl(process.env.MONGO_URL) : rawMongoUrl,
   jwtSecret,
   seed: {

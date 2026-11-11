@@ -13,6 +13,10 @@ export interface ProducerEmbedded {
   photoUrl: string
   hidden: boolean
   rejectReason: string
+  // Written by reviews.service (recomputeRatings) and read by the public page,
+  // the directory and the producer dashboard.
+  averageRating?: number
+  ratingCount?: number
 }
 
 export interface CartItem {
@@ -49,6 +53,8 @@ const producerSchema = new mongoose.Schema(
     photoUrl: { type: String, default: '' },
     hidden: { type: Boolean, default: false },
     rejectReason: { type: String, default: '' },
+    averageRating: { type: Number, default: 0, min: 0, max: 5 },
+    ratingCount: { type: Number, default: 0, min: 0 },
   },
   { _id: false },
 )

@@ -2,6 +2,8 @@
 
 import type { OrderStatus } from '@/features/orders/my-orders/my-orders.types'
 
+export type DashboardOrderStatus = Exclude<OrderStatus, 'cancelled'>
+
 export interface DashboardSalesPoint {
   day: string
   total: number
@@ -27,7 +29,7 @@ export interface ProducerDashboardStats {
   activeProducts: number
   averageRating: number
   salesPerDay: DashboardSalesPoint[]
-  byStatus: Record<OrderStatus, number>
+  byStatus: Record<DashboardOrderStatus, number>
   lowStock: DashboardLowStockItem[]
   activeAuction: DashboardActiveAuction | null
 }

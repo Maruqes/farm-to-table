@@ -48,7 +48,15 @@ export function OrderCard({ order, onRate }: OrderCardProps) {
             )}
           </p>
         </div>
-        <Badge variant={order.status === 'delivered' ? 'secondary' : 'outline'}>
+        <Badge
+          variant={
+            order.status === 'delivered'
+              ? 'secondary'
+              : order.status === 'cancelled'
+                ? 'destructive'
+                : 'outline'
+          }
+        >
           {ORDER_STATUS_LABELS[order.status]}
         </Badge>
       </header>

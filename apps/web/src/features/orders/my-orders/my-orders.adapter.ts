@@ -16,7 +16,13 @@ import type {
   OrderTimelineEntry,
 } from './my-orders.types'
 
-const ORDER_STATUSES: OrderStatus[] = ['pending', 'confirmed', 'ready', 'delivered']
+const ORDER_STATUSES: OrderStatus[] = [
+  'pending',
+  'confirmed',
+  'ready',
+  'delivered',
+  'cancelled',
+]
 
 function asString(value: unknown, fallback = ''): string {
   return typeof value === 'string' && value.trim() ? value.trim() : fallback

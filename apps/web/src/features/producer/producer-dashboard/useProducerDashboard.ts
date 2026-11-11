@@ -81,7 +81,7 @@ export function useProducerDashboard() {
     const realtime = createProducerDashboardRealtime()
     return realtime.subscribe(userId, () => {
       void refresh().then((ok) => {
-        if (ok) setAnnouncement('A new order arrived. Your dashboard is up to date.')
+        if (ok) setAnnouncement('Your dashboard is up to date.')
       })
     })
   }, [refresh, userId])

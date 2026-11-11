@@ -18,6 +18,13 @@ export function setToken(token: string | null): void {
   }
 }
 
+// Fired when the server refuses the stored token (expired after 2h, or invalid).
+export const SESSION_EXPIRED_EVENT = 'ftt:session-expired'
+
+export function reportSessionExpired(): void {
+  window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT))
+}
+
 export type ApiFields = Record<string, string>
 
 export class ApiError extends Error {
@@ -85,7 +92,9 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     } catch {
       // Keep the fallback error when the body is empty or not JSON.
     }
-    throw normaliseError(response.status, body)
+    const error = normaliseError(response.status, body)
+    if (token && error.status === 401 && error.code === 'UNAUTHORIZED') reportSessionExpired()
+    throw error
   }
 
   if (response.status === 204) return undefined as T

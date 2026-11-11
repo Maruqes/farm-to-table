@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import { ApiError } from '../../lib/api-error.js'
+import { publicProducerName } from '../../lib/producer-name.js'
 import { UserModel } from '../users/users.model.js'
 import { findBuyable, imageUrl } from '../products/products.service.js'
 import type { SaveCartInput } from './cart.schemas.js'
@@ -24,7 +25,7 @@ async function toLines(lines: Line[]) {
       stock: p.stock,
       category: p.category,
       ...imageUrl(p),
-      producer: { id: String(producer._id), name: producer.name, location: producer.producer?.location ?? '' },
+      producer: { id: String(producer._id), name: publicProducerName(producer), location: producer.producer?.location ?? '' },
     }]
   })
 }

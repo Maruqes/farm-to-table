@@ -41,6 +41,102 @@ export interface MyReviewDto {
   text: string
 }
 
+export interface AdminReviewDto {
+  id: string
+  author: string
+  rating: number
+  text: string
+  product: string | null
+  producer: string | null
+  createdAt: string
+  report: {
+    reason: string
+    note?: string
+    reportedAt: string
+  }
+  status: 'reported' | 'hidden'
+}
+
+const ADMIN_QUEUE_LIMIT = 200
+
+type AdminNameMaps = { authors: Map<string, string>, producers: Map<string, string> }
+
+async function adminNameMaps(reviews: Review[]): Promise<AdminNameMaps> {
+  const buyerIds = [...new Set(reviews.map((r) => String(r.buyer)))]
+  const producerIds = [...new Set(reviews.map((r) => String(r.producer)))]
+  const [buyers, producers] = await Promise.all([
+    buyerIds.length ? UserModel.find({ _id: { $in: buyerIds } }).select('name').lean() : [],
+    producerIds.length ? UserModel.find({ _id: { $in: producerIds } }).select('name producer').lean() : [],
+  ])
+  return {
+    authors: new Map(buyers.map((b) => [String(b._id), b.name])),
+    producers: new Map(producers.map((p) => [String(p._id), p.producer?.farmName ?? p.name])),
+  }
+}
+
+function toAdminReviewDto(review: Review, names: AdminNameMaps): AdminReviewDto {
+  const dto: AdminReviewDto = {
+    id: String(review._id),
+    author: names.authors.get(String(review.buyer)) ?? '',
+    rating: review.rating,
+    text: review.text,
+    product: review.productName ?? null,
+    producer: names.producers.get(String(review.producer)) ?? null,
+    createdAt: new Date(review.createdAt).toISOString(),
+    report: {
+      reason: review.report?.reason ?? '',
+      reportedAt: review.report ? new Date(review.report.reportedAt).toISOString() : new Date(review.createdAt).toISOString(),
+    },
+    status: review.hidden === true ? 'hidden' : 'reported',
+  }
+  if (review.report && 'note' in review.report && typeof (review.report as { note?: unknown }).note === 'string') {
+    dto.report.note = (review.report as { note: string }).note
+  }
+  return dto
+}
+
+// The moderation queue: reviews with an open report plus hidden ones, newest report first.
+const IN_QUEUE = { $or: [{ 'report.open': true }, { hidden: true }] }
+
+export async function listReportedReviewsForAdmin(): Promise<AdminReviewDto[]> {
+  const reviews: Review[] = await ReviewModel.find(IN_QUEUE)
+    .sort({ 'report.reportedAt': -1, _id: -1 })
+    .limit(ADMIN_QUEUE_LIMIT)
+    .lean()
+  if (!reviews.length) return []
+  const names = await adminNameMaps(reviews)
+  return reviews.map((review) => toAdminReviewDto(review, names))
+}
+
+async function adminReviewById(
+  id: string,
+  filter: Record<string, unknown>,
+  update: Record<string, unknown>,
+): Promise<AdminReviewDto> {
+  if (!mongoose.isValidObjectId(id)) throw new ApiError(404, 'REVIEW_NOT_FOUND', 'Review not found')
+  const updated: Review | null = await ReviewModel.findOneAndUpdate(
+    { _id: id, ...filter },
+    update,
+    { returnDocument: 'after' },
+  ).lean()
+  if (!updated) throw new ApiError(404, 'REVIEW_NOT_FOUND', 'Review not found')
+  return toAdminReviewDto(updated, await adminNameMaps([updated]))
+}
+
+// Dismisses an open report; the review stays public and leaves the queue.
+// A review that is already hidden has no open report, so keeping it is a 404.
+export async function keepReportedReview(id: string): Promise<AdminReviewDto> {
+  return adminReviewById(id, { 'report.open': true }, { $set: { 'report.open': false } })
+}
+
+// Hides the review and closes the report; hidden reviews stay in the queue marked Hidden.
+export async function hideReportedReview(id: string): Promise<AdminReviewDto> {
+  const dto = await adminReviewById(id, IN_QUEUE, { $set: { hidden: true, 'report.open': false } })
+  const updated: Review | null = await ReviewModel.findById(dto.id).lean()
+  if (updated) await recomputeRatings(String(updated.producer), updated.products.map(String))
+  return dto
+}
+
 function toCreatedReviewDto(review: Review): CreatedReviewDto {
   return {
     id: String(review._id),
@@ -111,11 +207,9 @@ export async function recomputeRatings(producerId: string, productIds: string[] 
   ])
 
   await Promise.all([
-    // The embedded producer rating fields are not in users.model.ts, so the update is deliberately not strict.
     UserModel.updateOne(
       { _id: producerId },
       { $set: { 'producer.averageRating': producerStats.averageRating, 'producer.ratingCount': producerStats.ratingCount } },
-      { strict: false },
     ),
     ...ids.map((id, index) =>
       ProductModel.updateOne(

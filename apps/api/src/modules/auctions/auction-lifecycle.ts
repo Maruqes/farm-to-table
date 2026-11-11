@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { emitToAuction, emitToUser, viewerCount } from '../../realtime/emit.js'
 import { notify } from '../notifications/notifications.service.js'
-import { createOrder, decrementStock } from '../orders/orders.service.js'
+import { createOrder, decrementStock, findOrderByAuction } from '../orders/orders.service.js'
 import { ProductModel } from '../products/products.model.js'
 import { chargeCard } from '../users/users.service.js'
 import { UserModel } from '../users/users.model.js'
@@ -75,6 +75,20 @@ async function settleAuction(auction: AuctionRow): Promise<void> {
   let winner: Person | null = auction.winner
     ? { id: String(auction.winner.id), name: auction.winner.name }
     : null
+
+  if (!winner) {
+    // An earlier attempt may have created the order and crashed before writing
+    // the winner. Adopt that order; never charge the bidders or decrement stock twice.
+    const existingOrder = await findOrderByAuction(String(auction._id))
+    if (existingOrder) {
+      const buyer = await UserModel.findById(existingOrder.buyer).select('name').lean()
+      winner = { id: existingOrder.buyer, name: buyer?.name ?? '' }
+      await AuctionModel.updateOne(
+        { _id: auction._id, status: 'ended' },
+        { $set: { winner } },
+      )
+    }
+  }
 
   if (!winner) {
     const candidates = await highestBids(auction._id)

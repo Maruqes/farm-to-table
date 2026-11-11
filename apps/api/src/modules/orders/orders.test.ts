@@ -165,6 +165,17 @@ test('a pickup order ignores the address; a delivery order stores it', async () 
   assert.deepEqual(deliveryDoc!.address, { line1: 'Rua das Flores 1', city: 'Viana do Castelo', postalCode: '4900-001' })
 })
 
+test('my orders show the farm name, not the personal account name', async () => {
+  const b = await buyer('Mine Buyer')
+  const p = await producer('Mine Personal', { farmName: 'Mine Farm' })
+  const id = await product(p.id, { name: 'Mine Apples', price: 2, stock: 5 })
+  await putCart(b.token, [{ productId: id, quantity: 1 }])
+  assert.equal((await checkout(b.token, { fulfilment: 'pickup' })).status, 201)
+  const res = await mine(b.token)
+  assert.equal(res.status, 200)
+  assert.equal(res.body[0].producer.name, 'Mine Farm')
+})
+
 test('two producers create two orders, copy lines, decrement stock and empty the cart', async () => {
   const b = await buyer('Happy Buyer')
   const p1 = await producer('Happy Farm One', { location: 'Minho' })

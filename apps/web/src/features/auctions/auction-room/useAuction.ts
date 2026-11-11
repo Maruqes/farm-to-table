@@ -56,6 +56,9 @@ export function useAuction(id: string, token: string | null) {
   const [bidError, setBidError] = useState<string | null>(null)
   const [bidding, setBidding] = useState(false)
   const [announcement, setAnnouncement] = useState('')
+  // Bumped when a scheduled auction reaches its start (or an active one its end)
+  // so the page asks the server again even if no socket event arrived.
+  const [boundaryTick, setBoundaryTick] = useState(0)
 
   const auctionRef = useRef<AuctionRoom | null>(null)
   useEffect(() => {
@@ -174,6 +177,29 @@ export function useAuction(id: string, token: string | null) {
       // Keep the current state; the rejected-bid message already explains the race.
     }
   }, [])
+
+  // The server changes `scheduled` -> `active` (and `active` -> `ended`) on its
+  // own clock. Socket events usually carry that, but if the room is open before
+  // the start or the connection was down, refetch at the boundary.
+  useEffect(() => {
+    const current = auction
+    if (!current || current.status === 'ended') return
+    const boundary = current.status === 'scheduled' ? current.startsAt : current.endsAt
+    if (!boundary) return
+    const at = Date.parse(boundary)
+    if (Number.isNaN(at)) return
+
+    const wait = at - Date.now()
+    if (wait > 0) {
+      const timer = setTimeout(() => setBoundaryTick((value) => value + 1), wait + 750)
+      return () => clearTimeout(timer)
+    }
+
+    const interval = setInterval(() => {
+      void syncAuction(current.id)
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [auction, boundaryTick, syncAuction])
 
   const placeBid = useCallback(
     async (amount: number): Promise<PlaceBidResult> => {

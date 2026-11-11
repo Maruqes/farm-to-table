@@ -6,6 +6,7 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   confirmed: 'Confirmed',
   ready: 'Ready',
   delivered: 'Delivered',
+  cancelled: 'Cancelled',
 }
 
 export const ORDER_STATUS_STEPS: OrderStatus[] = [

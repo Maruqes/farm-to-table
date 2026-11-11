@@ -1,4 +1,3 @@
-import type { OrderStatus } from '@/features/orders/my-orders/my-orders.types'
 import type {
   ProducerDashboardActiveAuctionDto,
   ProducerDashboardAuctionProductDto,
@@ -7,6 +6,7 @@ import type {
 import { DASHBOARD_ORDER_STATUSES } from './producer-dashboard.labels'
 import type {
   DashboardActiveAuction,
+  DashboardOrderStatus,
   DashboardLowStockItem,
   DashboardSalesPoint,
   ProducerDashboardStats,
@@ -33,7 +33,7 @@ function asDay(value: unknown): string | null {
   return day && !Number.isNaN(Date.parse(day)) ? day : null
 }
 
-function emptyByStatus(): Record<OrderStatus, number> {
+function emptyByStatus(): Record<DashboardOrderStatus, number> {
   return {
     pending: 0,
     confirmed: 0,
@@ -42,7 +42,7 @@ function emptyByStatus(): Record<OrderStatus, number> {
   }
 }
 
-function adaptByStatus(value: unknown): Record<OrderStatus, number> {
+function adaptByStatus(value: unknown): Record<DashboardOrderStatus, number> {
   const result = emptyByStatus()
   if (!value || typeof value !== 'object') return result
 

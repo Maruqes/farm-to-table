@@ -1,6 +1,11 @@
 // Domain model consumed by components and hooks. API shapes stay in my-orders.dto.ts.
 
-export type OrderStatus = 'pending' | 'confirmed' | 'ready' | 'delivered'
+export type OrderStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'ready'
+  | 'delivered'
+  | 'cancelled'
 
 export interface OrderTimelineEntry {
   status: OrderStatus

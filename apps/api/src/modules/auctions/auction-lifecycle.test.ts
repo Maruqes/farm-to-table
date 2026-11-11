@@ -378,6 +378,47 @@ test('stock edge: a payable bidder still loses when the lot quantity is no longe
   })
 })
 
+test('recovery adopts an order already created for a stranded auction instead of charging and decrementing again', async () => {
+  const p = await producer('Crash farm')
+  const bidder = await buyer('Crash winner', validCard)
+  const item = await product(p.id, 16)
+  const auctionId = await seedAuction(p.id, item, {
+    status: 'ended',
+    quantity: 4,
+    currentPrice: 12,
+    bidCount: 1,
+    leader: { id: bidder.id, name: bidder.name },
+  })
+  await seedBid(auctionId, bidder, 12)
+  // Simulates the crash window: the order and the stock change happened, but
+  // the winner write and settledAt did not.
+  await OrderModel.create({
+    buyer: bidder.id,
+    producer: p.id,
+    items: [{ productId: item, name: 'Kiwi lot', price: 3, quantity: 4, unit: 'kg' }],
+    total: 12,
+    status: 'pending',
+    history: [{ status: 'pending', date: new Date() }],
+    fulfilment: 'pickup',
+    address: null,
+    auction: auctionId,
+  })
+  await AuctionModel.collection.updateOne(
+    { _id: new mongoose.Types.ObjectId(auctionId) },
+    { $set: { updatedAt: new Date(Date.now() - 20_000) } },
+  )
+
+  await tick(new Date())
+
+  assert.equal(await OrderModel.countDocuments({ auction: auctionId }), 1)
+  assert.equal(await stockOf(item), 16)
+  assert.equal(await NotificationModel.countDocuments({ user: bidder.id, type: 'auction-won' }), 0)
+  assert.equal(await NotificationModel.countDocuments({ user: p.id, type: 'order-new' }), 0)
+  const doc = await AuctionModel.findById(auctionId).lean()
+  assert.equal(doc!.winner!.id.toString(), bidder.id)
+  assert.ok(doc!.settledAt)
+})
+
 test('two ticks in parallel on a due auction create one order and settle it once', async () => {
   const p = await producer('Race close farm')
   const bidder = await buyer('Race winner', validCard)

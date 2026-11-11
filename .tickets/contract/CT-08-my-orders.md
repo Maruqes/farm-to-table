@@ -13,7 +13,7 @@ Follows CT-00; reuses `OrderStatus` and `OrderItem` from CT-07. Both endpoints n
 OrderHistoryEntry = { status: OrderStatus, date: string } // ISO 8601, oldest first
 MyOrder = {
   id: string,
-  status: OrderStatus,
+  status: OrderStatus,               // may also be "cancelled" (CT-14); a cancelled order is final
   history: OrderHistoryEntry[],
   producer: {
     id: string, name: string, location: string,
@@ -40,3 +40,7 @@ MyOrder = {
 
 ## Realtime
 - Consumes `order-updated` on `user:<buyerId>` exactly as defined in CT-00 (`{ orderId, status, updatedAt }`). The client ignores events that move an order backwards and otherwise takes the server status.
+- A `cancelled` event is accepted only from `pending`; the order is then final and is shown as cancelled in the timeline.
+
+## Amendment
+- 2026-11-11: the API already returned `cancelled` here (verified in BE-23); the status union and the client now include it. No other field changed.

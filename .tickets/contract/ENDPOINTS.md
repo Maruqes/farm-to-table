@@ -76,7 +76,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] GET /api/admin/status — FE-25 — CT-25
 
 ## Realtime events (CT-00)
-- [x] order-updated — FE-08, FE-14 — CT-00, CT-08, CT-14
+- [x] order-updated — FE-08, FE-12, FE-14 — CT-00, CT-08, CT-12, CT-14
 - [x] order-created — FE-14 — CT-14
 - [ ] auction-updated — — CT-00
 - [x] notification — FE-09, FE-12 — CT-09, CT-12

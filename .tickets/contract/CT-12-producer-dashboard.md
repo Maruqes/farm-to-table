@@ -35,4 +35,4 @@ A producer with no data gets zeros and empty arrays, not 404.
 **Errors**: 401 `UNAUTHORIZED`; 403 `FORBIDDEN` (not a producer); 403 `PRODUCER_NOT_APPROVED`.
 
 ## Realtime
-No new event. The page listens on `user:<id>` for the `notification` event (CT-09) and refetches the stats when its `type` is `order-new` or `order-status-changed`. The server must emit `order-new` to the producer when a buyer places an order for them.
+No new event. The page listens on `user:<id>` for the `notification` event (CT-09) and refetches the stats when its `type` is `order-new` or `order-status-changed`. It also listens to `order-updated` (CT-00) so a status change made in another producer tab refreshes this dashboard. The server must emit `order-new` to the producer when a buyer places an order for them.

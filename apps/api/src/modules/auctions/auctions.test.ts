@@ -502,6 +502,22 @@ test('ownership: another producer cannot edit, publish or cancel; a foreign prod
   assert.equal(await AuctionModel.countDocuments({ producer: p.id }), 1)
 })
 
+test('public room shows the farm name, not the personal account name', async () => {
+  const p = await producer('Room Personal', { farmName: 'Room Farmhouse' })
+  const bidder = await createUser('buyer', 'Room Bidder')
+  const item = await product(p.id, { name: 'Room apples' })
+  const now = Date.now()
+  const active = await seedAuction(p.id, {
+    productId: item,
+    status: 'active',
+    startsAt: new Date(now - 10 * minute),
+    endsAt: new Date(now + 20 * minute),
+  })
+  const res = await room(active)
+  assert.equal(res.status, 200)
+  assert.equal(res.body.producer.name, 'Room Farmhouse')
+})
+
 test('public room: CT-11 shape, newest bids capped at 50, winner only when ended, drafts never public', async () => {
   const p = await producer('Room Farm')
   const bidder = await createUser('buyer', 'Room Bidder')

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/components/ui/utils'
 import { SearchBox } from './SearchBox'
 import { DevRoleSwitcher } from './DevRoleSwitcher'
+import { USE_MOCKS } from '@/services/env'
 import { useLiveAuctionCount } from '@/features/auctions/auctions-list'
 
 interface NavItem {
@@ -111,7 +112,7 @@ export function SiteHeader() {
         </nav>
       </div>
 
-      {import.meta.env.DEV && <DevRoleSwitcher />}
+      {import.meta.env.DEV && USE_MOCKS && <DevRoleSwitcher />}
     </header>
   )
 }

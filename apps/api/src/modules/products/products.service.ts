@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import { ApiError } from '../../lib/api-error.js'
 import { escapeRegex } from '../../lib/escape-regex.js'
+import { publicProducerName } from '../../lib/producer-name.js'
 import { listProductReviews } from '../reviews/reviews.service.js'
 import { UserModel } from '../users/users.model.js'
 import { ProductModel, type ProductDoc } from './products.model.js'
@@ -10,7 +11,7 @@ import type { ListProductsQuery, SaveProductInput } from './products.schemas.js'
 
 const LIMIT = 200
 
-type Producer = { _id: unknown, name: string, producer?: { location?: string } }
+type Producer = { _id: unknown, name: string, producer?: { farmName?: string, location?: string } }
 type Product = ProductDoc & { _id: unknown }
 
 export const imageUrl = (p: { _id: unknown, imageKey?: string, updatedAt?: Date }) =>
@@ -28,7 +29,7 @@ export async function findBuyable(opts: { id?: string, q?: string, inStock?: boo
   const filter: Record<string, unknown> = { ...opts.productFilter, producer: { $in: [...byId.keys()] }, hidden: { $ne: true } }
   if (opts.q) {
     const re = new RegExp(escapeRegex(opts.q), 'i')
-    const named = producers.filter((p) => re.test(p.name)).map((p) => p._id)
+    const named = producers.filter((p) => re.test(publicProducerName(p))).map((p) => p._id)
     filter.$or = [{ name: re }, { ingredients: re }, { producer: { $in: named } }]
   }
   if (opts.id) filter._id = opts.id
@@ -61,7 +62,7 @@ export async function listProducts(query: ListProductsQuery) {
       stock: p.stock,
       category: p.category,
       ...imageUrl(p),
-      producer: { id: String(producer._id), name: producer.name, location: producer.producer?.location ?? '' },
+      producer: { id: String(producer._id), name: publicProducerName(producer), location: producer.producer?.location ?? '' },
       averageRating: p.averageRating,
     }))
 }
@@ -78,7 +79,7 @@ export async function getProduct(id: string) {
     stock: p.stock,
     category: p.category,
     ...imageUrl(p),
-    producer: { id: String(producer._id), name: producer.name, location: producer.producer?.location ?? '' },
+    producer: { id: String(producer._id), name: publicProducerName(producer), location: producer.producer?.location ?? '' },
     averageRating: p.averageRating,
     description: p.description,
     reviews: await listProductReviews(id),

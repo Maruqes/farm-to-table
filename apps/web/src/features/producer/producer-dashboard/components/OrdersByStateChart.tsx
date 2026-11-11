@@ -1,11 +1,11 @@
-import type { OrderStatus } from '@/features/orders/my-orders/my-orders.types'
+import type { DashboardOrderStatus } from '../producer-dashboard.types'
 import {
   DASHBOARD_ORDER_STATUSES,
   DASHBOARD_STATUS_LABELS,
 } from '../producer-dashboard.labels'
 
 interface OrdersByStateChartProps {
-  byStatus: Record<OrderStatus, number>
+  byStatus: Record<DashboardOrderStatus, number>
 }
 
 export function OrdersByStateChart({ byStatus }: OrdersByStateChartProps) {

@@ -81,7 +81,9 @@ export async function placeBid(bidder: Bidder, auctionId: string, input: PlaceBi
       _id: auction._id,
       status: 'active',
       endsAt: { $gt: now },
-      $expr: { $gte: [amount, { $add: ['$currentPrice', '$increment'] }] },
+      // Rounded like the check above: 1.1 + 2.2 is 3.3000000000000003 in floating point,
+      // which would refuse a bid of exactly the minimum.
+      $expr: { $gte: [amount, { $round: [{ $add: ['$currentPrice', '$increment'] }, 2] }] },
     },
     {
       $set: { currentPrice: amount, leader: { id: new mongoose.Types.ObjectId(bidder.id), name: user.name } },
@@ -89,7 +91,17 @@ export async function placeBid(bidder: Bidder, auctionId: string, input: PlaceBi
     },
     { returnDocument: 'after' },
   ).lean()
-  if (!updated) rejectOutbid(bidder.id, auctionId, amount)
+  if (!updated) {
+    // The conditional update can also fail because the scheduler closed the
+    // lot between the read above and this write. Report the real reason.
+    const current: Pick<AuctionDoc, 'status' | 'endsAt'> | null = await AuctionModel.findById(auction._id)
+      .select('status endsAt')
+      .lean()
+    if (!current) throw new ApiError(404, 'AUCTION_NOT_FOUND', 'Auction not found')
+    if (current.status !== 'active') throw new ApiError(409, 'AUCTION_NOT_ACTIVE', 'Auction is not active')
+    if (current.endsAt.getTime() <= now.getTime()) throw new ApiError(409, 'AUCTION_CLOSED', 'Auction has ended')
+    rejectOutbid(bidder.id, auctionId, amount)
+  }
 
   const bid = await BidModel.create({ auction: updated._id, bidder: leader.id, name: leader.name, amount })
   const dto = toBidDto(bid.toObject() as BidRow)

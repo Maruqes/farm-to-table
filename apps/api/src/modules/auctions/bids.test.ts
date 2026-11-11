@@ -334,6 +334,12 @@ test('minimum increment: below currentPrice + increment is 409 BID_TOO_LOW, the 
   const next = await bid(b4.token, id, { amount: 15 })
   assert.equal(next.status, 201)
   assert.equal((await auctionState(id)).currentPrice, 15)
+
+  // 1.1 + 2.2 is 3.3000000000000003 in floating point; the exact minimum must still win.
+  const floatLot = await seedAuction(p.id, { basePrice: 1.1, currentPrice: 1.1, increment: 2.2 })
+  const float = await bid(b4.token, floatLot, { amount: 3.3 })
+  assert.equal(float.status, 201)
+  assert.equal((await auctionState(floatLot)).currentPrice, 3.3)
 })
 
 test('time and state: non-active lots are 409 AUCTION_NOT_ACTIVE; past endsAt is 409 AUCTION_CLOSED', async () => {

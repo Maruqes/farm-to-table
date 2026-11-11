@@ -66,6 +66,17 @@ async function product(producerId: string, over: Record<string, unknown> = {}) {
 
 const ids = (res: { body: any }) => res.body.map((p: any) => p.id)
 
+test('catalog and detail show the farm name, and q matches it', async () => {
+  const me = await producer('C Personal', { farmName: 'Clover Farm' })
+  const id = await product(me.id, { name: 'Cloverprod' })
+  const list = await call('/api/products?q=cloverprod')
+  assert.deepEqual(list.body.map((p: any) => p.producer.name), ['Clover Farm'])
+  assert.deepEqual(ids(await call('/api/products?q=clover%20farm')), [id])
+  assert.deepEqual(ids(await call('/api/products?q=c%20personal')), [])
+  const detail = await call(`/api/products/${id}`)
+  assert.equal(detail.body.producer.name, 'Clover Farm')
+})
+
 test('list never shows hidden, zero-stock, pending-producer or hidden-producer products', async () => {
   const ok = await producer('Never Ok')
   const pending = await producer('Never Pending', { status: 'pending' })

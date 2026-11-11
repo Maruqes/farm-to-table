@@ -26,6 +26,7 @@ import CheckoutPage from '@/pages/CheckoutPage'
 import MyOrdersPage from '@/pages/MyOrdersPage'
 import ProfilePage from '@/pages/ProfilePage'
 import { AUTHENTICATED_ROLES } from '@/context/roles'
+import { RequireApprovedProducer } from '@/features/auth/producer-status/RequireApprovedProducer'
 import { RequireRole } from './RequireRole'
 import AccountPage from './AccountPage'
 import NotFoundPage from './NotFoundPage'
@@ -41,12 +42,12 @@ export function AppRoutes() {
       <Route path="/auctions/:id" element={<AuctionRoomPage />} />
       <Route path="/login" element={<AuthPage mode="login" />} />
       <Route path="/register" element={<AuthPage mode="register" />} />
-      <Route path="/producer" element={<RequireRole roles={['producer']}><ProducerDashboardPage /></RequireRole>} />
-      <Route path="/producer/products" element={<RequireRole roles={['producer']}><ProducerProductsPage /></RequireRole>} />
-      <Route path="/producer/page" element={<RequireRole roles={['producer']}><ProducerPageEditPage /></RequireRole>} />
-      <Route path="/producer/orders" element={<RequireRole roles={['producer']}><ProducerOrdersPage /></RequireRole>} />
-      <Route path="/producer/reviews" element={<RequireRole roles={['producer']}><ProducerReviewsPage /></RequireRole>} />
-      <Route path="/producer/auctions" element={<RequireRole roles={['producer']}><ProducerAuctionsPage /></RequireRole>} />
+      <Route path="/producer" element={<RequireRole roles={['producer']}><RequireApprovedProducer><ProducerDashboardPage /></RequireApprovedProducer></RequireRole>} />
+      <Route path="/producer/products" element={<RequireRole roles={['producer']}><RequireApprovedProducer><ProducerProductsPage /></RequireApprovedProducer></RequireRole>} />
+      <Route path="/producer/page" element={<RequireRole roles={['producer']}><RequireApprovedProducer><ProducerPageEditPage /></RequireApprovedProducer></RequireRole>} />
+      <Route path="/producer/orders" element={<RequireRole roles={['producer']}><RequireApprovedProducer><ProducerOrdersPage /></RequireApprovedProducer></RequireRole>} />
+      <Route path="/producer/reviews" element={<RequireRole roles={['producer']}><RequireApprovedProducer><ProducerReviewsPage /></RequireApprovedProducer></RequireRole>} />
+      <Route path="/producer/auctions" element={<RequireRole roles={['producer']}><RequireApprovedProducer><ProducerAuctionsPage /></RequireApprovedProducer></RequireRole>} />
       <Route path="/producer/status" element={<RequireRole roles={['producer']}><ProducerStatusPage /></RequireRole>} />
       <Route path="/admin" element={<RequireRole roles={['admin']}><AdminOverviewPage /></RequireRole>} />
       <Route path="/admin/producers" element={<RequireRole roles={['admin']}><AdminProducersPage /></RequireRole>} />

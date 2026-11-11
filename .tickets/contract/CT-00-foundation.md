@@ -25,13 +25,15 @@ Frozen once a human sets `status: done`. After that, change it only through a ne
 - Handshake: `auth: { token: <jwt> }`. No token = visitor, may only join `auction:<id>` read-only.
 - Rooms: `user:<id>` (joined automatically by the server for the token's user), `auction:<id>` (client emits `join` / `leave` with `{ room }`).
 - Server → client events (payloads are the contract the mock in `realtime.ts` must emit):
-  - `order-updated` → `user:<buyerId>` and `user:<producerId>`: `{ orderId: string, status: "pending"|"confirmed"|"ready"|"delivered", updatedAt: string }`
+  - `order-updated` → `user:<buyerId>` and `user:<producerId>`: `{ orderId: string, status: "pending"|"confirmed"|"ready"|"delivered"|"cancelled", updatedAt: string }`
   - `auction-updated` → `auction:<id>`: `{ auctionId: string, currentPrice: number, bidCount: number, leader: { id: string, name: string } | null, endsAt: string, status: "scheduled"|"active"|"ended" }`
+  - `notification` → `user:<id>`: full `Notification` object (CT-09), emitted when the notification is stored.
 - Module contracts add their own events here by new contract tickets, never ad hoc.
 
-## Gaps found against current frontend (fix in the FE ticket that next touches these files)
-- `services/api.ts` does not send the Bearer token and throws a plain `Error`; it must normalise the error body above into one `ApiError { status, code, message, fields? }`.
-- The mock `realtime.ts` emits `order-updated` without `updatedAt`, and `auction-updated` without `leader`, `endsAt`, `status`.
+## Gaps found against current frontend (fixed 2026-11-11)
+- `services/api.ts` now sends the Bearer token and normalises the error body into one `ApiError { status, code, message, fields? }`.
+- The mock `realtime.ts` now emits `updatedAt` on `order-updated` and `leader`, `endsAt`, `status` on `auction-updated`.
+- The real `SocketRealtimeClient` is implemented with `socket.io-client` (JWT handshake, `join`/`leave`, rejoin after reconnect).
 
 ## Done when
 - [ ] Reviewed against SCOPE.md and approved by a human (`status: done`)

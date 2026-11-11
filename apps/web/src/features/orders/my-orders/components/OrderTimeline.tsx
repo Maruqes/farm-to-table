@@ -10,6 +10,23 @@ interface OrderTimelineProps {
 }
 
 export function OrderTimeline({ status, history }: OrderTimelineProps) {
+  const cancelledAt = history.find((entry) => entry.status === 'cancelled')?.date ?? null
+
+  if (status === 'cancelled') {
+    return (
+      <div className="rounded-lg border bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+        This order was cancelled by the producer. Any stock has been returned to the
+        catalog.
+        {cancelledAt && (
+          <>
+            {' '}
+            Cancelled on <time dateTime={cancelledAt}>{formatDate(cancelledAt)}</time>.
+          </>
+        )}
+      </div>
+    )
+  }
+
   const currentIndex = ORDER_STATUS_STEPS.indexOf(status)
 
   return (

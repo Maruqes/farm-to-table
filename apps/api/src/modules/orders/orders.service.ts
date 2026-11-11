@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import { ApiError } from '../../lib/api-error.js'
 import { round2 } from '../../lib/money.js'
+import { publicProducerName } from '../../lib/producer-name.js'
 import { emitToUser } from '../../realtime/emit.js'
 import { clearCart, getCartLines } from '../cart/cart.service.js'
 import { notify } from '../notifications/notifications.service.js'
@@ -104,7 +105,7 @@ type ProducerUser = {
   _id: unknown
   name: string
   email: string
-  producer?: { location?: string, lat?: number, lng?: number }
+  producer?: { farmName?: string, location?: string, lat?: number, lng?: number }
 }
 
 type BuyerUser = {
@@ -249,6 +250,13 @@ export async function checkout(buyerId: string, input: CheckoutInput): Promise<O
   }
 }
 
+// Used by the auction settlement recovery path: an order may exist even when
+// writing the winner to the auction did not complete before a crash.
+export async function findOrderByAuction(auctionId: string): Promise<{ buyer: string } | null> {
+  const order = await OrderModel.findOne({ auction: auctionId }).select('buyer').lean()
+  return order ? { buyer: String(order.buyer) } : null
+}
+
 // Only the next step forward; cancelling is the one way out of pending.
 const PREVIOUS_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
   confirmed: 'pending',
@@ -343,7 +351,7 @@ export async function listMyOrders(buyerId: string): Promise<MyOrderDto[]> {
       order,
       {
         id: producer ? String(producer._id) : String(order.producer),
-        name: producer?.name ?? '',
+        name: producer ? publicProducerName(producer) : '',
         location: embedded?.location ?? '',
         ...(producer?.email ? { email: producer.email } : {}),
         ...(typeof embedded?.lat === 'number' && typeof embedded?.lng === 'number' ? { lat: embedded.lat, lng: embedded.lng } : {}),

@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import { app } from '../../app.js'
 import { env } from '../../config/env.js'
 import { connect, disconnect } from '../../db/connect.js'
+import { ProductModel } from '../products/products.model.js'
 import { UserModel, type ProducerEmbedded, type UserRole } from '../users/users.model.js'
 
 let server: Server
@@ -75,6 +76,35 @@ test('directory lists only approved, visible producers, sorted, without email', 
   const tooLong = await call(`/api/producers?q=${'a'.repeat(101)}`)
   assert.equal(tooLong.status, 400)
   assert.equal(tooLong.body.error.code, 'VALIDATION_ERROR')
+})
+
+test('public producer rating comes from the stored review aggregate, not the average of product averages', async () => {
+  const me = await createUser('producer', 'Rated Farm', { status: 'approved', location: 'Douro', averageRating: 4.25, ratingCount: 11 })
+  await ProductModel.create([
+    { producer: me.id, name: 'Popular', category: 'fruit', price: 2, unit: 'kg', stock: 5, season: 'summer', organic: false, averageRating: 5, ratingCount: 10 },
+    { producer: me.id, name: 'Unpopular', category: 'fruit', price: 2, unit: 'kg', stock: 5, season: 'summer', organic: false, averageRating: 1, ratingCount: 1 },
+  ])
+
+  const directory = await call('/api/producers?q=rated')
+  assert.equal(directory.body[0].averageRating, 4.25)
+  const page = await call(`/api/producers/${me.id}`)
+  assert.equal(page.body.averageRating, 4.25)
+})
+
+test('public name is the farm name, not the personal account name', async () => {
+  const me = await createUser('producer', 'Ana Personal', { farmName: 'Vale Farm', status: 'approved', location: 'Douro Valley' })
+  const all = await call('/api/producers')
+  assert.ok(all.body.some((p: any) => p.name === 'Vale Farm'))
+  assert.ok(all.body.every((p: any) => p.name !== 'Ana Personal'))
+  const q = await call('/api/producers?q=vale')
+  assert.deepEqual(q.body.map((p: any) => p.name), ['Vale Farm'])
+  const personal = await call('/api/producers?q=ana%20personal')
+  assert.deepEqual(personal.body, [])
+  const page = await call(`/api/producers/${me.id}`)
+  assert.equal(page.status, 200)
+  assert.equal(page.body.name, 'Vale Farm')
+  const mine = await call('/api/producers/me', 'GET', me.token)
+  assert.equal(mine.body.name, 'Vale Farm')
 })
 
 test('public page 404s for pending, rejected, hidden, unknown and invalid ids', async () => {

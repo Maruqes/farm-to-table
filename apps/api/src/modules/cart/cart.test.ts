@@ -80,6 +80,15 @@ test('401 without token, 403 for producer and admin', async () => {
   }
 })
 
+test('cart lines show the farm name, not the personal account name', async () => {
+  const b = await buyer()
+  const p = await producer('Cart Personal', { farmName: 'Cart Farm', location: 'Minho' })
+  const id = await product(p.id, { name: 'Cart Item' })
+  const saved = await put(b.token, [{ productId: id, quantity: 1 }])
+  assert.equal(saved.status, 200)
+  assert.equal(saved.body.items[0].producer.name, 'Cart Farm')
+})
+
 test('empty cart reads as no items', async () => {
   const b = await buyer()
   const res = await get(b.token)

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
 import { ApiError } from '../../lib/api-error.js'
+import { publicProducerName } from '../../lib/producer-name.js'
 import { round2 } from '../../lib/money.js'
-import { viewerCount } from '../../realtime/emit.js'
+import { emitToAuction, viewerCount } from '../../realtime/emit.js'
 import { ProductModel } from '../products/products.model.js'
 import { UserModel } from '../users/users.model.js'
 import {
@@ -166,10 +167,10 @@ export async function getPublicAuction(id: string): Promise<AuctionRoomDto> {
   if (!auction) throw new ApiError(404, 'AUCTION_NOT_FOUND', 'Auction not found')
 
   const [producer, bids] = await Promise.all([
-    UserModel.findById(auction.producer).select('name').lean(),
+    UserModel.findById(auction.producer).select('name producer').lean(),
     BidModel.find({ auction: auction._id }).sort({ createdAt: -1, _id: -1 }).limit(BIDS_LIMIT).lean(),
   ])
-  return toRoomDto(auction, producer?.name ?? '', bids as BidRow[])
+  return toRoomDto(auction, producer ? publicProducerName(producer) : '', bids as BidRow[])
 }
 
 export async function listProducerAuctions(producerId: string): Promise<ProducerAuctionDto[]> {
@@ -311,7 +312,11 @@ export async function cancelAuction(producerId: string, id: string): Promise<Pro
         { returnDocument: 'after', runValidators: true },
       ).lean()
     : null
-  if (updated) return toProducerAuctionDto(updated)
+  if (updated) {
+    // Anyone still watching the room sees it close instead of a countdown that never resolves.
+    emitToAuction(id, 'auction-ended', { auctionId: id, status: 'ended', winner: null, currentPrice: updated.currentPrice })
+    return toProducerAuctionDto(updated)
+  }
 
   const existing = mongoose.isValidObjectId(id)
     ? await AuctionModel.findOne({ _id: id }).select('producer status bidCount').lean()

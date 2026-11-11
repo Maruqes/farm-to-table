@@ -10,11 +10,18 @@ import { adaptOrderUpdated } from './my-orders.adapter'
 import type { OrderUpdatedEventDto } from './my-orders.dto'
 import { ORDER_STATUS_LABELS, ORDER_STATUS_STEPS } from './my-orders.labels'
 import { myOrdersService } from './my-orders.service'
-import type { MyOrder, OrderStatusUpdate, RateResult } from './my-orders.types'
+import type { MyOrder, OrderStatus, OrderStatusUpdate, RateResult } from './my-orders.types'
 
 const LOAD_ERROR = 'Your orders could not be loaded. Check your connection and try again.'
 const RATE_ERROR = 'We could not save your rating. Check your connection and try again.'
 const ALREADY_RATED = 'This order has already been rated. Each order can only be rated once.'
+
+function isForwardUpdate(current: OrderStatus, next: OrderStatus): boolean {
+  if (current === next || current === 'cancelled') return false
+  // SCOPE.md §0: a cancelled order is final; cancelling is only possible while pending.
+  if (next === 'cancelled') return current === 'pending'
+  return ORDER_STATUS_STEPS.indexOf(next) > ORDER_STATUS_STEPS.indexOf(current)
+}
 
 function applyStatusUpdate(orders: MyOrder[], update: OrderStatusUpdate): MyOrder[] {
   let changed = false
@@ -22,9 +29,8 @@ function applyStatusUpdate(orders: MyOrder[], update: OrderStatusUpdate): MyOrde
   const next = orders.map((order) => {
     if (order.id !== update.orderId) return order
 
-    // SCOPE.md §0: order states only move forward. Ignore an out-of-order event
-    // rather than showing a delivered order going back to pending.
-    if (ORDER_STATUS_STEPS.indexOf(update.status) < ORDER_STATUS_STEPS.indexOf(order.status)) {
+    // Ignore an out-of-order event instead of showing a delivered order go backwards.
+    if (!isForwardUpdate(order.status, update.status) && order.status !== update.status) {
       return order
     }
 
@@ -95,10 +101,7 @@ export function useMyOrders() {
       if (!update) return
 
       const target = ordersRef.current.find((order) => order.id === update.orderId)
-      if (
-        target &&
-        ORDER_STATUS_STEPS.indexOf(update.status) > ORDER_STATUS_STEPS.indexOf(target.status)
-      ) {
+      if (target && isForwardUpdate(target.status, update.status)) {
         setAnnouncement(
           `Order from ${target.producer.name} is now ${ORDER_STATUS_LABELS[update.status]}.`,
         )

@@ -39,8 +39,8 @@ class StatusTest extends TestCase
         $this->assertSame(7 * 86400, $ttl['expireAfterSeconds']);
 
         $admin = User::create(['name' => 'Admin', 'email' => 'admin@example.test', 'passwordHash' => 'x', 'role' => 'admin']);
-        $this->get('/status')->assertRedirect('/login');
-        $response = $this->actingAs($admin)->get('/status')->assertOk()->assertSee('1 service down.');
+        $this->get('/backoffice/status')->assertRedirect('/backoffice/login');
+        $response = $this->actingAs($admin)->get('/backoffice/status')->assertOk()->assertSee('1 service down.');
 
         $services = collect($response->viewData('services'))->keyBy('name');
         $this->assertSame('down', $services['API']['state']);
@@ -55,6 +55,6 @@ class StatusTest extends TestCase
     public function test_page_without_samples(): void
     {
         $admin = User::create(['name' => 'Admin', 'email' => 'admin@example.test', 'passwordHash' => 'x', 'role' => 'admin']);
-        $this->actingAs($admin)->get('/status')->assertOk()->assertSee('No checks recorded yet.');
+        $this->actingAs($admin)->get('/backoffice/status')->assertOk()->assertSee('No checks recorded yet.');
     }
 }

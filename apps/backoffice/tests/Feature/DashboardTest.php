@@ -39,7 +39,7 @@ class DashboardTest extends TestCase
 
     public function test_guests_are_sent_to_login(): void
     {
-        $this->get('/')->assertRedirect('/login');
+        $this->get('/backoffice/backoffice')->assertRedirect('/backoffice/login');
     }
 
     public function test_only_admins_can_log_in(): void
@@ -47,16 +47,16 @@ class DashboardTest extends TestCase
         $buyer = $this->user('buyer');
         $admin = $this->user('admin');
 
-        $this->post('/login', ['email' => $buyer->email, 'password' => 'secret-pass'])->assertSessionHasErrors('email');
+        $this->post('/backoffice/login', ['email' => $buyer->email, 'password' => 'secret-pass'])->assertSessionHasErrors('email');
         $this->assertGuest();
-        $this->post('/login', ['email' => $admin->email, 'password' => 'wrong'])->assertSessionHasErrors('email');
-        $this->post('/login', ['email' => $admin->email, 'password' => 'secret-pass'])->assertRedirect('/');
+        $this->post('/backoffice/login', ['email' => $admin->email, 'password' => 'wrong'])->assertSessionHasErrors('email');
+        $this->post('/backoffice/login', ['email' => $admin->email, 'password' => 'secret-pass'])->assertRedirect('/backoffice');
         $this->assertAuthenticatedAs($admin);
     }
 
     public function test_a_logged_in_non_admin_is_forbidden(): void
     {
-        $this->actingAs($this->user('buyer'))->get('/')->assertForbidden();
+        $this->actingAs($this->user('buyer'))->get('/backoffice/backoffice')->assertForbidden();
     }
 
     public function test_dashboard_numbers(): void
@@ -74,7 +74,7 @@ class DashboardTest extends TestCase
         Auction::create(['status' => 'active', 'cancelled' => true]);
         Auction::create(['status' => 'ended']);
 
-        $response = $this->actingAs($admin)->get('/')->assertOk();
+        $response = $this->actingAs($admin)->get('/backoffice/backoffice')->assertOk();
 
         $response->assertViewHas('users', 3);
         $response->assertViewHas('pendingProducers', 1);
@@ -92,13 +92,13 @@ class DashboardTest extends TestCase
         $good = $this->user('producer', ['producer' => ['farmName' => 'Good Farm', 'status' => 'pending']]);
         $bad = $this->user('producer', ['producer' => ['farmName' => 'Bad Farm', 'status' => 'pending']]);
 
-        $this->post("/producers/{$good->id}/approve")->assertRedirect('/login');
+        $this->post("/backoffice/producers/{$good->id}/approve")->assertRedirect('/backoffice/login');
 
-        $this->actingAs($admin)->get('/producers')->assertOk()->assertSee('Good Farm')->assertSee('Bad Farm');
-        $this->post("/producers/{$good->id}/approve")->assertSessionHas('status', 'Good Farm was approved.');
-        $this->post("/producers/{$bad->id}/reject", ['reason' => ' No farm address '])->assertSessionHas('status');
+        $this->actingAs($admin)->get('/backoffice/producers')->assertOk()->assertSee('Good Farm')->assertSee('Bad Farm');
+        $this->post("/backoffice/producers/{$good->id}/approve")->assertSessionHas('status', 'Good Farm was approved.');
+        $this->post("/backoffice/producers/{$bad->id}/reject", ['reason' => ' No farm address '])->assertSessionHas('status');
         // A second decision on the same application is refused.
-        $this->post("/producers/{$good->id}/reject")->assertSessionHasErrors('action');
+        $this->post("/backoffice/producers/{$good->id}/reject")->assertSessionHasErrors('action');
 
         $this->assertSame('approved', $good->fresh()->producer['status']);
         $this->assertSame(['farmName' => 'Bad Farm', 'status' => 'rejected', 'rejectReason' => 'No farm address'], $bad->fresh()->producer);
@@ -123,13 +123,13 @@ class DashboardTest extends TestCase
         $rude = $review(1, true);
         $unreported = $review(4, false);
 
-        $this->actingAs($admin)->get('/reviews')->assertOk()
+        $this->actingAs($admin)->get('/backoffice/reviews')->assertOk()
             ->assertSee('Review with 5 stars')->assertSee('Review with 1 stars')->assertDontSee('Review with 4 stars')->assertSee('Rated Farm');
 
-        $this->post("/reviews/{$fine->id}/keep")->assertSessionHas('status');
-        $this->post("/reviews/{$fine->id}/keep")->assertSessionHasErrors('action');
-        $this->post("/reviews/{$unreported->id}/hide")->assertSessionHasErrors('action');
-        $this->post("/reviews/{$rude->id}/hide")->assertSessionHas('status');
+        $this->post("/backoffice/reviews/{$fine->id}/keep")->assertSessionHas('status');
+        $this->post("/backoffice/reviews/{$fine->id}/keep")->assertSessionHasErrors('action');
+        $this->post("/backoffice/reviews/{$unreported->id}/hide")->assertSessionHasErrors('action');
+        $this->post("/backoffice/reviews/{$rude->id}/hide")->assertSessionHas('status');
 
         $this->assertFalse($fine->fresh()->hidden);
         $this->assertFalse($fine->fresh()->report['open']);
@@ -145,21 +145,21 @@ class DashboardTest extends TestCase
         $farm = $this->user('producer', ['producer' => ['farmName' => 'Shown Farm', 'status' => 'approved', 'hidden' => false]]);
         $product = Product::create(['name' => 'Cheese', 'producer' => new ObjectId($farm->id), 'hidden' => false]);
 
-        $this->actingAs($admin)->get('/content')->assertOk()->assertSee('Shown Farm')->assertSee('Cheese');
+        $this->actingAs($admin)->get('/backoffice/content')->assertOk()->assertSee('Shown Farm')->assertSee('Cheese');
 
-        $this->post("/content/product/{$product->id}/hide")->assertSessionHas('status');
-        $this->post("/content/product/{$product->id}/hide")->assertSessionHasErrors('action');
-        $this->post("/content/producer/{$farm->id}/hide")->assertSessionHas('status');
+        $this->post("/backoffice/content/product/{$product->id}/hide")->assertSessionHas('status');
+        $this->post("/backoffice/content/product/{$product->id}/hide")->assertSessionHasErrors('action');
+        $this->post("/backoffice/content/producer/{$farm->id}/hide")->assertSessionHas('status');
         $this->assertTrue($product->fresh()->hidden);
         $this->assertTrue($farm->fresh()->producer['hidden']);
         $this->assertSame('approved', $farm->fresh()->producer['status']);
 
-        $this->post("/content/product/{$product->id}/unhide")->assertSessionHas('status');
+        $this->post("/backoffice/content/product/{$product->id}/unhide")->assertSessionHas('status');
         $this->assertFalse($product->fresh()->hidden);
         // Hiding notifies the producer, unhiding does not.
         $this->assertSame(2, DB::connection('mongodb')->table('notifications')->where('user', new ObjectId($farm->id))->count());
-        $this->post("/content/admin/{$admin->id}/hide")->assertNotFound();
-        $this->post("/content/producer/{$admin->id}/hide")->assertSessionHasErrors('action');
+        $this->post("/backoffice/content/admin/{$admin->id}/hide")->assertNotFound();
+        $this->post("/backoffice/content/producer/{$admin->id}/hide")->assertSessionHasErrors('action');
     }
 
     public function test_lists_filter_and_page(): void
@@ -174,23 +174,23 @@ class DashboardTest extends TestCase
         Auction::create(['producer' => $ids['producer'], 'productName' => 'Wine lot', 'status' => 'ended', 'currentPrice' => 30]);
         $this->actingAs($admin);
 
-        $this->get('/users')->assertOk()->assertSee('Root')->assertSee('Ana B.Costa')->assertSee('Listed Farm');
-        $this->get('/users?role=producer')->assertSee('Rui')->assertDontSee('Ana B.Costa');
-        $this->get('/users?q=b.cos')->assertSee('Ana B.Costa')->assertDontSee('Rui');
+        $this->get('/backoffice/users')->assertOk()->assertSee('Root')->assertSee('Ana B.Costa')->assertSee('Listed Farm');
+        $this->get('/backoffice/users?role=producer')->assertSee('Rui')->assertDontSee('Ana B.Costa');
+        $this->get('/backoffice/users?q=b.cos')->assertSee('Ana B.Costa')->assertDontSee('Rui');
         // The search is literal text, not a pattern: "." must not match any character.
-        $this->get('/users?q=a.b')->assertDontSee('Ana B.Costa');
-        $this->get('/users?role=nonsense')->assertOk()->assertSee('Rui');
+        $this->get('/backoffice/users?q=a.b')->assertDontSee('Ana B.Costa');
+        $this->get('/backoffice/users?role=nonsense')->assertOk()->assertSee('Rui');
 
-        $this->get('/orders')->assertOk()->assertSee('2 × Kale')->assertSee('1 × Figs')->assertSee('Listed Farm');
-        $this->get('/orders?status=cancelled')->assertSee('1 × Figs')->assertDontSee('2 × Kale');
+        $this->get('/backoffice/orders')->assertOk()->assertSee('2 × Kale')->assertSee('1 × Figs')->assertSee('Listed Farm');
+        $this->get('/backoffice/orders?status=cancelled')->assertSee('1 × Figs')->assertDontSee('2 × Kale');
 
-        $this->get('/auctions')->assertOk()->assertSee('Honey lot')->assertSee('Wine lot');
-        $this->get('/auctions?status=active')->assertSee('Honey lot')->assertDontSee('Wine lot');
+        $this->get('/backoffice/auctions')->assertOk()->assertSee('Honey lot')->assertSee('Wine lot');
+        $this->get('/backoffice/auctions?status=active')->assertSee('Honey lot')->assertDontSee('Wine lot');
 
         for ($i = 0; $i < 20; $i++) {
             $this->user('buyer', ['name' => "Bulk $i"]);
         }
-        $this->get('/users')->assertSee('Bulk 19')->assertDontSee('Ana B.Costa');
-        $this->get('/users?page=2')->assertSee('Ana B.Costa')->assertDontSee('Bulk 19');
+        $this->get('/backoffice/users')->assertSee('Bulk 19')->assertDontSee('Ana B.Costa');
+        $this->get('/backoffice/users?page=2')->assertSee('Ana B.Costa')->assertDontSee('Bulk 19');
     }
 }

@@ -9,4 +9,5 @@ COPY . .
 RUN composer dump-autoload --optimize
 EXPOSE 8000
 # shortcut: artisan serve is single-process, swap for php-fpm/FrankenPHP if load testing this service.
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# schedule:work runs the status recorder every minute, next to the web server.
+CMD ["sh", "-c", "php artisan schedule:work & exec php artisan serve --host=0.0.0.0 --port=8000"]

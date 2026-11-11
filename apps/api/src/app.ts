@@ -5,6 +5,7 @@ import { authRouter } from './modules/auth/auth.routes.js'
 import { usersRouter } from './modules/users/users.routes.js'
 import { producersRouter } from './modules/producers/producers.routes.js'
 import { productsRouter } from './modules/products/products.routes.js'
+import { cartRouter } from './modules/cart/cart.routes.js'
 
 // Express app only (no listen) so tests can import it. Routers are mounted from src/modules/*.
 export const app = express()
@@ -20,6 +21,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/producers', producersRouter)
 app.use('/api/products', productsRouter)
+app.use('/api/cart', cartRouter)
 
 app.use(notFound)
 app.use(errorHandler)

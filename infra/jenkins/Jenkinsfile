@@ -1,6 +1,7 @@
-// Deploys on the cluster node itself over SSH: pull, check .env, build images, apply infra/k8s, check.
+// Deploys on the cluster node itself over SSH: pull, check .env, apply infra/k8s, check.
+// Images are built and pushed by .github/workflows/images.yml, not here.
 // Jenkins job: Pipeline from SCM, Script Path = infra/jenkins/Jenkinsfile. Needs sshpass on the Jenkins agent.
-// The node needs git, docker and kubectl, and a populated .env in the project folder.
+// The node needs git and kubectl, and a populated .env in the project folder.
 
 // Runs one command on the node, inside the project folder. Commands must not contain single quotes.
 def remote(String cmd) {
@@ -21,17 +22,6 @@ pipeline {
     stage('Check .env') {
       // No .env on the node: stop here, before anything is built or changed.
       steps { script { remote('test -s .env') } }
-    }
-
-    stage('Build images') {
-      // Plain docker build with the exact names the manifests use (compose would name them after the folder).
-      steps {
-        script {
-          remote('docker build --target prod -t farm-to-table/api:latest apps/api')
-          remote('docker build --target prod -t farm-to-table/web:latest apps/web')
-          remote('docker build -t farm-to-table/backoffice:latest apps/backoffice')
-        }
-      }
     }
 
     stage('Apply') {
@@ -55,6 +45,13 @@ pipeline {
           remote('kubectl get pods')
         }
       }
+    }
+  }
+
+  post {
+    // Show why a rollout is stuck: pod states, nodes, and the latest cluster events.
+    failure {
+      script { remote('kubectl get pods -o wide; kubectl get events --sort-by=.lastTimestamp | tail -n 30') }
     }
   }
 }

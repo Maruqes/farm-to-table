@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: farm-to-table/web:latest
-          imagePullPolicy: IfNotPresent # built on the node by infra/jenkins/Jenkinsfile, never pulled
+          image: ghcr.io/maruqes/farm-to-table-web:latest # pushed by .github/workflows/images.yml
           ports:
             - containerPort: 80
           readinessProbe:

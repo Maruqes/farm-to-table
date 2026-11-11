@@ -11,7 +11,8 @@ apps/
   backoffice/  Laravel 13 admin (bonus), mongodb/laravel-mongodb, same Mongo as the API
 infra/
   k8s/         Kubernetes manifests, one file per service
-  jenkins/     Jenkinsfile: build images, push, deploy infra/k8s
+  jenkins/     Jenkinsfile: deploy infra/k8s on the cluster node over SSH
+.github/workflows/  images.yml: build and push the app images to ghcr.io on every push to main
 docs/          SCOPE.md (requirements), add ADRs/report notes here
 .tickets/      work orders, one markdown file each (see "Work from tickets")
 compose.yaml       production-like stack (web, api, backoffice, mongo); nginx in web proxies /api, /api-docs, /socket.io

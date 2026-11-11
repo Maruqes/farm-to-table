@@ -25,7 +25,7 @@ export async function getProducerCatalogStats(producerIds: string[]): Promise<Ma
     return [id, {
       products: mine.map((p) => ({
         id: String(p._id), name: p.name, price: p.price, unit: p.unit, stock: p.stock, category: p.category,
-        ...imageUrl(p.imageKey), averageRating: p.averageRating,
+        ...imageUrl(p), averageRating: p.averageRating,
       })),
       productCount: mine.length,
       averageRating: rated.length ? round2(rated.reduce((n, p) => n + p.averageRating, 0) / rated.length) : 0,

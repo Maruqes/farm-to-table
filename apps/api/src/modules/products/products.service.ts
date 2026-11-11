@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 import { ApiError } from '../../lib/api-error.js'
 import { escapeRegex } from '../../lib/escape-regex.js'
-import { env } from '../../config/env.js'
 import { UserModel } from '../users/users.model.js'
 import { ProductModel, type ProductDoc } from './products.model.js'
+import { deleteObject } from '../../lib/storage.js'
 import type { ListProductsQuery, SaveProductInput } from './products.schemas.js'
 
 const LIMIT = 200
@@ -11,7 +11,8 @@ const LIMIT = 200
 type Producer = { _id: unknown, name: string, producer?: { location?: string } }
 type Product = ProductDoc & { _id: unknown }
 
-export const imageUrl = (key?: string) => (key ? { imageUrl: `${env.s3.endpoint}/${env.s3.bucket}/${key}` } : {})
+export const imageUrl = (p: { _id: unknown, imageKey?: string, updatedAt?: Date }) =>
+  p.imageKey ? { imageUrl: `/api/products/${String(p._id)}/image?v=${p.updatedAt ? new Date(p.updatedAt).getTime() : 0}` } : {}
 
 // The one definition of "buyable": producer approved and visible, product not hidden; the list also needs stock.
 export async function findBuyable(opts: { id?: string, q?: string, inStock?: boolean, producerFilter?: Record<string, unknown>, productFilter?: Record<string, unknown>, sort?: Record<string, 1 | -1> }) {
@@ -57,7 +58,7 @@ export async function listProducts(query: ListProductsQuery) {
       unit: p.unit,
       stock: p.stock,
       category: p.category,
-      ...imageUrl(p.imageKey),
+      ...imageUrl(p),
       producer: { id: String(producer._id), name: producer.name, location: producer.producer?.location ?? '' },
       averageRating: p.averageRating,
     }))
@@ -74,7 +75,7 @@ export async function getProduct(id: string) {
     unit: p.unit,
     stock: p.stock,
     category: p.category,
-    ...imageUrl(p.imageKey),
+    ...imageUrl(p),
     producer: { id: String(producer._id), name: producer.name, location: producer.producer?.location ?? '' },
     averageRating: p.averageRating,
     description: p.description,
@@ -91,7 +92,7 @@ const toOwn = (p: Product) => ({
   stock: p.stock,
   season: p.season,
   organic: p.organic,
-  ...imageUrl(p.imageKey),
+  ...imageUrl(p),
 })
 
 export async function listOwnProducts(sub: string) {
@@ -122,8 +123,9 @@ async function hasLiveAuction(_productId: string): Promise<boolean> {
 }
 
 export async function deleteProduct(sub: string, id: string): Promise<void> {
-  const doc = mongoose.isValidObjectId(id) ? await ProductModel.findOne({ _id: id, producer: sub }).select('_id').lean() : null
+  const doc = mongoose.isValidObjectId(id) ? await ProductModel.findOne({ _id: id, producer: sub }).select('imageKey').lean() : null
   if (!doc) return notOwned(id)
   if (await hasLiveAuction(id)) throw new ApiError(409, 'PRODUCT_IN_AUCTION', 'Product is used by an auction')
   await ProductModel.deleteOne({ _id: id, producer: sub })
+  if (doc.imageKey) await deleteObject(doc.imageKey).catch(() => {})
 }

@@ -21,6 +21,7 @@ Format: `- [ ] METHOD path — FE tickets — contract`
 - [x] PUT /api/products/:id — FE-13 — CT-13
 - [x] DELETE /api/products/:id — FE-13 — CT-13
 - [x] POST /api/products/:id/image — FE-13 — CT-13
+- [x] GET /api/products/:id/image (public, streams the stored image) — FE-03, FE-04, FE-13 — CT-13
 
 ## Producers
 - [x] GET /api/producers?q&location — FE-26 — CT-26

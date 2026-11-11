@@ -9,6 +9,7 @@ import {
   listProductsController,
   updateProductController,
 } from './products.controller.js'
+import { mountProductImageRoutes } from './product-image.routes.js'
 import { listProductsQuerySchema, saveProductSchema } from './products.schemas.js'
 
 export const productsRouter = Router()
@@ -24,6 +25,7 @@ productsRouter.get(
 )
 productsRouter.get('/', validate({ query: listProductsQuerySchema }), listProductsController)
 productsRouter.post('/', ...approvedProducer, validate({ body: saveProductSchema }), createProductController)
+mountProductImageRoutes(productsRouter)
 productsRouter.get('/:id', getProductController)
 productsRouter.put('/:id', ...approvedProducer, validate({ body: saveProductSchema }), updateProductController)
 productsRouter.delete('/:id', ...approvedProducer, deleteProductController)

@@ -19,6 +19,7 @@ export interface ProductDoc {
   hidden: boolean
   averageRating: number
   ratingCount: number
+  updatedAt: Date
 }
 
 const productSchema = new mongoose.Schema(

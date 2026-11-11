@@ -1,12 +1,15 @@
 import { Link, NavLink } from 'react-router-dom'
 import { LogOut, Sprout } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
+import { Notifications } from '@/components/Notifications'
 import { useSession, type Role } from '@/context/session'
 import { ROLE_LABELS } from '@/context/roles'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/components/ui/utils'
 import { SearchBox } from './SearchBox'
 import { DevRoleSwitcher } from './DevRoleSwitcher'
+import { USE_MOCKS } from '@/services/env'
+import { useLiveAuctionCount } from '@/features/auctions/auctions-list'
 
 interface NavItem {
   to: string
@@ -43,6 +46,7 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
 
 export function SiteHeader() {
   const { user, role, isAuthenticated, logout } = useSession()
+  const liveAuctionCount = useLiveAuctionCount()
   const links = [...PUBLIC_LINKS, ...ROLE_LINKS[role], ...(isAuthenticated ? [{ to: '/account', label: 'Account' }] : [])]
 
   return (
@@ -62,6 +66,7 @@ export function SiteHeader() {
 
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
+            <Notifications />
             {isAuthenticated && user ? (
               <>
                 <span className="hidden text-sm text-muted-foreground md:inline">
@@ -82,14 +87,32 @@ export function SiteHeader() {
 
         <nav aria-label="Main navigation" className="-mx-3 -mb-px flex gap-1 overflow-x-auto">
           {links.map((link) => (
-            <NavLink key={link.to} to={link.to} end={link.to === '/'} className={navLinkClass}>
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === '/' || link.to === '/producer'}
+              className={navLinkClass}
+              aria-label={
+                link.to === '/auctions' && liveAuctionCount > 0
+                  ? `Auctions, ${liveAuctionCount} live`
+                  : undefined
+              }
+            >
               {link.label}
+              {link.to === '/auctions' && liveAuctionCount > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-live px-1.5 text-[11px] leading-none font-semibold text-live-foreground tabular"
+                >
+                  {liveAuctionCount}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>
       </div>
 
-      {import.meta.env.DEV && <DevRoleSwitcher />}
+      {import.meta.env.DEV && USE_MOCKS && <DevRoleSwitcher />}
     </header>
   )
 }

@@ -11,6 +11,8 @@ services:
     ports: ["3000:3000"]
     environment:
       MONGO_URL: mongodb://mongo:27017/farm_to_table
+      # web/nginx is the only proxy in front of the API, so trust exactly one hop.
+      TRUST_PROXY: "1"
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
       S3_ENDPOINT: http://silo:9000
       S3_BUCKET: ${S3_BUCKET:-farm-to-table}

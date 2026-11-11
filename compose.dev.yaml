@@ -10,6 +10,8 @@ services:
     volumes: ["./apps/api:/app", "/app/node_modules"]
   backoffice:
     volumes: ["./apps/backoffice:/app", "/app/vendor"]
+    # The status recorder reaches the Vite dev server, not nginx.
+    environment: { STATUS_WEB_URL: "http://web:5173" }
   mongo:
     ports: ["27017:27017"]
   silo:

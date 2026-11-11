@@ -7,8 +7,31 @@ Every page URL that exists in the web app (`http://localhost:5173<route>`), i.e.
 Format: `- route — roles (guard) — FE ticket`
 
 - `/` — all (public) — FE-03
+- `/products/:id` — all (public) — FE-04
+- `/producers` — all (public) — FE-26
+- `/producers/:id` — all (public) — FE-05
+- `/auctions` — all (public) — FE-27
+- `/auctions/:id` — all (public; visitors watch read-only) — FE-11
 - `/login` — visitor — FE-01
 - `/register` — visitor — FE-01
 - `/account` — any signed-in role (`RequireRole`) — FE-00
+- `/cart` — buyer (`RequireRole`) — FE-06
+- `/checkout` — buyer (`RequireRole`) — FE-07
+- `/orders` — buyer (`RequireRole`) — FE-08
+- `/profile` — buyer, producer (`RequireRole`) — FE-10
+- `/producer` — producer (`RequireRole`) — FE-12
+- `/producer/products` — producer (`RequireRole`) — FE-13
+- `/producer/page` — producer (`RequireRole`) — FE-17
+- `/producer/orders` — producer (`RequireRole`) — FE-14
+- `/producer/reviews` — producer (`RequireRole`) — FE-16
+- `/producer/auctions` — producer (`RequireRole`) — FE-15
 - `/producer/status` — producer (`RequireRole`; pending/rejected producers land here) — FE-02
+- `/admin` — admin (`RequireRole`) — FE-18
+- `/admin/producers` — admin (`RequireRole`) — FE-19
+- `/admin/reviews` — admin (`RequireRole`) — FE-20
+- `/admin/moderation` — admin (`RequireRole`) — FE-21
+- `/admin/users` — admin (`RequireRole`) — FE-22
+- `/admin/orders` — admin (`RequireRole`) — FE-23
+- `/admin/auctions` — admin (`RequireRole`) — FE-24
+- `/admin/status` — admin (`RequireRole`) — FE-25
 - `*` (404) — all — FE-00

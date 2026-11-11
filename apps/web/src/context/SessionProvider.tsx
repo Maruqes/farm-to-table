@@ -1,5 +1,7 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
-import { setToken } from '@/services/api'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { toast } from 'sonner'
+import { getToken, SESSION_EXPIRED_EVENT, setToken } from '@/services/api'
+import { USE_MOCKS } from '@/services/env'
 import { AUTHENTICATED_ROLES, MOCK_USERS } from './roles'
 import { SessionContext, type AuthenticatedRole, type Role, type SessionUser } from './session'
 
@@ -10,6 +12,8 @@ function isAuthenticatedRole(value: unknown): value is AuthenticatedRole {
 }
 
 function readStoredUser(): SessionUser | null {
+  // Against the real API a stored user without a token cannot do anything.
+  if (!USE_MOCKS && !getToken()) return null
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
@@ -56,6 +60,24 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setToken(null)
   }, [])
 
+  const updateUser = useCallback((patch: Partial<SessionUser>) => {
+    setUser((current) => {
+      if (!current) return current
+      const next = { ...current, ...patch }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      return next
+    })
+  }, [])
+
+  useEffect(() => {
+    const onExpired = () => {
+      logout()
+      toast('Your session expired. Sign in again to continue.')
+    }
+    window.addEventListener(SESSION_EXPIRED_EVENT, onExpired)
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onExpired)
+  }, [logout])
+
   const setRole = useCallback(
     (role: Role) => {
       if (role === 'visitor') logout()
@@ -72,9 +94,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       login,
       signIn,
       logout,
+      updateUser,
       setRole,
     }),
-    [user, login, signIn, logout, setRole],
+    [user, login, signIn, logout, updateUser, setRole],
   )
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>

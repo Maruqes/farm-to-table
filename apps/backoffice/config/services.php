@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    // Base URLs the status recorder probes (status:check); the defaults are the compose service names.
+    'status' => [
+        'web' => env('STATUS_WEB_URL', 'http://web'),
+        'api' => env('STATUS_API_URL', 'http://api:3000'),
+        'storage' => env('STATUS_STORAGE_URL', 'http://silo:9000'),
+    ],
+
 ];

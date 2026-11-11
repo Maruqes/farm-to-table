@@ -1,3 +1,5 @@
+import { io, type Socket } from 'socket.io-client'
+import { getToken, reportSessionExpired } from './api'
 import { USE_MOCKS } from './env'
 
 export type RealtimeHandler<T = unknown> = (payload: T) => void
@@ -55,12 +57,14 @@ class MockRealtimeClient implements RealtimeClient {
 
   private emitTick(): void {
     this.tick += 1
+    const now = Date.now()
     for (const room of this.rooms) {
       if (room.startsWith('user:')) {
         this.emit('order-updated', {
           room,
           orderId: `order-${this.tick}`,
           status: ORDER_STATES[this.tick % ORDER_STATES.length],
+          updatedAt: new Date(now).toISOString(),
         })
       } else if (room.startsWith('auction:')) {
         this.emit('auction-updated', {
@@ -68,6 +72,9 @@ class MockRealtimeClient implements RealtimeClient {
           auctionId: room.slice('auction:'.length),
           currentPrice: 5 + this.tick,
           bidCount: this.tick,
+          leader: null,
+          endsAt: new Date(now + 60_000).toISOString(),
+          status: 'active',
         })
       }
     }
@@ -78,14 +85,84 @@ class MockRealtimeClient implements RealtimeClient {
   }
 }
 
-// Placeholder until the API exposes Socket.io (see SCOPE.md §3/§4).
+// Real Socket.io transport. The server reads the JWT from the handshake, so a
+// signed-in browser joins `user:<id>` automatically and can ask for auction rooms.
 class SocketRealtimeClient implements RealtimeClient {
-  connect(): void {}
-  disconnect(): void {}
-  join(_room: string): void {}
-  leave(_room: string): void {}
-  on<T = unknown>(_event: string, _handler: RealtimeHandler<T>): () => void {
-    return () => {}
+  private socket: Socket | null = null
+  private authToken = ''
+  private readonly rooms = new Set<string>()
+  private readonly handlers = new Map<string, Set<RealtimeHandler>>()
+
+  connect(): void {
+    const token = getToken() ?? ''
+
+    if (this.socket) {
+      // A different user (or a fresh login) needs a new handshake, not the old room set.
+      if (token === this.authToken) {
+        if (!this.socket.connected) this.socket.connect()
+        return
+      }
+      this.closeSocket()
+    }
+
+    this.authToken = token
+    const socket = io({
+      auth: { token },
+      autoConnect: false,
+    })
+    this.socket = socket
+
+    for (const [event, handlers] of this.handlers) {
+      for (const handler of handlers) socket.on(event, handler as (...args: unknown[]) => void)
+    }
+
+    // Rooms live on the server connection, so they must be rejoined after a reconnect.
+    socket.on('connect', () => {
+      for (const room of this.rooms) socket.emit('join', { room })
+    })
+
+    socket.on('connect_error', (error) => {
+      if (token && error.message === 'UNAUTHORIZED') reportSessionExpired()
+    })
+
+    socket.connect()
+  }
+
+  join(room: string): void {
+    this.rooms.add(room)
+    this.connect()
+    if (this.socket?.connected) this.socket.emit('join', { room })
+  }
+
+  leave(room: string): void {
+    this.rooms.delete(room)
+    if (this.socket?.connected) this.socket.emit('leave', { room })
+  }
+
+  on<T = unknown>(event: string, handler: RealtimeHandler<T>): () => void {
+    const set = this.handlers.get(event) ?? new Set<RealtimeHandler>()
+    set.add(handler as RealtimeHandler)
+    this.handlers.set(event, set)
+    this.socket?.on(event, handler as (...args: unknown[]) => void)
+
+    return () => {
+      set.delete(handler as RealtimeHandler)
+      if (set.size === 0) this.handlers.delete(event)
+      this.socket?.off(event, handler as (...args: unknown[]) => void)
+    }
+  }
+
+  disconnect(): void {
+    this.rooms.clear()
+    this.closeSocket()
+  }
+
+  private closeSocket(): void {
+    const socket = this.socket
+    this.socket = null
+    this.authToken = ''
+    if (!socket) return
+    socket.disconnect()
   }
 }
 

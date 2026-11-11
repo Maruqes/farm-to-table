@@ -8,6 +8,10 @@ const target = process.env.API_TARGET ?? 'http://localhost:3000'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // The repo keeps one .env for every app (see .env.example); Vite only exposes
+  // VITE_* values, so pointing at the repo root is safe and keeps the mock switch
+  // in the same file as the API settings.
+  envDir: fileURLToPath(new URL('../..', import.meta.url)),
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -16,9 +20,9 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
-      '/api': target,
-      '/api-docs': target,
-      '/socket.io': { target, ws: true },
+      '/api': { target, xfwd: true },
+      '/api-docs': { target, xfwd: true },
+      '/socket.io': { target, ws: true, xfwd: true },
     },
   },
 })

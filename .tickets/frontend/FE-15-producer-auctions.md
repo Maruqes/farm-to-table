@@ -1,7 +1,7 @@
 ---
 id: FE-15
 title: Producer auction manager
-status: todo
+status: done
 depends_on: [FE-11, FE-13]
 route: /producer/auctions
 roles: [producer]
@@ -20,7 +20,7 @@ verify: cd apps/web && npm run lint && npm run build
 - `GET /api/auctions?producer=me`, `POST /api/auctions` → 201, `PUT /api/auctions/:id` (draft only), `POST /api/auctions/:id/publish`, `POST /api/auctions/:id/cancel` → 200; 409 if bids exist
 
 ## Done when
-- [ ] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
-- [ ] Route registered in `app/routes.tsx` with the right role guard
-- [ ] Usable at 375 / 768 / 1280 px and by keyboard
-- [ ] `verify` passes
+- [x] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
+- [x] Route registered in `app/routes.tsx` with the right role guard
+- [x] Usable at 375 / 768 / 1280 px and by keyboard
+- [x] `verify` passes

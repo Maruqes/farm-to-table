@@ -1,7 +1,7 @@
 ---
 id: CT-02
 title: API contract — producer approval status (waiting / rejected)
-status: review
+status: done
 depends_on: [FE-02]
 source: [FE-02, SCOPE.md §0]
 consumers: [apps/web/src/features/auth/producer-status/ProducerStatusView.tsx, apps/web/src/features/auth/producer-status/RequireApprovedProducer.tsx]

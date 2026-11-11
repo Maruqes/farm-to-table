@@ -1,7 +1,7 @@
 ---
 id: CT-03
 title: API contract — public catalog and live auctions strip
-status: review
+status: done
 depends_on: [FE-03]
 source: [FE-03, SCOPE.md §0 §2]
 consumers: [apps/web/src/features/catalog/home-catalog/catalog.http.ts, apps/web/src/features/catalog/home-catalog/catalog.dto.ts]

@@ -5,8 +5,8 @@ One markdown file per work order. The folder is the board; git is the history.
 ```
 .tickets/
   frontend/   FE-nn-<page>.md   one per page (UI on mock data)
-  contract/   later: one per API module, gate before backend work
-  backend/    later: one per module, created from a frozen contract
+  contract/   CT-nn-<page>.md   API contract per page, gate before backend work
+  backend/    BE-nn-<slice>.md  small API slices built from frozen contracts (see backend/README.md)
 ```
 
 ## Format

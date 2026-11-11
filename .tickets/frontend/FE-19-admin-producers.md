@@ -1,7 +1,7 @@
 ---
 id: FE-19
 title: Producer approvals
-status: todo
+status: done
 depends_on: [FE-01]
 route: /admin/producers
 roles: [admin]
@@ -19,7 +19,7 @@ verify: cd apps/web && npm run lint && npm run build
 - `POST /api/admin/producers/:id/approve` and `/reject` → 200
 
 ## Done when
-- [ ] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
-- [ ] Route registered in `app/routes.tsx` with the right role guard
-- [ ] Usable at 375 / 768 / 1280 px and by keyboard
-- [ ] `verify` passes
+- [x] Everything above works in mock mode (`VITE_USE_MOCKS=true`), including loading, empty and error states
+- [x] Route registered in `app/routes.tsx` with the right role guard
+- [x] Usable at 375 / 768 / 1280 px and by keyboard
+- [x] `verify` passes

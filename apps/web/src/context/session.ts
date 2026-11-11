@@ -20,6 +20,7 @@ export interface SessionContextValue {
   login: (role: AuthenticatedRole) => void
   signIn: (user: SessionUser, token: string) => void
   logout: () => void
+  updateUser: (patch: Partial<SessionUser>) => void
   setRole: (role: Role) => void
 }
 

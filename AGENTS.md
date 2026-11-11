@@ -19,7 +19,7 @@ compose.dev.yaml   dev override: hot reload + exposed DB ports
 ```
 
 ### apps/api/src
-`app.ts` Express app (no listen) · `server.ts` HTTP + Socket.io · `config/env.ts` the only place reading env vars · `db/` Mongo connection · `middleware/` auth (JWT), roles, errors · `realtime/` socket rooms (`auction:<id>`, `user:<id>`) · `docs/` OpenAPI spec · `modules/<feature>/` per feature: model, routes, controller, service (`auth users products orders auctions reviews`).
+`app.ts` Express app (no listen) · `server.ts` HTTP + Socket.io · `config/env.ts` the only place reading env vars · `db/` connect + id/toJSON plugin · `middleware/` auth (JWT), validate, errors · `lib/` tiny shared helpers only (ApiError, money, escapeRegex) · `realtime/` socket rooms (`auction:<id>`, `user:<id>`) · `docs/` OpenAPI spec · `modules/<feature>/` per feature: model, schemas, service, controller, routes, test (`auth users producers products cart orders reviews notifications auctions admin`).
 
 ### apps/backoffice
 Standard Laravel layout. Models extend `MongoDB\Laravel\Eloquent\Model`; sessions/cache are file-based (no SQL database).

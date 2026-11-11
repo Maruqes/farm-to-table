@@ -3,6 +3,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: silo-init
+  namespace: farm-to-table
 spec:
   backoffLimit: 10
   template:

@@ -1,0 +1,5 @@
+# Everything of this project lives in this namespace. Named 00- so "kubectl apply -f infra/k8s/" creates it first.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: farm-to-table

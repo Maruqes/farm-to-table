@@ -47,14 +47,16 @@ pipeline {
     stage('Apply') {
       steps {
         script {
+          // The namespace must exist before the Secret can be created in it.
+          remote('kubectl apply -f infra/k8s/00-namespace.yaml')
           // Create or update the Secret from .env.
-          remote('kubectl create secret generic farm-to-table --from-env-file=.env --dry-run=client -o yaml | kubectl apply -f -')
+          remote('kubectl -n farm-to-table create secret generic farm-to-table --from-env-file=.env --dry-run=client -o yaml | kubectl -n farm-to-table apply -f -')
           // silo-init is a finished Job; its spec is immutable, so recreate it instead of applying over it.
-          remote('kubectl delete job silo-init --ignore-not-found')
+          remote('kubectl -n farm-to-table delete job silo-init --ignore-not-found')
           // Apply a rendered copy: the two public ports come from .env (defaults 30080 / 30081 stay if unset).
-          remote('W=$(grep ^K8S_WEB_PORT= .env | cut -d= -f2); B=$(grep ^K8S_BACKOFFICE_PORT= .env | cut -d= -f2); D=$(mktemp -d) && cp infra/k8s/*.yaml $D/ && sed -i "s/nodePort: 30080/nodePort: ${W:-30080}/; s/nodePort: 30081/nodePort: ${B:-30081}/" $D/*.yaml && kubectl apply -f $D/ && rm -rf $D')
+          remote('W=$(grep ^K8S_WEB_PORT= .env | cut -d= -f2); B=$(grep ^K8S_BACKOFFICE_PORT= .env | cut -d= -f2); D=$(mktemp -d) && cp infra/k8s/*.yaml $D/ && sed -i "s/nodePort: 30080/nodePort: ${W:-30080}/; s/nodePort: 30081/nodePort: ${B:-30081}/" $D/*.yaml && kubectl -n farm-to-table apply -f $D/ && rm -rf $D')
           // The tag is always "latest", so apply alone would not pick up the new images.
-          remote('kubectl rollout restart deployment/api deployment/web deployment/backoffice')
+          remote('kubectl -n farm-to-table rollout restart deployment/api deployment/web deployment/backoffice')
         }
       }
     }
@@ -62,8 +64,8 @@ pipeline {
     stage('Check') {
       steps {
         script {
-          remote('for s in api web backoffice; do kubectl rollout status deployment/$s --timeout=180s || exit 1; done')
-          remote('kubectl get pods')
+          remote('for s in api web backoffice; do kubectl -n farm-to-table rollout status deployment/$s --timeout=180s || exit 1; done')
+          remote('kubectl -n farm-to-table get pods')
         }
       }
     }
@@ -72,7 +74,7 @@ pipeline {
   post {
     // Show why a rollout is stuck: pod states, nodes, and the latest cluster events.
     failure {
-      script { remote('kubectl get pods -o wide; kubectl get events --sort-by=.lastTimestamp | tail -n 30') }
+      script { remote('kubectl -n farm-to-table get pods -o wide; kubectl -n farm-to-table get events --sort-by=.lastTimestamp | tail -n 30') }
     }
   }
 }

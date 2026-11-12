@@ -39,7 +39,7 @@ class DashboardTest extends TestCase
 
     public function test_guests_are_sent_to_login(): void
     {
-        $this->get('/backoffice/backoffice')->assertRedirect('/backoffice/login');
+        $this->get('/backoffice')->assertRedirect('/backoffice/login');
     }
 
     public function test_only_admins_can_log_in(): void
@@ -56,7 +56,7 @@ class DashboardTest extends TestCase
 
     public function test_a_logged_in_non_admin_is_forbidden(): void
     {
-        $this->actingAs($this->user('buyer'))->get('/backoffice/backoffice')->assertForbidden();
+        $this->actingAs($this->user('buyer'))->get('/backoffice')->assertForbidden();
     }
 
     public function test_dashboard_numbers(): void
@@ -74,7 +74,7 @@ class DashboardTest extends TestCase
         Auction::create(['status' => 'active', 'cancelled' => true]);
         Auction::create(['status' => 'ended']);
 
-        $response = $this->actingAs($admin)->get('/backoffice/backoffice')->assertOk();
+        $response = $this->actingAs($admin)->get('/backoffice')->assertOk();
 
         $response->assertViewHas('users', 3);
         $response->assertViewHas('pendingProducers', 1);

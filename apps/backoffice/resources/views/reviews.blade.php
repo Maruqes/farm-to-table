@@ -7,21 +7,22 @@
         {{ $reviews->where('hidden', '!=', true)->count() }} waiting for a decision. Keep dismisses the report; Hide removes the review from the site and from the rating averages.
     </p>
 
+    @if ($reviews->isNotEmpty()) <div class="board"> @endif
     @forelse ($reviews as $review)
         @php
             $producer = $people[(string) $review->producer] ?? null;
             $hidden = $review->hidden === true;
         @endphp
-        <article class="panel mb-3" style="height: auto">
-            <div class="row g-3">
+        <article class="board-row d-block">
+            <div class="row g-3 w-100">
                 <div class="col-md-8">
                     <p class="mb-1 fw-semibold tabular">
-                        <span aria-hidden="true" style="color: var(--beet)">{{ str_repeat('★', (int) $review->rating) }}</span><span aria-hidden="true" class="text-secondary">{{ str_repeat('☆', 5 - (int) $review->rating) }}</span>
+                        <span aria-hidden="true">{{ str_repeat('★', (int) $review->rating) }}</span><span aria-hidden="true" class="text-secondary">{{ str_repeat('☆', 5 - (int) $review->rating) }}</span>
                         {{ $review->rating }} out of 5
-                        @if ($hidden) <span class="badge rounded-pill text-bg-light border fw-medium ms-2">Hidden</span> @endif
+                        @if ($hidden) <span class="badge badge-secondary ms-2">Hidden</span> @endif
                     </p>
-                    <p class="mb-2" style="max-width: 65ch">{{ $review->text ?: 'No text, rating only.' }}</p>
-                    <p class="text-secondary small mb-0">
+                    <p class="measure mb-2">{{ $review->text ?: 'No text, rating only.' }}</p>
+                    <p class="d-none d-md-block text-secondary small mb-0">
                         By {{ $people[(string) $review->buyer]->name ?? 'a deleted account' }}
                         for {{ $producer->producer['farmName'] ?? $producer->name ?? 'an unknown producer' }}@if ($review->productName), {{ $review->productName }}@endif
                         · {{ $review->createdAt?->timezone('Europe/Lisbon')->format('j M Y') }}
@@ -45,8 +46,9 @@
             </div>
         </article>
     @empty
-        <div class="panel text-center text-secondary py-5" style="height: auto">
+        <div class="page-state">
             No reviews have been reported. They appear here when a producer reports one.
         </div>
     @endforelse
+    @if ($reviews->isNotEmpty()) </div> @endif
 @endsection

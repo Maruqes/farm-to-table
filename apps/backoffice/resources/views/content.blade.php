@@ -15,38 +15,40 @@
     <h1 class="mb-1">Content</h1>
     <p class="text-secondary mb-4">Hide a producer page or a product to take it off the public site. Nothing is deleted, and you can show it again.</p>
 
-    <div class="row g-3">
+    <div class="row g-4">
         @foreach ($sections as $title => $rows)
             <div class="{{ $loop->first ? 'col-lg-5' : 'col-lg-7' }}">
-                <section class="panel" style="height: auto">
-                    <h2 class="h5">{{ $title }} <span class="text-secondary fw-normal fs-6" style="letter-spacing: 0; font-family: var(--bs-body-font-family)">{{ $rows->count() }}, {{ $rows->where('hidden', true)->count() }} hidden</span></h2>
+                <section>
+                    <h2 class="h5">{{ $title }} <span class="section-count font-body text-secondary fs-6">{{ $rows->count() }}, {{ $rows->where('hidden', true)->count() }} hidden</span></h2>
                     @if ($rows->isEmpty())
-                        <p class="text-secondary py-4 mb-0 text-center">Nothing here yet.</p>
+                        <div class="page-state">Nothing here yet.</div>
                     @else
-                        <table class="table align-middle mb-0">
-                            <thead class="visually-hidden">
-                                <tr><th scope="col">Name</th><th scope="col">Visibility</th><th scope="col">Action</th></tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($rows as $item)
-                                    <tr>
-                                        <th scope="row" class="fw-normal">
-                                            <span class="fw-medium {{ $item['hidden'] ? 'text-secondary' : '' }}">{{ $item['name'] }}</span>
-                                            <span class="d-block small text-secondary">{{ $item['detail'] }}</span>
-                                        </th>
-                                        <td>
-                                            @if ($item['hidden']) <span class="badge rounded-pill text-bg-light border fw-medium">Hidden</span> @else <span class="small text-secondary">Public</span> @endif
-                                        </td>
-                                        <td class="text-end">
-                                            <form method="post" action="{{ route('content.set', [$item['type'], $item['id'], $item['hidden'] ? 'unhide' : 'hide']) }}">
-                                                @csrf
-                                                <button class="btn btn-sm px-3 {{ $item['hidden'] ? 'btn-outline-secondary' : 'btn-outline-danger' }}" aria-label="{{ $item['hidden'] ? 'Show' : 'Hide' }} {{ $item['name'] }}">{{ $item['hidden'] ? 'Show' : 'Hide' }}</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead class="visually-hidden">
+                                    <tr><th scope="col">Name</th><th scope="col" class="d-none d-md-table-cell">Visibility</th><th scope="col">Action</th></tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($rows as $item)
+                                        <tr>
+                                            <th scope="row" class="fw-normal">
+                                                <span class="fw-medium {{ $item['hidden'] ? 'text-secondary' : '' }}">{{ $item['name'] }}</span>
+                                                <span class="d-none d-md-block small text-secondary">{{ $item['detail'] }}</span>
+                                            </th>
+                                            <td class="d-none d-md-table-cell">
+                                                @if ($item['hidden']) <span class="badge badge-secondary">Hidden</span> @else <span class="small text-secondary">Public</span> @endif
+                                            </td>
+                                            <td class="text-end">
+                                                <form method="post" action="{{ route('content.set', [$item['type'], $item['id'], $item['hidden'] ? 'unhide' : 'hide']) }}">
+                                                    @csrf
+                                                    <button class="btn btn-sm px-3 {{ $item['hidden'] ? 'btn-outline-secondary' : 'btn-outline-danger' }}" aria-label="{{ $item['hidden'] ? 'Show' : 'Hide' }} {{ $item['name'] }}">{{ $item['hidden'] ? 'Show' : 'Hide' }}</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     @endif
                 </section>
             </div>

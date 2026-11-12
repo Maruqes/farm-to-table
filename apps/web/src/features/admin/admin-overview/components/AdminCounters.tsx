@@ -31,14 +31,14 @@ export function AdminCounters({ summary }: AdminCountersProps) {
   return (
     <dl className="board" aria-label="Marketplace totals">
       {counters.map((counter) => (
-        <div key={counter.label} className="admin-counter">
+        <div key={counter.label} className="flex items-baseline justify-between gap-4 border-b border-dim py-[0.7rem]">
           <dt className="min-w-0">
             <span className="label-line">{counter.label}</span>
-            <span className="d-block small text-body-secondary">
+            <span className="block text-sm text-dim">
               {counter.hint}
             </span>
           </dt>
-          <dd className="flex-shrink-0 text-end">
+          <dd className="shrink-0 text-right">
             <data value={counter.value} className="price tabular">
               {counter.value}
             </data>

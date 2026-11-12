@@ -40,9 +40,9 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
   }
 
   return (
-    <li className="board-row pa-order-row">
-      <div className="min-w-0 vstack gap-1">
-        <div className="d-flex flex-wrap align-items-baseline gap-2">
+    <li className="board-row grid gap-4 md:grid-cols-[minmax(0,1fr)_8rem_8rem_13rem] md:items-center">
+      <div className="min-w-0 flex flex-col gap-1">
+        <div className="flex flex-wrap items-baseline gap-2">
           <h2 id={headingId}>
             Order{' '}
             <data value={order.id} title={order.id} className="tabular">
@@ -50,7 +50,7 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
             </data>
           </h2>
           {order.createdAt && (
-            <span className="small text-body-secondary">
+            <span className="text-sm text-dim">
               Placed <time dateTime={order.createdAt}>{formatDate(order.createdAt)}</time>
             </span>
           )}
@@ -58,20 +58,20 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
 
         <p>
           {order.buyer.name}
-          <span className="text-body-secondary">
+          <span className="text-dim">
             {' '}
             · {fulfilmentLabel(order.fulfilment.method)}
           </span>
         </p>
 
         {order.fulfilment.method === 'delivery' && order.fulfilment.address && (
-          <p className="text-break small text-body-secondary">
+          <p className="break-words text-sm text-dim">
             {order.fulfilment.address}
           </p>
         )}
 
         {order.items.length > 0 && (
-          <p className="text-break small text-body-secondary">
+          <p className="break-words text-sm text-dim">
             {order.items
               .map((item) => `${item.name} × ${item.quantity} ${item.unit}`)
               .join(', ')}
@@ -79,25 +79,25 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
         )}
       </div>
 
-      <div className="d-flex align-items-baseline justify-content-between gap-2 pa-md-block">
-        <span className="label-line pa-col-label">Total</span>
+      <div className="flex items-baseline justify-between gap-2 md:block">
+        <span className="label-line md:sr-only">Total</span>
         <data value={order.total} className="price tabular">
           {formatMoney(order.total)}
         </data>
       </div>
 
-      <div className="d-flex align-items-center justify-content-between gap-2 pa-md-block">
-        <span className="label-line pa-col-label">Status</span>
+      <div className="flex items-center justify-between gap-2 md:block">
+        <span className="label-line md:sr-only">Status</span>
         <Badge variant={statusBadgeVariant(order.status)}>
           {ORDER_STATUS_LABELS[order.status]}
         </Badge>
       </div>
 
       {(next || cancellable) && (
-        <div className="pa-order-actions">
+        <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1">
           {next && (
-            <div className="vstack gap-1">
-              <label htmlFor={selectId} className="visually-hidden">
+            <div className="flex flex-col gap-1">
+              <label htmlFor={selectId} className="sr-only">
                 Update status for order {shortOrderRef(order.id)}
               </label>
               <select
@@ -143,19 +143,19 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
           onKeyDown={(event) => {
             if (event.key === 'Escape') setConfirmingCancel(false)
           }}
-          className="frame-alarm p-3 pa-confirm-span"
+          className="frame-alarm p-3 md:col-span-full"
         >
-          <p id={`${confirmId}-title`} className="fw-semibold">
+          <p id={`${confirmId}-title`} className="font-semibold">
             Cancel order {shortOrderRef(order.id)}?
           </p>
           <p
             id={`${confirmId}-description`}
-            className="mt-1 small text-body-secondary"
+            className="mt-1 text-sm text-dim"
           >
             The buyer is told straight away and the stock returns to your catalog.
             Cancelling cannot be undone.
           </p>
-          <div className="d-flex flex-wrap gap-2 mt-3">
+          <div className="mt-3 flex flex-wrap gap-2">
             <Button
               type="button"
               variant="outline"
@@ -197,7 +197,7 @@ export function ProducerOrdersTable({
     <div>
       <div
         aria-hidden="true"
-        className="label-line d-none d-md-grid pa-order-head py-2"
+        className="label-line hidden py-2 md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_13rem] md:items-center"
       >
         <span>Order</span>
         <span>Total</span>

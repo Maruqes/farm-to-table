@@ -5,17 +5,17 @@ import type { AuctionRoom } from '../auction-room.types'
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="room-details-row border-bottom">
+    <div className="flex items-baseline justify-between gap-4 border-b border-ink py-2.5">
       <dt className="label-line">{label}</dt>
-      <dd className="min-w-0 text-end small fw-semibold mb-0">{children}</dd>
+      <dd className="mb-0 min-w-0 text-right text-sm font-semibold">{children}</dd>
     </div>
   )
 }
 
 export function LotDetails({ auction }: { auction: AuctionRoom }) {
   return (
-    <section aria-labelledby="lot-details-heading" className="border-top pt-4">
-      <h2 id="lot-details-heading" className="fs-4">
+    <section aria-labelledby="lot-details-heading" className="border-t border-ink pt-6">
+      <h2 id="lot-details-heading" className="text-2xl">
         Lot details
       </h2>
 
@@ -39,7 +39,7 @@ export function LotDetails({ auction }: { auction: AuctionRoom }) {
           {auction.producer.id ? (
             <Link
               to={`/producers/${auction.producer.id}`}
-              className="text-decoration-underline"
+              className="underline"
             >
               {auction.producer.name}
             </Link>

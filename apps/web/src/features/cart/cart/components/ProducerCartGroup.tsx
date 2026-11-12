@@ -16,13 +16,13 @@ export function ProducerCartGroup({
 }: ProducerCartGroupProps) {
   return (
     <section aria-label={`${group.producer.name} in your cart`}>
-      <header className="d-flex flex-wrap align-items-baseline justify-content-between gap-2 pb-2">
+      <header className="flex flex-wrap items-baseline justify-between gap-2 pb-2">
         <div className="min-w-0">
-          <h2 className="mb-0">
+          <h2>
             {group.producer.id ? (
               <Link
                 to={`/producers/${group.producer.id}`}
-                className="cart-row-link"
+                className="no-underline hover:underline"
               >
                 {group.producer.name}
               </Link>
@@ -31,14 +31,14 @@ export function ProducerCartGroup({
             )}
           </h2>
           {group.producer.location && (
-            <p className="small text-body-secondary mb-0">{group.producer.location}</p>
+            <p className="text-sm text-dim">{group.producer.location}</p>
           )}
         </div>
-        <p className="small text-body-secondary mb-0">
+        <p className="text-sm text-dim">
           Subtotal{' '}
           <data
             value={group.subtotal}
-            className="ms-1 fw-semibold tabular"
+            className="ml-1 font-semibold tabular"
           >
             {formatMoney(group.subtotal)}
           </data>

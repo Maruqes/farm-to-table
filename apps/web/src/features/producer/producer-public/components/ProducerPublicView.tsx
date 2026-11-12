@@ -38,11 +38,11 @@ function ProducerProductRow({ product }: { product: ProducerProduct }) {
       <CrateChip category={product.category} />
       <span className="lot tabular">{lotNumber(product.id)}</span>
 
-      <div className="min-w-0 flex-grow-1">
-        <Link to={detailsUrl} className="producer-public-product-link text-break fw-semibold">
+      <div className="min-w-0 grow">
+        <Link to={detailsUrl} className="break-words font-semibold no-underline hover:underline">
           {product.name}
         </Link>
-        <small className="d-block text-body-secondary">
+        <small className="block text-dim">
           {product.stock > 0 ? (
             <>
               <data value={product.stock} className="tabular">
@@ -56,28 +56,28 @@ function ProducerProductRow({ product }: { product: ProducerProduct }) {
         </small>
       </div>
 
-      <span className="d-none d-md-inline-flex flex-shrink-0 align-items-center gap-1 small text-body-secondary">
+      <span className="hidden shrink-0 items-center gap-1 text-sm text-dim md:inline-flex">
         {product.averageRating > 0 ? (
           <>
-            <Star size={16} className="producer-public-star" aria-hidden="true" />
-            <data value={product.averageRating} className="tabular fw-semibold">
+            <Star size={16} className="fill-current" aria-hidden="true" />
+            <data value={product.averageRating} className="tabular font-semibold">
               {product.averageRating.toFixed(1)}
             </data>
-            <span className="visually-hidden">out of 5</span>
+            <span className="sr-only">out of 5</span>
           </>
         ) : (
           'No ratings yet'
         )}
       </span>
 
-      <div className="flex-shrink-0 text-end">
+      <div className="shrink-0 text-right">
         <data value={product.price} className="price tabular">
           {formatMoney(product.price)}
         </data>
-        <small className="d-block text-body-secondary">per {product.unit}</small>
+        <small className="block text-dim">per {product.unit}</small>
       </div>
 
-      <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+      <Button asChild variant="outline" size="sm" className="shrink-0">
         <Link to={detailsUrl} aria-label={`View ${product.name}`}>
           View
         </Link>
@@ -90,19 +90,19 @@ export function ProducerPublicView({ producer }: { producer: ProducerPublic }) {
   const { lat, lng } = producer
 
   return (
-    <article className="vstack gap-5">
+    <article className="flex flex-col gap-12">
       <Link
         to="/"
-        className="producer-public-back d-inline-flex align-items-center gap-1 small text-body-secondary"
+        className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink"
       >
         <ArrowLeft size={16} aria-hidden="true" />
         Back to catalog
       </Link>
 
       <header className={cn('crate-label', crateClass(mainCategory(producer.products)))}>
-        <p className="producer-public-kicker">Producer</p>
-        <h1 className="producer-public-title mt-1 mb-0">{producer.name}</h1>
-        <div className="double-rule mt-4 d-flex flex-wrap justify-content-between gap-2 pt-2 small fw-semibold text-uppercase">
+        <p className="m-0 text-xs font-semibold tracking-[0.04em] uppercase">Producer</p>
+        <h1 className="mt-1 mb-0 text-5xl md:text-6xl">{producer.name}</h1>
+        <div className="double-rule mt-6 flex flex-wrap justify-between gap-2 pt-2 text-sm font-semibold uppercase">
           <span>{producer.location}</span>
           {producer.averageRating > 0 ? (
             <span>
@@ -117,22 +117,20 @@ export function ProducerPublicView({ producer }: { producer: ProducerPublic }) {
         </div>
       </header>
 
-      {producer.bio && <p className="measure producer-public-bio mb-0">{producer.bio}</p>}
+      {producer.bio && <p className="measure mb-0 leading-[1.625]">{producer.bio}</p>}
 
       {lat !== null && lng !== null && (
-        <section aria-labelledby="producer-location-heading" className="vstack gap-3">
-          <h2 id="producer-location-heading" className="producer-public-section-title mb-0">
+        <section aria-labelledby="producer-location-heading" className="flex flex-col gap-4">
+          <h2 id="producer-location-heading" className="mb-0 text-xl md:text-2xl">
             Where to find them
           </h2>
           <Suspense
             fallback={
               <div
                 role="status"
-                className="frame-thick w-100 producer-public-map placeholder-glow"
+                className="frame-thick relative h-64 w-full animate-pulse bg-wash md:h-80"
               >
-                <span className="placeholder producer-public-map-placeholder">
-                  <span className="visually-hidden">Loading map…</span>
-                </span>
+                <span className="sr-only">Loading map…</span>
               </div>
             }
           >
@@ -141,8 +139,8 @@ export function ProducerPublicView({ producer }: { producer: ProducerPublic }) {
         </section>
       )}
 
-      <section aria-labelledby="producer-products-heading" className="vstack gap-4">
-        <h2 id="producer-products-heading" className="producer-public-section-title mb-0">
+      <section aria-labelledby="producer-products-heading" className="flex flex-col gap-6">
+        <h2 id="producer-products-heading" className="mb-0 text-xl md:text-2xl">
           Products
         </h2>
         {producer.products.length === 0 ? (

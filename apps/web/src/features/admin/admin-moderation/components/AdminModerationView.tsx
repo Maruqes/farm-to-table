@@ -53,15 +53,15 @@ export function AdminModerationView() {
   )
 
   return (
-    <section aria-labelledby="admin-moderation-heading" className="vstack gap-4">
-      <Link to="/admin" className="admin-back">
+    <section aria-labelledby="admin-moderation-heading" className="flex flex-col gap-6">
+      <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink hover:underline">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
       <header>
         <h1 id="admin-moderation-heading">Content moderation</h1>
-        <p className="measure text-body-secondary mb-0">
+        <p className="measure text-dim mb-0">
           Hide a product or a producer page to remove it from the public
           catalog. Hiding never deletes the content or changes its text, and
           you can unhide it at any time.
@@ -70,7 +70,7 @@ export function AdminModerationView() {
 
       <ModerationTabs value={type} onChange={setType} />
 
-      <p className="visually-hidden" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
 
@@ -78,7 +78,7 @@ export function AdminModerationView() {
         role="tabpanel"
         id={`moderation-panel-${type}`}
         aria-labelledby={`moderation-tab-${type}`}
-        className="vstack gap-3"
+        className="flex flex-col gap-4"
       >
         <PageState
           loading={loading}
@@ -88,11 +88,11 @@ export function AdminModerationView() {
           empty={empty}
           emptyMessage={moderationEmptyMessage(type)}
         >
-          <div className="vstack gap-3">
-            <p className="small text-body-secondary mb-0">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm text-dim mb-0">
               <data
                 value={summary.total}
-                className="fw-semibold tabular"
+                className="font-semibold tabular"
               >
                 {summary.total}
               </data>{' '}
@@ -100,7 +100,7 @@ export function AdminModerationView() {
               <span aria-hidden="true"> · </span>
               <data
                 value={summary.hidden}
-                className="fw-semibold tabular"
+                className="font-semibold tabular"
               >
                 {summary.hidden}
               </data>{' '}

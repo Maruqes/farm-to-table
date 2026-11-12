@@ -24,23 +24,23 @@ export function CartLine({ item, onQuantityChange, onRemove }: CartLineProps) {
         {lotNumber(item.productId)}
       </span>
 
-      <div className="cart-line-main">
+      <div className="min-w-0 flex-[1_1_9rem]">
         <h3>
           <Link
             to={`/products/${item.productId}`}
-            className="cart-row-link"
+            className="no-underline hover:underline"
           >
             {item.name}
           </Link>
         </h3>
-        <p className="mt-1 small text-body-secondary mb-0">
+        <p className="mt-1 text-sm text-dim">
           {item.producer.name}
           {item.producer.location ? ` · ${item.producer.location}` : ''}
         </p>
         {atStockLimit && (
-          <p className="mt-1 cart-note mb-0">
+          <p className="mt-1 text-xs text-dim">
             Only{' '}
-            <data value={item.stock} className="tabular fw-medium">
+            <data value={item.stock} className="tabular font-medium">
               {item.stock} {item.unit}
               {item.stock === 1 ? '' : 's'}
             </data>{' '}
@@ -49,16 +49,16 @@ export function CartLine({ item, onQuantityChange, onRemove }: CartLineProps) {
         )}
       </div>
 
-      <div className="text-end">
+      <div className="text-right">
         <data value={lineTotal} className="price tabular">
           {formatMoney(lineTotal)}
         </data>
-        <p className="mt-1 cart-note tabular mb-0">
+        <p className="mt-1 text-xs text-dim tabular">
           {formatMoney(item.price)} per {item.unit}
         </p>
       </div>
 
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 w-100">
+      <div className="flex w-full flex-wrap items-center justify-between gap-2">
         <CartQuantityStepper
           productId={item.productId}
           productName={item.name}

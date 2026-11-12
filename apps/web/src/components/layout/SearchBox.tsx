@@ -16,8 +16,8 @@ export function SearchBox() {
   }
 
   return (
-    <form role="search" onSubmit={handleSubmit} className="d-flex w-100 align-items-center gap-2">
-      <label htmlFor="site-search" className="visually-hidden">
+    <form role="search" onSubmit={handleSubmit} className="flex w-full items-center gap-2">
+      <label htmlFor="site-search" className="sr-only">
         Search products
       </label>
       <Input

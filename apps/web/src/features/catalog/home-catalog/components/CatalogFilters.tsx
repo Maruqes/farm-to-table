@@ -7,6 +7,9 @@ import { CATEGORY_OPTIONS, SEASON_OPTIONS, SORT_OPTIONS } from '../catalog-optio
 import type { CatalogSort } from '../catalog.types'
 import type { CatalogFilterDraft } from '../useCatalogFilters'
 
+const SELECT_CLASS =
+  'block min-h-10 w-full border-2 border-ink bg-transparent px-3 py-1.5 text-[0.9375rem] text-ink'
+
 // Square category chip: filled with the crate colour when on, outlined when off.
 function CategoryChip({
   pressed,
@@ -25,8 +28,10 @@ function CategoryChip({
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(
-        'catalog-chip',
-        pressed && (crate ? crateClass(crate) : 'ink-fill'),
+        'inline-flex min-h-10 cursor-pointer items-center border-2 border-ink px-3 py-1 text-sm font-semibold capitalize transition-colors duration-150 ease-out',
+        pressed
+          ? (crate ? crateClass(crate) : 'bg-ink text-paper')
+          : 'bg-transparent text-ink hover:bg-wash',
       )}
     >
       {children}
@@ -63,10 +68,10 @@ export function CatalogFilters({
   }
 
   return (
-    <form onSubmit={handleSubmit} aria-label="Catalog filters" className="vstack gap-3">
+    <form onSubmit={handleSubmit} aria-label="Catalog filters" className="flex flex-col gap-4">
       <fieldset>
         <legend className="label-line">Category</legend>
-        <div className="d-flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           <CategoryChip pressed={draft.category === ''} onClick={() => update('category', '')}>
             All
           </CategoryChip>
@@ -85,9 +90,9 @@ export function CatalogFilters({
         </div>
       </fieldset>
 
-      <div className="catalog-filter-grid">
-        <div className="catalog-field-wide">
-          <label htmlFor="catalog-q" className="form-label">
+      <div className="grid grid-cols-2 items-end gap-x-2 gap-y-3 md:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_auto_auto]">
+        <div className="col-span-2 md:col-span-1">
+          <label htmlFor="catalog-q" className="label-line mb-1 block">
             Search
           </label>
           <Input
@@ -102,7 +107,7 @@ export function CatalogFilters({
         </div>
 
         <div>
-          <label htmlFor="catalog-location" className="form-label">
+          <label htmlFor="catalog-location" className="label-line mb-1 block">
             Locality
           </label>
           <Input
@@ -117,13 +122,13 @@ export function CatalogFilters({
         </div>
 
         <div>
-          <label htmlFor="catalog-season" className="form-label">
+          <label htmlFor="catalog-season" className="label-line mb-1 block">
             Season
           </label>
           <select
             id="catalog-season"
             name="season"
-            className="form-select"
+            className={SELECT_CLASS}
             value={draft.season}
             onChange={(event) => update('season', event.target.value)}
           >
@@ -137,13 +142,13 @@ export function CatalogFilters({
         </div>
 
         <div>
-          <label htmlFor="catalog-sort" className="form-label">
+          <label htmlFor="catalog-sort" className="label-line mb-1 block">
             Sort by
           </label>
           <select
             id="catalog-sort"
             name="sort"
-            className="form-select"
+            className={SELECT_CLASS}
             value={draft.sort}
             onChange={(event) => update('sort', event.target.value as CatalogSort | '')}
           >
@@ -156,22 +161,22 @@ export function CatalogFilters({
           </select>
         </div>
 
-        <div className="d-flex align-items-end">
-          <div className="form-check catalog-check">
+        <div className="flex items-end">
+          <div className="flex min-h-10 items-center gap-2 whitespace-nowrap">
             <input
               id="catalog-organic"
               name="organic"
               type="checkbox"
               checked={draft.organic}
               onChange={(event) => update('organic', event.target.checked)}
-              className="form-check-input"
+              className="size-5 flex-none accent-ink"
             />
-            <label htmlFor="catalog-organic" className="form-check-label">
+            <label htmlFor="catalog-organic" className="cursor-pointer">
               Organic only
             </label>
           </div>
         </div>
-        <div className="d-flex align-items-end gap-1">
+        <div className="flex items-end gap-1">
           <Button type="submit" size="sm">
             Apply
           </Button>
@@ -182,10 +187,10 @@ export function CatalogFilters({
       </div>
 
       {producer && (
-        <div className="d-flex flex-wrap align-items-center gap-2">
-          <p className="d-flex align-items-center gap-2 small text-body-secondary">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="flex items-center gap-2 text-sm text-dim">
             <span>
-              Producer filter: <strong className="fw-semibold">{producer}</strong>
+              Producer filter: <strong className="font-semibold">{producer}</strong>
             </span>
             <Button type="button" variant="link" size="sm" onClick={onClearProducer}>
               Remove

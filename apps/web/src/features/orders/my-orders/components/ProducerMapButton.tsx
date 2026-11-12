@@ -25,10 +25,10 @@ export function ProducerMapButton({ producer }: { producer: OrderProducer }) {
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-panel">
-          <div className="mb-4 d-flex align-items-start justify-content-between gap-3">
-            <div className="vstack gap-1">
-              <Dialog.Title className="mb-0">{producer.name}</Dialog.Title>
-              <Dialog.Description className="small text-body-secondary">
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <Dialog.Title>{producer.name}</Dialog.Title>
+              <Dialog.Description className="text-sm text-dim">
                 {producer.location || 'Approximate location on the map.'}
               </Dialog.Description>
             </div>
@@ -43,9 +43,9 @@ export function ProducerMapButton({ producer }: { producer: OrderProducer }) {
             fallback={
               <div
                 role="status"
-                className="orders-map-fallback"
+                className="h-64 w-full border border-dim md:h-80"
               >
-                <span className="visually-hidden">Loading map…</span>
+                <span className="sr-only">Loading map…</span>
               </div>
             }
           >

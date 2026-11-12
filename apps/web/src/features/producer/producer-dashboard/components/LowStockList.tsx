@@ -9,16 +9,16 @@ interface LowStockListProps {
 
 export function LowStockList({ items }: LowStockListProps) {
   return (
-    <section aria-labelledby="low-stock-heading" className="vstack gap-3">
-      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
+    <section aria-labelledby="low-stock-heading" className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 id="low-stock-heading">Low stock</h2>
-        <p className="small text-body-secondary">
+        <p className="text-sm text-dim">
           Restock before the next order arrives.
         </p>
       </div>
 
       {items.length === 0 ? (
-        <p className="pa-empty">No products need restocking right now.</p>
+        <p className="border border-dashed border-dim p-6 px-4 text-sm text-dim [&>p]:m-0">No products need restocking right now.</p>
       ) : (
         <ul className="board">
           {items.map((item) => (
@@ -26,9 +26,9 @@ export function LowStockList({ items }: LowStockListProps) {
               <span aria-hidden="true" className="lot">
                 {lotNumber(item.productId)}
               </span>
-              <span className="min-w-0 flex-grow-1">
-                <span className="d-block fw-semibold">{item.name}</span>
-                <span className="d-block small text-body-secondary">
+              <span className="min-w-0 grow">
+                <span className="block font-semibold">{item.name}</span>
+                <span className="block text-sm text-dim">
                   <data value={item.stock} className="tabular">
                     {item.stock}
                   </data>{' '}

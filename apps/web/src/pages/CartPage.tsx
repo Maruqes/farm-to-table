@@ -26,12 +26,12 @@ function CartPageContent() {
   const showEmpty = !loading && !error && items.length === 0
 
   return (
-    <section aria-labelledby="cart-heading" className="vstack gap-4">
-      <header className="d-flex flex-wrap align-items-end justify-content-between gap-3">
-        <div className="vstack gap-1">
-          <h1 id="cart-heading" className="mb-0">Your cart</h1>
+    <section aria-labelledby="cart-heading" className="flex flex-col gap-6">
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 id="cart-heading">Your cart</h1>
           {!loading && !error && items.length > 0 && (
-            <p className="text-body-secondary mb-0">
+            <p className="text-dim">
               {items.length} {items.length === 1 ? 'product' : 'products'} from{' '}
               {groups.length} {groups.length === 1 ? 'producer' : 'producers'}
             </p>
@@ -40,7 +40,7 @@ function CartPageContent() {
         {!loading && !error && items.length > 0 && (
           <Link
             to="/"
-            className="small text-body-secondary"
+            className="text-sm text-dim"
           >
             Continue shopping
           </Link>
@@ -66,7 +66,7 @@ function CartPageContent() {
       </PageState>
 
       {showEmpty && (
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           <Button asChild>
             <Link to="/">Browse the catalog</Link>
           </Button>

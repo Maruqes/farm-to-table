@@ -18,8 +18,8 @@ export function CartView({
   const total = groups.reduce((sum, group) => sum + group.subtotal, 0)
 
   return (
-    <div className="vstack gap-5">
-      <div className="vstack gap-5">
+    <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-12">
         {groups.map((group) => (
           <ProducerCartGroup
             key={group.producer.id || group.producer.name}

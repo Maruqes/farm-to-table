@@ -6,19 +6,19 @@ export default function AccountPage() {
   const { user, role } = useSession()
 
   return (
-    <section className="profile-column vstack gap-3">
-      <h1 className="mb-0">My account</h1>
-      <div className="rule vstack gap-2 pt-4">
-        <p className="text-body-secondary mb-0">
+    <section className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+      <h1>My account</h1>
+      <div className="rule flex flex-col gap-2 pt-6">
+        <p className="text-dim">
           Signed in as <strong>{user?.name}</strong>
         </p>
-        <p className="mb-0">
+        <p>
           <span className="label-line">Role</span>{' '}
           <Badge variant="outline">
             {ROLE_LABELS[role]}
           </Badge>
         </p>
-        <p className="small text-body-secondary mb-0">
+        <p className="text-sm text-dim">
           Account details will be managed from your profile.
         </p>
       </div>

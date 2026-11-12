@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-// The initial data-bs-theme is set before paint by the inline script in index.html.
+// The initial .dark class is set before paint by the inline script in index.html.
 export function ThemeToggle() {
-  const [dark, setDark] = useState(() => document.documentElement.getAttribute('data-bs-theme') === 'dark')
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'))
 
   function toggle() {
     const next = !dark
-    document.documentElement.setAttribute('data-bs-theme', next ? 'dark' : 'light')
+    document.documentElement.classList.toggle('dark', next)
     try {
       localStorage.setItem('theme', next ? 'dark' : 'light')
     } catch {

@@ -65,10 +65,10 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-panel">
-          <div className="mb-4 d-flex align-items-start justify-content-between gap-3">
-            <div className="vstack gap-1">
-              <Dialog.Title className="mb-0">Rate {order.producer.name}</Dialog.Title>
-              <Dialog.Description className="small text-body-secondary">
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <Dialog.Title>Rate {order.producer.name}</Dialog.Title>
+              <Dialog.Description className="text-sm text-dim">
                 Your rating is public on the producer’s page. You can rate this order once.
               </Dialog.Description>
             </div>
@@ -79,16 +79,16 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="vstack gap-4">
-            <fieldset className="vstack gap-2">
-              <legend className="label-line mb-0">Your rating</legend>
-              <div className="d-flex flex-wrap gap-1">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <fieldset className="flex flex-col gap-2">
+              <legend className="label-line">Your rating</legend>
+              <div className="flex flex-wrap gap-1">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <label
                     key={value}
                     className={cn(
-                      'orders-star',
-                      rating === value && 'is-active',
+                      'inline-flex size-11 cursor-pointer items-center justify-center border-2 border-transparent transition-colors duration-150 ease-out hover:border-dim focus-within:border-ink',
+                      rating === value && 'border-ink',
                     )}
                   >
                     <input
@@ -100,32 +100,31 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
                         setRating(value)
                         setError(null)
                       }}
-                      className="visually-hidden"
+                      className="sr-only"
                       autoFocus={value === 1}
                     />
                     <Star
                       size={24}
                       fill={value <= rating ? 'currentColor' : 'none'}
                       aria-hidden="true"
-                      className={cn(value <= rating && 'text-primary')}
                     />
-                    <span className="visually-hidden">
+                    <span className="sr-only">
                       {value} star{value === 1 ? '' : 's'}
                     </span>
                   </label>
                 ))}
               </div>
-              <p className="orders-note mb-0">
+              <p className="text-xs text-dim">
                 {rating > 0 ? `${rating} out of 5 stars` : 'Choose a star rating.'}
               </p>
             </fieldset>
 
-            <div className="vstack gap-2">
-              <div className="d-flex align-items-baseline justify-content-between gap-3">
-                <label htmlFor={textId} className="label-line mb-0">
-                  Review <span className="fw-normal">(optional)</span>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-baseline justify-between gap-4">
+                <label htmlFor={textId} className="label-line">
+                  Review <span className="font-normal">(optional)</span>
                 </label>
-                <span className="small text-body-secondary tabular">
+                <span className="text-sm text-dim tabular">
                   {text.length} / {MAX_TEXT_LENGTH}
                 </span>
               </div>
@@ -136,9 +135,9 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
                 maxLength={MAX_TEXT_LENGTH}
                 rows={4}
                 placeholder="What did you think of the produce and the producer?"
-                className="form-control orders-review-text"
+                className="form-control min-h-[6rem]"
               />
-              <p className="orders-note mb-0">
+              <p className="text-xs text-dim">
                 Keep it specific: freshness, packaging and pickup are useful to other buyers.
               </p>
             </div>
@@ -146,13 +145,13 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
             {error && (
               <p
                 role="alert"
-                className="frame-alarm px-3 py-2 small text-danger mb-0"
+                className="frame-alarm px-4 py-2 text-sm text-alarm"
               >
                 {error}
               </p>
             )}
 
-            <div className="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-2">
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Dialog.Close asChild>
                 <Button type="button" variant="outline" disabled={submitting}>
                   Cancel

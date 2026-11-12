@@ -42,16 +42,16 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
     : 'No sales in the last seven days.'
 
   return (
-    <section aria-labelledby={headingId} className="admin-chart">
+    <section aria-labelledby={headingId} className="border-t-2 border-ink pt-4">
       <div>
         <h2 id={headingId}>Sales over time</h2>
-        <p className="small text-body-secondary mb-0">Revenue per day for the last 7 days.</p>
+        <p className="text-sm text-dim mb-0">Revenue per day for the last 7 days.</p>
       </div>
 
       {hasSales ? (
         <>
-          <p className="small text-body-secondary mt-4 mb-0">
-            <data value={total} className="fw-semibold tabular">
+          <p className="text-sm text-dim mt-6 mb-0">
+            <data value={total} className="font-semibold tabular">
               {formatMoney(total)}
             </data>{' '}
             in total
@@ -63,7 +63,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
                   {fullDay(best.date)}
                 </time>{' '}
                 with{' '}
-                <data value={best.total} className="fw-semibold tabular">
+                <data value={best.total} className="font-semibold tabular">
                   {formatMoney(best.total)}
                 </data>
               </>
@@ -72,7 +72,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
 
           <svg
             viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-            className="admin-chart-svg mt-4"
+            className="h-28 w-full mt-6"
             preserveAspectRatio="none"
             role="img"
             aria-labelledby={`${chartTitleId} ${chartDescId}`}
@@ -85,7 +85,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
               x2={CHART_WIDTH}
               y2={CHART_HEIGHT}
               strokeWidth={1}
-              className="admin-chart-axis"
+              className="stroke-dim"
             />
             {points.map((point, index) => {
               const height = max > 0 ? (point.total / max) * CHART_HEIGHT : 0
@@ -96,7 +96,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
                   y={CHART_HEIGHT - height}
                   width={barWidth}
                   height={height}
-                  className="admin-chart-bar"
+                  className="fill-ink"
                 >
                   <title>{`${fullDay(point.date)}: ${formatMoney(point.total)}`}</title>
                 </rect>
@@ -104,18 +104,18 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
             })}
           </svg>
 
-          <div aria-hidden="true" className="d-flex gap-2 mt-2">
+          <div aria-hidden="true" className="flex gap-2 mt-2">
             {points.map((point) => (
               <span
                 key={point.date}
-                className="flex-fill text-center small text-body-secondary tabular"
+                className="flex-1 text-center text-sm text-dim tabular"
               >
                 {dayNumber(point.date)}
               </span>
             ))}
           </div>
 
-          <table className="visually-hidden">
+          <table className="sr-only">
             <caption>Daily sales for the last seven days</caption>
             <thead>
               <tr>
@@ -134,7 +134,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
           </table>
         </>
       ) : (
-        <p className="small text-body-secondary py-5 mb-0">
+        <p className="text-sm text-dim py-12 mb-0">
           No sales in the last 7 days yet. Sales appear here after buyers check out.
         </p>
       )}

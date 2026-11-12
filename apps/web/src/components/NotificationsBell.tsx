@@ -168,13 +168,13 @@ export function NotificationsBell({
           tabIndex={-1}
           className="notifications-panel"
         >
-          <div className="notifications-panel-head d-flex align-items-start justify-content-between gap-3 flex-shrink-0 px-3 py-3">
+          <div className="notifications-panel-head flex shrink-0 items-start justify-between gap-3 px-3 py-3">
             <div className="min-w-0">
-              <h2 className="fs-6 mb-0">
+              <h2 className="text-base">
                 Notifications
               </h2>
               {!loading && !error && (
-                <p aria-live="polite" className="small text-body-secondary tabular mb-0">
+                <p aria-live="polite" className="text-sm text-dim tabular">
                   {unreadCount === 0 ? 'No unread notifications' : `${unreadCount} unread`}
                 </p>
               )}
@@ -209,37 +209,37 @@ export function NotificationsBell({
                     <li key={notification.id} className="board-row notifications-row px-3">
                       <Icon
                         size={16}
-                        className={notification.read ? 'text-body-secondary flex-shrink-0 mt-1' : 'flex-shrink-0 mt-1'}
+                        className={notification.read ? 'mt-1 shrink-0 text-dim' : 'mt-1 shrink-0'}
                         aria-hidden="true"
                       />
-                      <div className="min-w-0 flex-grow-1">
-                        <div className="d-flex align-items-start justify-content-between gap-2">
+                      <div className="min-w-0 grow">
+                        <div className="flex items-start justify-between gap-2">
                           <p
                             id={textId}
                             className={
                               notification.read
-                                ? 'small text-body-secondary mb-0'
-                                : 'small fw-semibold mb-0'
+                                ? 'text-sm text-dim'
+                                : 'text-sm font-semibold'
                             }
                           >
                             {notification.text}
                           </p>
                           {!notification.read && (
                             <span className="notifications-dot">
-                              <span className="visually-hidden">Unread</span>
+                              <span className="sr-only">Unread</span>
                             </span>
                           )}
                         </div>
-                        <div className="d-flex flex-wrap align-items-center gap-2 mt-2">
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
                           <time
                             dateTime={notification.date ?? undefined}
-                            className="small text-body-secondary tabular"
+                            className="text-sm text-dim tabular"
                           >
                             {notification.date
                               ? formatDateTime(notification.date)
                               : 'Just now'}
                           </time>
-                          <span className="small text-body-secondary">
+                          <span className="text-sm text-dim">
                             {NOTIFICATION_TYPE_LABELS[notification.type]}
                           </span>
                           {!notification.read && (
@@ -247,7 +247,7 @@ export function NotificationsBell({
                               type="button"
                               variant="ghost"
                               size="sm"
-                              className="ms-auto"
+                              className="ml-auto"
                               onClick={() => handleMarkRead(notification.id)}
                               aria-describedby={textId}
                               data-mark-read={notification.id}

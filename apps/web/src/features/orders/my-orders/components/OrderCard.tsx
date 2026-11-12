@@ -30,16 +30,16 @@ export function OrderCard({ order, onRate }: OrderCardProps) {
   return (
     <article
       aria-labelledby={headingId}
-      className="rule pt-4"
+      className="rule pt-6"
     >
-      <header className="d-flex flex-wrap align-items-start justify-content-between gap-3">
-        <div className="min-w-0 vstack gap-1">
-          <h2 id={headingId} className="mb-0">
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-1">
+          <h2 id={headingId}>
             {producer.name}
           </h2>
-          <p className="d-flex flex-wrap align-items-center gap-2 small text-body-secondary mb-0">
+          <p className="flex flex-wrap items-center gap-2 text-sm text-dim">
             {producer.location && (
-              <span className="d-inline-flex align-items-center gap-2">
+              <span className="inline-flex items-center gap-2">
                 <MapPin size={16} aria-hidden="true" />
                 {producer.location}
               </span>
@@ -56,41 +56,41 @@ export function OrderCard({ order, onRate }: OrderCardProps) {
         </Badge>
       </header>
 
-      <div className="mt-4 vstack gap-4">
+      <div className="mt-6 flex flex-col gap-6">
         <OrderTimeline status={order.status} history={order.history} />
 
         <div>
-          <h3 className="label-line mb-0">Items</h3>
+          <h3 className="label-line">Items</h3>
           <ul className="board mt-1">
             {order.items.map((item, index) => (
               <li
                 key={`${item.productId}-${index}`}
-                className="board-row justify-content-between gap-3 small orders-compact"
+                className="board-row justify-between gap-4 py-1.5 text-sm"
               >
                 <span className="min-w-0">
                   {item.name}{' '}
-                  <span className="text-nowrap text-body-secondary tabular">
+                  <span className="whitespace-nowrap text-dim tabular">
                     × {item.quantity} {item.unit}
                   </span>
                 </span>
                 <data
                   value={item.price * item.quantity}
-                  className="flex-shrink-0 text-body-secondary tabular"
+                  className="shrink-0 text-dim tabular"
                 >
                   {formatMoney(item.price * item.quantity)}
                 </data>
               </li>
             ))}
           </ul>
-          <p className="mt-3 d-flex flex-wrap align-items-center justify-content-between gap-3 mb-0">
-            <span className="small text-body-secondary">Total</span>
+          <p className="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <span className="text-sm text-dim">Total</span>
             <data value={order.total} className="price-tag tabular">
               {formatMoney(order.total)}
             </data>
           </p>
         </div>
 
-        <div className="d-flex flex-wrap align-items-center gap-2 border-top pt-4">
+        <div className="flex flex-wrap items-center gap-2 border-t border-ink pt-6">
           {producer.email && (
             <Button asChild variant="outline">
               <a
@@ -120,25 +120,25 @@ export function OrderCard({ order, onRate }: OrderCardProps) {
         </div>
 
         {order.review && (
-          <div className="vstack gap-1 border-top pt-4">
-            <p className="d-flex flex-wrap align-items-center gap-2 small mb-0">
+          <div className="flex flex-col gap-1 border-t border-ink pt-6">
+            <p className="flex flex-wrap items-center gap-2 text-sm">
               <RatingStars rating={order.review.rating} />
-              <span className="fw-medium tabular">{order.review.rating} of 5</span>
-              <span className="text-body-secondary">your rating</span>
+              <span className="font-medium tabular">{order.review.rating} of 5</span>
+              <span className="text-dim">your rating</span>
             </p>
             {order.review.text && (
-              <p className="measure small text-body-secondary mb-0">
+              <p className="measure text-sm text-dim">
                 {order.review.text}
               </p>
             )}
-            <p className="orders-note mb-0">
+            <p className="text-xs text-dim">
               Ratings cannot be changed once submitted.
             </p>
           </div>
         )}
 
         {!order.review && order.reviewed && (
-          <p className="border-top pt-4 small text-body-secondary mb-0">
+          <p className="border-t border-ink pt-6 text-sm text-dim">
             You rated this order. Ratings cannot be changed once submitted.
           </p>
         )}

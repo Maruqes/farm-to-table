@@ -22,9 +22,9 @@ export function AuctionCountdown({
 }) {
   if (auction.status === 'ended') {
     return (
-      <div className="text-end">
-        <p className="small text-body-secondary mb-0">Closed</p>
-        <p className="small fw-semibold mb-0">
+      <div className="text-right">
+        <p className="mb-0 text-sm text-dim">Closed</p>
+        <p className="mb-0 text-sm font-semibold">
           {auction.endsAt ? (
             <time dateTime={auction.endsAt} className="tabular">
               {formatDateTime(auction.endsAt)}
@@ -41,9 +41,9 @@ export function AuctionCountdown({
 
   if (Number.isNaN(ends)) {
     return (
-      <div className="text-end">
-        <p className="small text-body-secondary mb-0">Ends in</p>
-        <p className="auctions-countdown-value mb-0">Soon</p>
+      <div className="text-right">
+        <p className="mb-0 text-sm text-dim">Ends in</p>
+        <p className="mb-0 font-display text-2xl leading-[1.1] normal-case">Soon</p>
       </div>
     )
   }
@@ -51,13 +51,13 @@ export function AuctionCountdown({
   const remaining = ends - now
 
   return (
-    <div className="text-end">
-      <p className="small text-body-secondary mb-0">
+    <div className="text-right">
+      <p className="mb-0 text-sm text-dim">
         {remaining <= 0 ? 'Time is up' : 'Ends in'}
       </p>
       <time
         dateTime={auction.endsAt ?? undefined}
-        className="auctions-countdown-value tabular"
+        className="font-display text-2xl leading-[1.1] normal-case tabular"
       >
         {remaining <= 0 ? '00:00' : formatCountdown(remaining)}
       </time>

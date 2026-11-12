@@ -50,14 +50,14 @@ interface UsersTableProps {
 
 export function UsersTable({ users }: UsersTableProps) {
   return (
-    <table className="table admin-table">
-      <caption className="visually-hidden">
+    <table className="table">
+      <caption className="sr-only">
         Users with their name, email, role and account state
       </caption>
       <thead>
         <tr>
           <th scope="col">User</th>
-          <th scope="col" className="d-none d-md-table-cell">
+            <th scope="col" className="hidden md:table-cell">
             Role
           </th>
           <th scope="col">State</th>
@@ -66,20 +66,20 @@ export function UsersTable({ users }: UsersTableProps) {
       <tbody>
         {users.map((user) => (
           <tr key={user.id}>
-            <th scope="row">
-              <span className="d-block fw-semibold text-break">
+            <th scope="row" className="text-base font-normal normal-case tracking-normal text-ink">
+              <span className="block font-semibold break-words">
                 {user.name}
               </span>
-              <span className="d-block small text-body-secondary text-break">
+              <span className="block text-sm text-dim break-words">
                 {user.email || 'No email on file'}
               </span>
-              <span className="d-block d-md-none mt-1">
+              <span className="block md:hidden mt-1">
                 <Badge variant="outline">
                   {ADMIN_USER_ROLE_LABELS[user.role]}
                 </Badge>
               </span>
             </th>
-            <td className="d-none d-md-table-cell">
+            <td className="hidden md:table-cell">
               <Badge variant="outline">
                 {ADMIN_USER_ROLE_LABELS[user.role]}
               </Badge>

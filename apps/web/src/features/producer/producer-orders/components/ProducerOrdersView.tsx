@@ -40,21 +40,21 @@ export function ProducerOrdersView() {
   )
 
   return (
-    <section aria-labelledby="producer-orders-heading" className="vstack gap-4">
-      <Link to="/producer" className="pa-back-link small text-body-secondary">
+    <section aria-labelledby="producer-orders-heading" className="flex flex-col gap-6">
+      <Link to="/producer" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="vstack gap-1">
+      <header className="flex flex-col gap-1">
         <h1 id="producer-orders-heading">Orders</h1>
-        <p className="measure text-body-secondary">
+        <p className="measure text-dim">
           Orders that contain your products. Move each one to the next step when it is
           ready, and the buyer hears about it straight away.
         </p>
       </header>
 
-      <p className="visually-hidden" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
 

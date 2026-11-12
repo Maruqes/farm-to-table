@@ -6,39 +6,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
   --font-sans: 'Azeret Mono', ui-monospace, monospace;
   --font-mono: 'Azeret Mono', ui-monospace, monospace;
   --font-display: 'Big Shoulders Display', 'Azeret Mono', sans-serif;
-  --color-board: var(--board);
-  --color-amber: var(--amber);
-  --color-board-foreground: var(--board-foreground);
-  --color-live: var(--live);
-  --color-tile-veg: var(--tile-veg);
-  --color-tile-fruit: var(--tile-fruit);
-  --color-tile-honey: var(--tile-honey);
-  --color-tile-wine: var(--tile-wine);
-  --color-tile-cheese: var(--tile-cheese);
-  --color-tile-bakery: var(--tile-bakery);
-  --color-live-foreground: var(--live-foreground);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+
+  /* Mobile first: sm 576 / md 768 / lg 1024 / xl 1280 (SCOPE.md §1). */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
 
   /* RULES.md: radius is 0 everywhere, borders not shadows. */
   --radius-xs: 0;
@@ -57,52 +34,58 @@
   --shadow-2xl: none;
 }
 
-:root {
+@theme inline {
   /* Painted price board (RULES.md): paper, ink, one red tag, crate colours. */
-  --radius: 0;
-  --background: #f6ecd6;
-  --foreground: #14301b;
-  --card: var(--background);
-  --card-foreground: var(--foreground);
-  --popover: var(--background);
-  --popover-foreground: var(--foreground);
-  --primary: var(--foreground);
-  --primary-foreground: var(--background);
-  --secondary: #ebe0c6;
-  --secondary-foreground: var(--foreground);
-  --muted: #ebe0c6;
-  --muted-foreground: #5d6b55;
-  --accent: #ebe0c6;
-  --accent-foreground: var(--foreground);
-  --live: #c8102e;
-  --live-foreground: #ffffff;
-  --destructive: #9a2a12;
-  --border: #5d6b55;
-  --input: var(--foreground);
-  --ring: var(--foreground);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-dim: var(--dim);
+  --color-tag: var(--tag);
+  --color-tag-ink: var(--tag-ink);
+  --color-wash: var(--wash);
+  --color-alarm: var(--alarm);
+  --color-crate-ink: var(--crate-ink);
+  /* Auction room only: the one dark surface in both themes. */
+  --color-board: var(--board);
+  --color-board-ink: var(--board-ink);
+  --color-amber: var(--amber);
+  --color-tile-cheese: var(--tile-cheese);
+  --color-tile-honey: var(--tile-honey);
+  --color-tile-bakery: var(--tile-bakery);
+  --color-tile-wine: var(--tile-wine);
+  --color-tile-fruit: var(--tile-fruit);
+  --color-tile-veg: var(--tile-veg);
+}
+
+:root {
+  color-scheme: light;
+  --paper: #f6ecd6;
+  --ink: #14301b;
+  --dim: #5d6b55;
+  --tag: #c8102e;
+  --tag-ink: #ffffff;
+  --wash: #ebe0c6;
+  --alarm: #9a2a12;
+  --crate-ink: #14301b;
+  --board: #1c1b18;
+  --board-ink: #f3e9d2;
+  --amber: #f5a623;
   --tile-cheese: #f2c14e;
   --tile-honey: #e8962e;
   --tile-bakery: #d9a066;
   --tile-wine: #a8496c;
   --tile-fruit: #a8c256;
   --tile-veg: #5c9e4a;
-  /* Auction room only: the one dark surface in both themes. */
-  --board: #1c1b18;
-  --amber: #f5a623;
-  --board-foreground: #f3e9d2;
 }
 
 .dark {
-  --background: #16130e;
-  --foreground: #f3e9d2;
-  --secondary: #242018;
-  --muted: #242018;
-  --muted-foreground: #a39c88;
-  --accent: #242018;
-  --live: #ff5a6e;
-  --live-foreground: #20040a;
-  --destructive: #ff8f73;
-  --border: #a39c88;
+  color-scheme: dark;
+  --paper: #16130e;
+  --ink: #f3e9d2;
+  --dim: #a39c88;
+  --tag: #ff5a6e;
+  --tag-ink: #20040a;
+  --wash: #242018;
+  --alarm: #ff8f73;
   --tile-cheese: #d4a63a;
   --tile-honey: #cc7f22;
   --tile-bakery: #bf8a56;
@@ -112,23 +95,19 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   html {
-    color-scheme: light;
-    scrollbar-color: var(--border) transparent;
-  }
-  html.dark {
-    color-scheme: dark;
+    scrollbar-color: var(--color-dim) transparent;
   }
   body {
-    @apply bg-background font-sans text-foreground antialiased;
+    @apply bg-paper font-sans text-ink antialiased;
     font-size: 15px;
     font-variant-numeric: tabular-nums;
   }
-  h1, h2, h3 {
-    @apply font-display text-balance uppercase;
+  /* Display face: Big Shoulders 800, uppercase, tight leading. h1-h3 only. */
+  h1,
+  h2,
+  h3 {
+    @apply font-display uppercase;
     line-height: 0.9;
     font-weight: 800;
   }
@@ -136,23 +115,35 @@
   h1 {
     font-size: clamp(2.25rem, 6vw, 3rem);
   }
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
   ::selection {
-    background: var(--foreground);
-    color: var(--background);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
   :focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid var(--color-ink);
     outline-offset: 2px;
   }
   /* Prices, quantities and countdowns must not jitter. */
-  .tabular, time, data {
+  .tabular,
+  time,
+  data {
     font-variant-numeric: tabular-nums;
   }
   a {
     text-underline-offset: 0.2em;
   }
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
@@ -185,29 +176,36 @@
 @layer components {
   /* A list: thick top rule, one .board-row per item. Use on ul/ol/tbody wrappers. */
   .board {
-    border-top: 2px solid var(--foreground);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 2px solid var(--color-ink);
   }
   .board-row {
     display: flex;
     align-items: center;
     gap: 0.9rem;
     padding: 0.7rem 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--color-dim);
   }
   /* Names in rows are mono, never the display face (RULES.md "Board row"). */
   .board-row :is(h2, h3, h4) {
+    margin: 0;
     font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.4;
     text-transform: none;
   }
+  .board-row p {
+    margin: 0;
+  }
   /* Column headers of a board/table, and the small line above form fields and on labels. */
   .label-line {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--muted-foreground);
+    color: var(--color-dim);
   }
   /* Three-digit lot number, first thing in every row and label. */
   .lot {
@@ -227,8 +225,8 @@
   /* The tilted red price tag: at most one per row, label or strip. */
   .price-tag {
     display: inline-block;
-    background: var(--live);
-    color: var(--live-foreground);
+    background: var(--color-tag);
+    color: var(--color-tag-ink);
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 2rem;
@@ -237,18 +235,44 @@
     transform: rotate(-4deg);
     white-space: nowrap;
   }
+  /* Crate colours; text on them is always dark. */
+  .bg-tile-cheese {
+    background-color: var(--color-tile-cheese);
+    color: var(--color-crate-ink);
+  }
+  .bg-tile-honey {
+    background-color: var(--color-tile-honey);
+    color: var(--color-crate-ink);
+  }
+  .bg-tile-bakery {
+    background-color: var(--color-tile-bakery);
+    color: var(--color-crate-ink);
+  }
+  .bg-tile-wine {
+    background-color: var(--color-tile-wine);
+    color: var(--color-crate-ink);
+  }
+  .bg-tile-fruit {
+    background-color: var(--color-tile-fruit);
+    color: var(--color-crate-ink);
+  }
+  .bg-tile-veg {
+    background-color: var(--color-tile-veg);
+    color: var(--color-crate-ink);
+  }
   /* Square category chip; add a bg-tile-* class (see crateClass). */
   .crate-chip {
+    display: inline-block;
     flex: none;
     width: 1.4rem;
     height: 1.4rem;
-    border: 2px solid var(--foreground);
+    border: 2px solid var(--color-ink);
   }
-  /* Product / producer label: flat crate colour, 4px ink border, always dark text. Add a bg-tile-* class. */
+  /* Product / producer label: flat crate colour, 4px ink border. Add a bg-tile-* class. */
   .crate-label {
     position: relative;
-    border: 4px solid var(--foreground);
-    color: #14301b;
+    border: 4px solid var(--color-ink);
+    color: var(--color-crate-ink);
     padding: 1.25rem;
   }
   /* Round stamp on a crate label: the only round, the only other tilted thing. */
@@ -268,5 +292,537 @@
   /* Double rule on labels (origin / lot line). */
   .double-rule {
     border-top: 4px double currentColor;
+  }
+
+  /* Ink rules and frames: borders, never shadows. */
+  .rule {
+    border-top: 2px solid var(--color-ink);
+  }
+  .rule-thick {
+    border-top: 4px solid var(--color-ink);
+  }
+  .rule-dim {
+    border-top: 1px solid var(--color-dim);
+  }
+  .frame {
+    border: 2px solid var(--color-ink);
+  }
+  .frame-thick {
+    border: 4px solid var(--color-ink);
+  }
+  .frame-alarm {
+    border: 2px solid var(--color-alarm);
+  }
+  /* Ink fill with paper text (selected tabs, counters). */
+  .ink-fill {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+  .measure {
+    max-width: 65ch;
+  }
+
+  /* Buttons: square, 2px ink border, ink fill with paper text; hover inverts. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.375rem 1rem;
+    border: 2px solid transparent;
+    background: transparent;
+    color: var(--color-ink);
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease-out,
+      color 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--color-ink);
+  }
+  .btn-outline-primary {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+  .btn-outline-primary:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-secondary {
+    background: var(--color-wash);
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+  .btn-secondary:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-danger {
+    background: var(--color-alarm);
+    color: var(--color-paper);
+    border-color: var(--color-alarm);
+  }
+  .btn-danger:hover {
+    background: transparent;
+    color: var(--color-alarm);
+  }
+  .btn-outline-danger {
+    background: transparent;
+    color: var(--color-alarm);
+    border-color: var(--color-alarm);
+  }
+  .btn-outline-danger:hover {
+    background: var(--color-alarm);
+    color: var(--color-paper);
+  }
+  /* Quiet button: no border until hover. */
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: transparent;
+  }
+  .btn-ghost:hover {
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+  .btn-link {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  /* Auction room only. */
+  .btn-amber {
+    background: var(--color-amber);
+    color: var(--color-board);
+    border-color: var(--color-amber);
+  }
+  .btn-amber:hover {
+    background: transparent;
+    color: var(--color-amber);
+  }
+  .btn-sm {
+    min-height: 2.5rem;
+  }
+  /* Main action of a page: 52px. */
+  .btn-lg {
+    min-height: 3.25rem;
+    padding-inline: 1.75rem;
+    font-size: 1rem;
+  }
+  .btn-icon {
+    width: 2.5rem;
+    padding: 0;
+  }
+
+  /* Badges: square, uppercase; state is always text, never colour alone. */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35em 0.65em;
+    border: 1px solid var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .badge-outline {
+    background: transparent;
+    color: var(--color-ink);
+  }
+  .badge-secondary {
+    background: var(--color-wash);
+    color: var(--color-ink);
+  }
+  .badge-danger {
+    border-color: var(--color-alarm);
+    background: var(--color-alarm);
+    color: var(--color-paper);
+  }
+  .badge-outline-danger {
+    border-color: var(--color-alarm);
+    background: transparent;
+    color: var(--color-alarm);
+  }
+  /* "Live" only. */
+  .badge-live {
+    border-color: var(--color-tag);
+    background: var(--color-tag);
+    color: var(--color-tag-ink);
+  }
+
+  /* Forms: label above in small uppercase mono, square 2px ink controls on paper. */
+  .form-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--color-dim);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .form-control,
+  .form-select {
+    display: block;
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.375rem 0.75rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 0.9375rem;
+  }
+  .form-control:focus,
+  .form-select:focus {
+    border-color: var(--color-ink);
+    background-color: transparent;
+    color: var(--color-ink);
+  }
+  .form-control::placeholder {
+    color: var(--color-dim);
+  }
+  .form-control:disabled,
+  .form-select:disabled {
+    background-color: var(--color-wash);
+  }
+  .form-control.is-invalid,
+  .form-select.is-invalid {
+    border-color: var(--color-alarm);
+  }
+  .form-select {
+    appearance: none;
+    padding-right: 2.25rem;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%2314301b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+  }
+  .dark .form-select {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23f3e9d2' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+  }
+  .form-text {
+    margin-top: 0.25rem;
+    color: var(--color-dim);
+    font-size: 0.875em;
+  }
+  .invalid-feedback {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--color-alarm);
+    font-size: 0.875em;
+  }
+  .form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .form-check-input {
+    appearance: none;
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    border: 2px solid var(--color-ink);
+    border-radius: 0;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  .form-check-input[type='radio'] {
+    border-radius: 50%;
+  }
+  .form-check-input:checked {
+    background-color: var(--color-ink);
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='%23f6ecd6' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/></svg>");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 0.85rem;
+  }
+  .dark .form-check-input:checked {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='%2316130e' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/></svg>");
+  }
+  .form-check-input[type='radio']:checked {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='%23f6ecd6'/></svg>");
+  }
+  .dark .form-check-input[type='radio']:checked {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='%2316130e'/></svg>");
+  }
+  .form-check-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .form-check-label {
+    cursor: pointer;
+  }
+
+  /* Tables: board rows, no stripes, no card around them. */
+  .table {
+    width: 100%;
+    margin: 0;
+    border-top: 2px solid var(--color-ink);
+    border-collapse: collapse;
+    vertical-align: middle;
+    color: var(--color-ink);
+  }
+  .table th {
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-dim);
+  }
+  .table th,
+  .table td {
+    padding: 0.7rem 0.5rem 0.7rem 0;
+    border-bottom: 1px solid var(--color-dim);
+    text-align: left;
+  }
+
+  /* Dialogs: square, 4px ink border, on paper. */
+  .dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    background: color-mix(in srgb, var(--color-ink) 40%, transparent);
+  }
+  .dialog-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1051;
+    width: min(32rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+    border: 4px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    padding: 1.5rem;
+  }
+
+  /* Loading / empty / error block of a data screen (PageState). */
+  .page-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    border: 2px solid var(--color-ink);
+    padding: 4rem 1.5rem;
+    text-align: center;
+    color: var(--color-dim);
+  }
+  .page-state.is-error {
+    border-color: var(--color-alarm);
+  }
+  .spin {
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Toasts (sonner). */
+  [data-sonner-toast] {
+    border: 2px solid var(--color-ink) !important;
+    border-radius: 0 !important;
+    background: var(--color-paper) !important;
+    color: var(--color-ink) !important;
+    box-shadow: none !important;
+    font-family: var(--font-sans) !important;
+  }
+  [data-sonner-toast] [data-description] {
+    color: var(--color-dim) !important;
+  }
+  [data-sonner-toast] [data-button],
+  [data-sonner-toast] [data-close-button] {
+    border: 2px solid var(--color-ink) !important;
+    border-radius: 0 !important;
+    background: var(--color-paper) !important;
+    color: var(--color-ink) !important;
+  }
+
+  /* Site header, navigation and footer. */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    border-bottom: 4px solid var(--color-ink);
+    background: var(--color-paper);
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 0.85;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: inherit;
+  }
+  /* Search drops to its own line on phones. */
+  .site-search {
+    order: 3;
+    flex: 1 0 100%;
+    min-width: 0;
+  }
+  @media (min-width: 576px) {
+    .site-search {
+      order: 0;
+      flex: 1 1 0;
+      padding-inline: 1rem;
+    }
+  }
+  .site-nav-link {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .site-nav-link:hover {
+    text-decoration: underline;
+  }
+  .site-nav-link.active {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-weight: 600;
+  }
+  /* Live auction count in the nav: the tag red means "live". */
+  .live-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 0.4rem;
+    padding: 0 0.35rem;
+    background: var(--color-tag);
+    color: var(--color-tag-ink);
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .dev-roles {
+    border-top: 2px solid var(--color-ink);
+  }
+  .site-footer {
+    border-top: 4px solid var(--color-ink);
+  }
+
+  /* Notifications bell: wrapper anchors the panel and the unread counter. */
+  .notifications-wrap {
+    position: relative;
+  }
+  /* Square ink unread counter on the bell. */
+  .notifications-count {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25rem;
+    min-height: 1.25rem;
+    padding-inline: 0.25rem;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Notifications panel: 4px ink frame on paper. On phones it pins to the
+     viewport edges with a margin so it never overflows a 375px viewport;
+     on md and up it drops down from the bell. */
+  .notifications-panel {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    max-height: 70dvh;
+    overflow: hidden;
+    border: 4px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  @media (min-width: 768px) {
+    .notifications-panel {
+      position: absolute;
+      left: auto;
+      right: 0;
+      bottom: auto;
+      top: 100%;
+      width: 24rem;
+      max-height: 28rem;
+      margin-top: 0.5rem;
+    }
+  }
+  /* Panel header: title, unread line and actions under a 2px ink rule. */
+  .notifications-panel-head {
+    border-bottom: 2px solid var(--color-ink);
+  }
+  /* Scrollable item list inside the panel. */
+  .notifications-list {
+    min-height: 0;
+    overflow-y: auto;
+  }
+  /* Board rows in the panel align to the top (icon, text, dot). */
+  .notifications-row {
+    align-items: flex-start;
+  }
+  /* Square ink dot marking an unread notification. */
+  .notifications-dot {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-top: 0.375rem;
+    background: var(--color-ink);
+  }
+}
+
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 72rem;
+    padding-inline: 1rem;
+  }
+  .is-invalid {
+    border-color: var(--color-alarm) !important;
   }
 }

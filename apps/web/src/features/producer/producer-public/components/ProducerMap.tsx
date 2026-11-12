@@ -25,11 +25,12 @@ export function ProducerMap({ lat, lng, name }: ProducerMapProps) {
   const position: [number, number] = [lat, lng]
 
   return (
-    <div className="frame-thick w-100 overflow-hidden position-relative producer-public-map">
+    <div className="frame-thick relative h-64 w-full overflow-hidden md:h-80">
       <MapContainer
         center={position}
         zoom={12}
         scrollWheelZoom={false}
+        className="h-full w-full"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

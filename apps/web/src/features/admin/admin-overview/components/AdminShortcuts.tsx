@@ -47,10 +47,10 @@ export function AdminShortcuts({ pendingProducers, activeAuctions }: AdminShortc
   ]
 
   return (
-    <section aria-labelledby="admin-shortcuts-heading" className="vstack gap-3">
+    <section aria-labelledby="admin-shortcuts-heading" className="flex flex-col gap-4">
       <div>
         <h2 id="admin-shortcuts-heading">Admin tasks</h2>
-        <p className="small text-body-secondary mb-0">
+        <p className="text-sm text-dim mb-0">
           Jump to the queues and panels that need an admin.
         </p>
       </div>
@@ -58,23 +58,23 @@ export function AdminShortcuts({ pendingProducers, activeAuctions }: AdminShortc
       <ul aria-label="Admin tasks" className="board">
         {shortcuts.map((shortcut) => (
           <li key={shortcut.to} className="board-row">
-            <Link to={shortcut.to} className="admin-shortcut-link">
-              <span className="min-w-0 flex-grow-1">
-                <span className="d-block fw-semibold admin-shortcut-title">{shortcut.title}</span>
-                <span className="d-block small text-body-secondary">
+            <Link to={shortcut.to} className="group flex min-h-[3.5rem] flex-1 items-center justify-between gap-3 py-[0.7rem] no-underline">
+              <span className="min-w-0 grow">
+                <span className="block font-semibold group-hover:underline">{shortcut.title}</span>
+                <span className="block text-sm text-dim">
                   {shortcut.description}
                 </span>
               </span>
-              <span className="d-flex flex-shrink-0 align-items-center gap-3">
+              <span className="flex shrink-0 items-center gap-3">
                 {shortcut.countLabel && (
-                  <span className="small text-body-secondary">
-                    <data value={shortcut.count} className="fw-semibold tabular">
+                  <span className="text-sm text-dim">
+                    <data value={shortcut.count} className="font-semibold tabular">
                       {shortcut.count}
                     </data>{' '}
                     {shortcut.countLabel}
                   </span>
                 )}
-                <ArrowRight size={16} className="flex-shrink-0 text-body-secondary" aria-hidden="true" />
+                <ArrowRight size={16} className="shrink-0 text-dim" aria-hidden="true" />
               </span>
             </Link>
           </li>

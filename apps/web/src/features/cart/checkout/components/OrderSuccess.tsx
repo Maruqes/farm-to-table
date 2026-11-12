@@ -28,9 +28,9 @@ export function OrderSuccess({ orders, input }: OrderSuccessProps) {
 
   if (orders.length === 0) {
     return (
-      <section className="vstack gap-4">
-        <h1 className="mb-0">No orders created</h1>
-        <p className="text-body-secondary mb-0">
+      <section className="flex flex-col gap-6">
+        <h1>No orders created</h1>
+        <p className="text-dim">
           Your cart is still available. Go back to review it and try again.
         </p>
         <Button asChild>
@@ -43,19 +43,19 @@ export function OrderSuccess({ orders, input }: OrderSuccessProps) {
   const total = orders.reduce((sum, order) => sum + order.total, 0)
 
   return (
-    <section aria-labelledby="order-success-heading" className="vstack gap-4">
-      <div className="d-flex align-items-start gap-3">
+    <section aria-labelledby="order-success-heading" className="flex flex-col gap-6">
+      <div className="flex items-start gap-3">
         <span
           aria-hidden="true"
-          className="checkout-success-badge"
+          className="grid size-11 flex-none place-items-center border-2 border-ink"
         >
           <CircleCheck size={24} aria-hidden="true" />
         </span>
-        <div className="vstack gap-1">
-          <h1 ref={headingRef} tabIndex={-1} id="order-success-heading" className="mb-0">
+        <div className="flex flex-col gap-1">
+          <h1 ref={headingRef} tabIndex={-1} id="order-success-heading">
             Order placed
           </h1>
-          <p className="measure text-body-secondary mb-0">
+          <p className="measure text-dim">
             {orders.length === 1
               ? 'The producer has your order and will confirm it soon.'
               : `We split your cart into ${orders.length} orders, one for each producer. Each farm will confirm its own order.`}
@@ -64,17 +64,17 @@ export function OrderSuccess({ orders, input }: OrderSuccessProps) {
       </div>
 
       {input && (
-        <p className="small text-body-secondary mb-0">{fulfilmentSummary(input)}</p>
+        <p className="text-sm text-dim">{fulfilmentSummary(input)}</p>
       )}
 
-      <div className="rule pt-4">
-        <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
-          <h2 className="mb-0">Your orders</h2>
-          <p className="small text-body-secondary mb-0">
+      <div className="rule pt-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2>Your orders</h2>
+          <p className="text-sm text-dim">
             Total{' '}
             <data
               value={total}
-              className="ms-1 fw-semibold tabular"
+              className="ml-1 font-semibold tabular"
             >
               {formatMoney(total)}
             </data>
@@ -83,19 +83,19 @@ export function OrderSuccess({ orders, input }: OrderSuccessProps) {
 
         <ul className="board mt-2">
           {orders.map((order) => (
-            <li key={order.id} className="board-row flex-wrap align-items-start">
-              <div className="checkout-success-main">
-                <p className="fw-semibold mb-0">{order.producer.name}</p>
+            <li key={order.id} className="board-row flex-wrap items-start">
+              <div className="min-w-0 flex-[1_1_10rem]">
+                <p className="font-semibold">{order.producer.name}</p>
                 {input?.fulfilment === 'pickup' && order.producer.location && (
-                  <p className="mt-1 small text-body-secondary mb-0">
+                  <p className="mt-1 text-sm text-dim">
                     Pickup at {order.producer.location}
                   </p>
                 )}
-                <ul className="list-unstyled mt-2 small text-body-secondary vstack gap-0 mb-0">
+                <ul className="mt-2 flex list-none flex-col gap-0 p-0 text-sm text-dim">
                   {order.items.map((item, index) => (
                     <li key={`${item.productId}-${index}`}>
                       {item.name}{' '}
-                      <span className="text-nowrap tabular">
+                      <span className="whitespace-nowrap tabular">
                         × {item.quantity} {item.unit}
                       </span>
                     </li>
@@ -103,7 +103,7 @@ export function OrderSuccess({ orders, input }: OrderSuccessProps) {
                 </ul>
               </div>
 
-              <div className="ms-auto d-flex flex-column align-items-end gap-2">
+              <div className="ml-auto flex flex-col items-end gap-2">
                 <data
                   value={order.total}
                   className="price tabular"
@@ -119,7 +119,7 @@ export function OrderSuccess({ orders, input }: OrderSuccessProps) {
         </ul>
       </div>
 
-      <div className="d-flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-4">
         <Button asChild>
           <Link to="/">Browse the catalog</Link>
         </Button>

@@ -80,16 +80,16 @@ export function ProducerProductsView() {
   }
 
   return (
-    <section aria-labelledby="producer-products-heading" className="vstack gap-4">
-      <Link to="/producer" className="pa-back-link small text-body-secondary">
+    <section aria-labelledby="producer-products-heading" className="flex flex-col gap-6">
+      <Link to="/producer" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="d-flex flex-wrap align-items-start justify-content-between gap-3">
-        <div className="vstack gap-1">
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex flex-col gap-1">
           <h1 id="producer-products-heading">Products</h1>
-          <p className="measure text-body-secondary">
+          <p className="measure text-dim">
             Manage what you sell. Buyers see these prices and stock in the catalog.
           </p>
         </div>
@@ -102,12 +102,12 @@ export function ProducerProductsView() {
       </header>
 
       {formOpen && (
-        <section aria-labelledby="product-form-heading" className="rule pt-4">
-          <div className="vstack gap-1 mb-4">
+        <section aria-labelledby="product-form-heading" className="rule pt-6">
+          <div className="mb-6 flex flex-col gap-1">
             <h2 id="product-form-heading">
               {editing ? 'Edit product' : 'Add product'}
             </h2>
-            <p className="small text-body-secondary">
+            <p className="text-sm text-dim">
               {editing
                 ? 'Change details, price, stock or photo. Buyers see the update in the catalog.'
                 : 'Add something you grow or make. It appears in the catalog as soon as you save.'}

@@ -29,7 +29,7 @@ function isTimeUp(auction: AuctionRoom, now: number): boolean {
 
 function BidErrorAlert({ message, onDismiss }: { message: string; onDismiss: () => void }) {
   return (
-    <div role="alert" className="room-error">
+    <div role="alert" className="mb-4 flex items-start justify-between gap-3 border-2 border-alarm p-3 text-sm">
       <p className="mb-0">{message}</p>
       <Button
         type="button"
@@ -49,16 +49,16 @@ function AuctionResult({ auction, user }: { auction: AuctionRoom; user: SessionU
     const youWon = user?.id === auction.winner.id
 
     return (
-      <div className="vstack gap-2">
-        <h3 className="fs-4">Auction ended</h3>
+      <div className="flex flex-col gap-2">
+        <h3 className="text-2xl">Auction ended</h3>
         <p className="mb-0">
           {youWon ? 'You won this lot' : `${auction.winner.name} won this lot`} for{' '}
-          <data value={auction.currentPrice} className="fw-semibold tabular room-highlight">
+          <data value={auction.currentPrice} className="font-semibold tabular text-amber">
             {formatMoney(auction.currentPrice)}
           </data>
           .
         </p>
-        <p className="small opacity-75 mb-0">
+        <p className="mb-0 text-sm opacity-75">
           {youWon
             ? 'The producer will contact you about pickup or delivery.'
             : 'The winning bidder is charged with the card saved in their profile.'}
@@ -68,10 +68,10 @@ function AuctionResult({ auction, user }: { auction: AuctionRoom; user: SessionU
   }
 
   return (
-    <div className="vstack gap-2">
-      <h3 className="fs-4">Auction ended</h3>
-      <p className="fw-semibold mb-0">No winner</p>
-      <p className="small opacity-75 mb-0">
+    <div className="flex flex-col gap-2">
+      <h3 className="text-2xl">Auction ended</h3>
+      <p className="mb-0 font-semibold">No winner</p>
+      <p className="mb-0 text-sm opacity-75">
         {auction.bids.length === 0
           ? 'No bids were placed before the clock ran out.'
           : 'The highest bidder could not complete payment, so this lot closed without a winner.'}
@@ -82,9 +82,9 @@ function AuctionResult({ auction, user }: { auction: AuctionRoom; user: SessionU
 
 function ScheduledNotice({ auction }: { auction: AuctionRoom }) {
   return (
-    <div className="vstack gap-2">
-      <h3 className="fs-4">Bidding opens soon</h3>
-      <p className="small opacity-75 mb-0">
+    <div className="flex flex-col gap-2">
+      <h3 className="text-2xl">Bidding opens soon</h3>
+      <p className="mb-0 text-sm opacity-75">
         {auction.startsAt ? (
           <>
             This lot opens at{' '}
@@ -94,7 +94,7 @@ function ScheduledNotice({ auction }: { auction: AuctionRoom }) {
           'This lot has not opened for bidding yet.'
         )}
       </p>
-      <p className="small opacity-75 mb-0">
+      <p className="mb-0 text-sm opacity-75">
         The starting price is {formatMoney(auction.basePrice)}.
       </p>
     </div>
@@ -103,9 +103,9 @@ function ScheduledNotice({ auction }: { auction: AuctionRoom }) {
 
 function VisitorPrompt() {
   return (
-    <div className="vstack gap-3">
-      <h3 className="fs-4">Want to bid?</h3>
-      <p className="small opacity-75 mb-0">
+    <div className="flex flex-col gap-3">
+      <h3 className="text-2xl">Want to bid?</h3>
+      <p className="mb-0 text-sm opacity-75">
         Log in with a buyer account to place a bid. You can keep watching this auction
         read-only.
       </p>
@@ -136,33 +136,33 @@ export function AuctionPanel({
 
   return (
     <section aria-labelledby="auction-bidding-heading">
-      <h2 id="auction-bidding-heading" className="visually-hidden">
+      <h2 id="auction-bidding-heading" className="sr-only">
         Auction bidding
       </h2>
 
-      <div className="room-panel-top">
+      <div className="flex flex-wrap items-center gap-6">
         <Countdown auction={auction} now={now} />
 
-        <div className="flex-grow-1 min-w-0 vstack gap-1">
-          <p className="small opacity-75 mb-0">{priceLabel}</p>
+        <div className="flex min-w-0 grow flex-col gap-1">
+          <p className="mb-0 text-sm opacity-75">{priceLabel}</p>
           <data
             value={auction.currentPrice}
-            className="room-current-bid tabular"
+            className="font-display text-[2.75rem] leading-none normal-case tabular whitespace-nowrap text-amber md:text-[3.5rem]"
           >
             {formatMoney(auction.currentPrice)}
           </data>
-          <p className="small opacity-75 mb-0">
+          <p className="mb-0 text-sm opacity-75">
             {auction.status === 'ended' ? (
               auction.winner ? (
                 <>
-                  Won by <span className="fw-semibold">{auction.winner.name}</span>
+                  Won by <span className="font-semibold">{auction.winner.name}</span>
                 </>
               ) : (
                 'No winner'
               )
             ) : auction.leader ? (
               <>
-                Leading: <span className="fw-semibold">{auction.leader.name}</span>
+                Leading: <span className="font-semibold">{auction.leader.name}</span>
               </>
             ) : (
               'No bids yet'
@@ -171,17 +171,17 @@ export function AuctionPanel({
         </div>
       </div>
 
-      <div className="room-stats">
-        <span className="room-stat">
+      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-ink pt-4 text-sm">
+        <span className="inline-flex items-center gap-1.5">
           <Eye size={16} aria-hidden="true" />
-          <data value={auction.viewerCount} className="fw-semibold tabular">
+          <data value={auction.viewerCount} className="font-semibold tabular">
             {auction.viewerCount}
           </data>
           watching
         </span>
-        <span className="room-stat">
+        <span className="inline-flex items-center gap-1.5">
           <Gavel size={16} aria-hidden="true" />
-          <data value={auction.bids.length} className="fw-semibold tabular">
+          <data value={auction.bids.length} className="font-semibold tabular">
             {auction.bids.length}
           </data>
           {auction.bids.length === 1 ? 'bid' : 'bids'}
@@ -189,14 +189,14 @@ export function AuctionPanel({
         {auction.status === 'active' && !timeUp && (
           <span>
             Minimum bid{' '}
-            <data value={minimum} className="fw-semibold tabular">
+            <data value={minimum} className="font-semibold tabular">
               {formatMoney(minimum)}
             </data>
           </span>
         )}
       </div>
 
-      <div className="mt-4 border-top pt-4">
+      <div className="mt-6 border-t border-ink pt-6">
         {bidError && <BidErrorAlert message={bidError} onDismiss={onDismissBidError} />}
 
         {auction.status === 'ended' ? (
@@ -204,25 +204,25 @@ export function AuctionPanel({
         ) : auction.status === 'scheduled' ? (
           <ScheduledNotice auction={auction} />
         ) : timeUp ? (
-          <div className="vstack gap-2">
-            <h3 className="fs-4">Time is up</h3>
-            <p className="small opacity-75 mb-0">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-2xl">Time is up</h3>
+            <p className="mb-0 text-sm opacity-75">
               Bids are closed. Waiting for the final result from the server…
             </p>
           </div>
         ) : !user ? (
           <VisitorPrompt />
         ) : user.id === auction.producer.id ? (
-          <div className="vstack gap-2">
-            <h3 className="fs-4">This is your lot</h3>
-            <p className="small opacity-75 mb-0">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-2xl">This is your lot</h3>
+            <p className="mb-0 text-sm opacity-75">
               You can follow the bids, but you cannot bid on your own auction.
             </p>
           </div>
         ) : user.role !== 'buyer' ? (
-          <div className="vstack gap-2">
-            <h3 className="fs-4">Read-only</h3>
-            <p className="small opacity-75 mb-0">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-2xl">Read-only</h3>
+            <p className="mb-0 text-sm opacity-75">
               Only buyer accounts can place bids. You can watch this auction read-only.
             </p>
           </div>

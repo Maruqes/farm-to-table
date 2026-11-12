@@ -31,15 +31,15 @@ export function AdminOrdersView() {
     : ''
 
   return (
-    <section aria-labelledby="admin-orders-heading" className="vstack gap-4">
-      <Link to="/admin" className="admin-back">
+    <section aria-labelledby="admin-orders-heading" className="flex flex-col gap-6">
+      <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink hover:underline">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
       <header>
         <h1 id="admin-orders-heading">Orders</h1>
-        <p className="measure text-body-secondary mb-0">
+        <p className="measure text-dim mb-0">
           Every order placed on Farm to Table. Filter by state to follow orders
           from pending to delivered. This list is read-only; only the producer
           who fulfils an order can change its state.
@@ -53,7 +53,7 @@ export function AdminOrdersView() {
         onClear={clearFilters}
       />
 
-      <p className="visually-hidden" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
 
@@ -69,11 +69,11 @@ export function AdminOrdersView() {
             : 'No orders yet. Orders appear here as soon as a buyer checks out.'
         }
       >
-        <div className="vstack gap-3">
-          <p className="small text-body-secondary mb-0">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-dim mb-0">
             <data
               value={total}
-              className="fw-semibold tabular"
+              className="font-semibold tabular"
             >
               {total}
             </data>{' '}

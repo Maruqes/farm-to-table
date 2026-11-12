@@ -28,17 +28,17 @@ export function ProductDetailView({
   const inStock = product.stock > 0
 
   return (
-    <article className="vstack gap-4">
+    <article className="flex flex-col gap-6">
       <Link
         to="/"
-        className="product-back-link small text-body-secondary"
+        className="inline-flex min-h-10 items-center gap-1 text-sm text-dim underline"
       >
         <ArrowLeft size={16} aria-hidden="true" />
         Back to catalog
       </Link>
 
-      <div className="product-heading">
-        <p className="product-producer small fw-semibold text-uppercase">
+      <div className="max-w-[40rem]">
+        <p className="text-sm font-semibold tracking-[0.04em] uppercase">
           {product.producer.id ? (
             <Link
               to={`/producers/${product.producer.id}`}
@@ -49,58 +49,58 @@ export function ProductDetailView({
             <span>{product.producer.name}</span>
           )}
         </p>
-        <h1 className="product-name">
+        <h1 className="mt-1 mb-0 text-[clamp(2rem,5vw,3rem)]">
           {product.name}
         </h1>
       </div>
 
-      <div className="row g-4 align-items-start">
-        <div className="col-md-6">
+      <div className="grid items-start gap-6 md:grid-cols-2">
+        <div>
           <section
             aria-label={`${product.name} label`}
             className={cn(
-              'crate-label product-label-single',
+              'crate-label flex flex-col gap-4',
               crateClass(product.category),
             )}
           >
-            <div className="product-media">
+            <div className="min-w-0">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="product-photo"
+                  className="aspect-[16/10] w-full border-2 border-ink object-cover"
                 />
               ) : (
                 <div
-                  className="product-photo-fallback"
+                  className="flex aspect-[16/10] w-full items-center justify-center border-2 border-ink bg-paper text-ink"
                   role="img"
                   aria-label={product.name}
                 >
-                  <CategoryIcon category={product.category} size={96} />
+                  <CategoryIcon category={product.category} size={96} className="text-ink" />
                 </div>
               )}
             </div>
 
-            <span className={cn('stamp product-stamp', crateClass(product.category))} aria-hidden="true">
-              <span className="product-stamp-inner">
-                <CategoryIcon category={product.category} size={22} />
+            <span className={cn('stamp absolute top-7 right-7 size-20', crateClass(product.category))} aria-hidden="true">
+              <span className="flex flex-col items-center gap-[0.15rem]">
+                <CategoryIcon category={product.category} size={22} className="text-current" />
                 <span>{categoryLabel(product.category)}</span>
               </span>
             </span>
-            <span className="price-tag product-price-tag">
+            <span className="price-tag absolute -right-2 bottom-[4.25rem]">
               <data value={product.price}>{formatMoney(product.price)}</data>
             </span>
 
-            <div className="double-rule pt-2 small fw-semibold text-uppercase product-origin">
-              <span className="d-block text-truncate">
+            <div className="double-rule pt-2 text-sm font-semibold tracking-[0.04em] uppercase">
+              <span className="block truncate">
                 {product.producer.location || categoryLabel(product.category)}
               </span>
             </div>
           </section>
         </div>
 
-        <div className="col-md-6">
-          <div className="vstack gap-4">
+        <div>
+          <div className="flex flex-col gap-6">
             <div>
               <p className="label-line">Description</p>
               {product.description ? (
@@ -108,20 +108,20 @@ export function ProductDetailView({
                   {product.description}
                 </p>
               ) : (
-                <p className="mt-2 measure text-body-secondary">
+                <p className="mt-2 measure text-dim">
                   No description from the producer yet.
                 </p>
               )}
-              <div className="mt-4 d-flex flex-wrap align-items-center gap-2 small text-body-secondary">
+              <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-dim">
                 <span>{categoryLabel(product.category)}</span>
                 <span aria-hidden="true">·</span>
                 <span>per {product.unit}</span>
                 {product.reviews.length > 0 && (
                   <>
                     <span aria-hidden="true">·</span>
-                    <span className="d-flex align-items-center gap-2">
+                    <span className="flex items-center gap-2">
                       <RatingStars rating={product.averageRating} />
-                      <span className="tabular fw-semibold">
+                      <span className="tabular font-semibold">
                         {product.averageRating.toFixed(1)}
                       </span>
                       <span>out of 5</span>
@@ -134,11 +134,11 @@ export function ProductDetailView({
             <div>
               <p className="label-line">Availability</p>
               {inStock ? (
-                <p className="mt-2 small text-body-secondary">
+                <p className="mt-2 text-sm text-dim">
                   In stock ·{' '}
                   <data
                     value={product.stock}
-                    className="tabular fw-semibold"
+                    className="tabular font-semibold"
                   >
                     {product.stock} {product.unit}
                     {product.stock === 1 ? '' : 's'}
@@ -151,32 +151,32 @@ export function ProductDetailView({
                 </p>
               )}
 
-              <div className="mt-4 rule pt-4">
+              <div className="mt-6 border-t-2 border-ink pt-6">
                 {!inStock ? (
-                  <div className="vstack gap-3">
-                    <p className="small text-body-secondary">
+                  <div className="flex flex-col gap-4">
+                    <p className="text-sm text-dim">
                       This product is sold out for now. Check the catalog for what
                       else is in season.
                     </p>
                     <div>
-                      <Button disabled size="lg" className="product-buy-btn">
+                      <Button disabled size="lg" className="w-full sm:w-auto">
                         Add to cart
                       </Button>
                     </div>
                   </div>
                 ) : !isAuthenticated ? (
-                  <div className="vstack gap-3">
+                  <div className="flex flex-col gap-4">
                     <div>
-                      <Button asChild size="lg" className="product-buy-btn">
+                      <Button asChild size="lg" className="w-full sm:w-auto">
                         <Link to="/login">Log in to buy</Link>
                       </Button>
                     </div>
-                    <p className="small text-body-secondary">
+                    <p className="text-sm text-dim">
                       You need an account to add products to your cart.
                     </p>
                   </div>
                 ) : (
-                  <div className="vstack gap-3">
+                  <div className="flex flex-col gap-4">
                     <QuantitySelector
                       value={quantity}
                       max={product.stock}
@@ -186,7 +186,7 @@ export function ProductDetailView({
                       <Button
                         type="button"
                         size="lg"
-                        className="product-buy-btn"
+                        className="w-full sm:w-auto"
                         onClick={() => onAddToCart(product, quantity)}
                       >
                         Add to cart

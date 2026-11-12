@@ -13,15 +13,15 @@ export function ProducerDashboardView() {
   const showEmpty = !loading && !error && empty
 
   return (
-    <section aria-labelledby="producer-dashboard-heading" className="vstack gap-4">
-      <header className="vstack gap-1">
+    <section aria-labelledby="producer-dashboard-heading" className="flex flex-col gap-6">
+      <header className="flex flex-col gap-1">
         <h1 id="producer-dashboard-heading">Dashboard</h1>
-        <p className="measure text-body-secondary">
+        <p className="measure text-dim">
           Your farm at a glance: sales, orders to prepare and what needs restocking.
         </p>
       </header>
 
-      <p className="visually-hidden" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
 
@@ -34,16 +34,16 @@ export function ProducerDashboardView() {
         emptyMessage="No sales or orders yet. Add your first product to the catalog and your numbers will appear here."
       >
         {stats && (
-          <div className="vstack gap-4">
+          <div className="flex flex-col gap-6">
             {stats.activeAuction && <LiveAuctionCard auction={stats.activeAuction} />}
 
             <DashboardCounters stats={stats} />
 
-            <div className="row g-4">
-              <div className="col-lg-6 min-w-0">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="min-w-0">
                 <SalesOverTimeChart points={stats.salesPerDay} />
               </div>
-              <div className="col-lg-6 min-w-0">
+              <div className="min-w-0">
                 <OrdersByStateChart byStatus={stats.byStatus} />
               </div>
             </div>
@@ -54,7 +54,7 @@ export function ProducerDashboardView() {
       </PageState>
 
       {showEmpty && (
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           <Button asChild>
             <Link to="/producer/products">Add your first product</Link>
           </Button>

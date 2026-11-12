@@ -1,7 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/components/ui/utils'
 
 interface TextFieldProps extends Omit<ComponentProps<'input'>, 'id'> {
   id: string
@@ -15,19 +14,19 @@ export function TextField({ id, label, error, hint, className, ...props }: TextF
   const hintId = `${id}-hint`
 
   return (
-    <div className="vstack gap-1">
-      <label htmlFor={id} className="form-label d-block">
+    <div className="flex flex-col gap-1">
+      <label htmlFor={id} className="form-label">
         {label}
       </label>
       <Input
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : hint ? hintId : undefined}
-        className={cn(error && 'is-invalid', className)}
+        className={className}
         {...props}
       />
       {error ? (
-        <p id={errorId} className="invalid-feedback d-block">
+        <p id={errorId} className="invalid-feedback">
           {error}
         </p>
       ) : hint ? (
@@ -43,9 +42,9 @@ export function FormAlert({ children }: { children: ReactNode }) {
   return (
     <div
       role="alert"
-      className="frame-alarm d-flex gap-2 px-3 py-2 small text-danger"
+      className="frame-alarm flex gap-2 px-4 py-2 text-sm text-alarm"
     >
-      <AlertTriangle size={16} className="mt-1 flex-shrink-0" aria-hidden="true" />
+      <AlertTriangle size={16} className="mt-1 shrink-0" aria-hidden="true" />
       <p className="mb-0">{children}</p>
     </div>
   )

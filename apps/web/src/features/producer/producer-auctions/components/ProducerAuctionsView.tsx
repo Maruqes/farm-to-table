@@ -96,16 +96,16 @@ export function ProducerAuctionsView() {
   }
 
   return (
-    <section aria-labelledby="producer-auctions-heading" className="vstack gap-4">
-      <Link to="/producer" className="pa-back-link small text-body-secondary">
+    <section aria-labelledby="producer-auctions-heading" className="flex flex-col gap-6">
+      <Link to="/producer" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="d-flex flex-wrap align-items-start justify-content-between gap-3">
-        <div className="vstack gap-1">
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex flex-col gap-1">
           <h1 id="producer-auctions-heading">Auctions</h1>
-          <p className="measure text-body-secondary">
+          <p className="measure text-dim">
             Turn your produce into a live lot. Create a draft, publish it, and follow bids
             in the auction room.
           </p>
@@ -118,17 +118,17 @@ export function ProducerAuctionsView() {
         )}
       </header>
 
-      <p className="visually-hidden" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
 
       {formOpen && (
-        <section aria-labelledby="auction-form-heading" className="rule pt-4">
-          <div className="vstack gap-1 mb-4">
+        <section aria-labelledby="auction-form-heading" className="rule pt-6">
+          <div className="mb-6 flex flex-col gap-1">
             <h2 id="auction-form-heading">
               {editing ? 'Edit draft auction' : 'New auction'}
             </h2>
-            <p className="small text-body-secondary">
+            <p className="text-sm text-dim">
               {editing
                 ? 'Drafts can be changed until you publish them. Publishing schedules the lot.'
                 : 'Pick one of your products, set the lot and the starting price, then save a draft or publish.'}

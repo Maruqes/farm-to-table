@@ -13,40 +13,40 @@ interface ReviewRowProps {
 
 function ReviewRow({ review, reporting, reportBusy, onReport }: ReviewRowProps) {
   return (
-    <li className="board-row pa-review-row">
-      <div className="min-w-0 vstack gap-1">
-        <h2 className="text-break">{review.author}</h2>
-        <p className="small text-body-secondary">{reviewSubject(review)}</p>
+    <li className="board-row grid gap-4 md:grid-cols-[minmax(0,1fr)_8rem_7.5rem_11rem] md:items-start">
+      <div className="min-w-0 flex flex-col gap-1">
+        <h2 className="break-words">{review.author}</h2>
+        <p className="text-sm text-dim">{reviewSubject(review)}</p>
         {review.text ? (
-          <p className="measure text-break small">{review.text}</p>
+          <p className="measure break-words text-sm">{review.text}</p>
         ) : (
-          <p className="small text-body-secondary">No comment left.</p>
+          <p className="text-sm text-dim">No comment left.</p>
         )}
       </div>
 
-      <div className="d-flex align-items-center justify-content-between gap-2 pa-md-block">
-        <span className="label-line pa-col-label">Rating</span>
-        <div className="d-flex align-items-center gap-2">
+      <div className="flex items-center justify-between gap-2 md:block">
+        <span className="label-line md:sr-only">Rating</span>
+        <div className="flex items-center gap-2">
           <RatingStars rating={review.rating} />
           <data
             value={review.rating}
-            className="text-nowrap small fw-semibold tabular"
+            className="text-nowrap text-sm font-semibold tabular"
           >
             {review.rating > 0 ? review.rating.toFixed(1) : '—'}
           </data>
         </div>
       </div>
 
-      <div className="d-flex align-items-center justify-content-between gap-2 pa-md-block">
-        <span className="label-line pa-col-label">Status</span>
+      <div className="flex items-center justify-between gap-2 md:block">
+        <span className="label-line md:sr-only">Status</span>
         <Badge variant={review.reported ? 'secondary' : 'outline'}>
           {review.reported ? 'Reported' : 'Published'}
         </Badge>
       </div>
 
-      <div className="d-flex justify-content-md-end">
+      <div className="flex md:justify-end">
         {reporting ? (
-          <p className="small text-body-secondary text-md-end">
+          <p className="text-sm text-dim md:text-right">
             Waiting for an admin decision.
           </p>
         ) : (
@@ -76,12 +76,12 @@ export function ProducerReviewsList({
     <div>
       <div
         aria-hidden="true"
-        className="label-line d-none d-md-grid pa-review-head py-2"
+        className="label-line hidden py-2 md:grid md:grid-cols-[minmax(0,1fr)_8rem_7.5rem_11rem] md:items-start"
       >
         <span>Review</span>
         <span>Rating</span>
         <span>Status</span>
-        <span className="text-end">Action</span>
+        <span className="text-right">Action</span>
       </div>
 
       <ul

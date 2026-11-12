@@ -33,8 +33,8 @@ export function PageState({
   if (error) {
     return (
       <div role="alert" className="page-state is-error">
-        <AlertTriangle size={24} className="text-danger" aria-hidden="true" />
-        <p className="small mb-0">{errorMessage}</p>
+        <AlertTriangle size={24} className="text-alarm" aria-hidden="true" />
+        <p className="text-sm">{errorMessage}</p>
         {onRetry && (
           <Button variant="outline" onClick={onRetry}>
             Try again
@@ -48,7 +48,7 @@ export function PageState({
     return (
       <div className="page-state">
         <Inbox size={24} aria-hidden="true" />
-        <p className="small mb-0">{emptyMessage}</p>
+        <p className="text-sm">{emptyMessage}</p>
       </div>
     )
   }

@@ -101,10 +101,10 @@ export function ProducerDecisionDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-panel">
-          <div className="d-flex align-items-start justify-content-between gap-3 mb-4">
+          <div className="flex items-start justify-between gap-4 mb-6">
             <div>
               <Dialog.Title>{copy.title(producer.name)}</Dialog.Title>
-              <Dialog.Description className="small text-body-secondary mb-0">
+              <Dialog.Description className="text-sm text-dim mb-0">
                 {copy.description}
               </Dialog.Description>
             </div>
@@ -120,14 +120,14 @@ export function ProducerDecisionDialog({
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="vstack gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {rejecting && (
               <div>
-                <div className="d-flex align-items-baseline justify-content-between gap-3">
+                <div className="flex items-baseline justify-between gap-4">
                   <label htmlFor={reasonId} className="form-label">
                     Reason (optional)
                   </label>
-                  <span className="small text-body-secondary tabular">
+                  <span className="text-sm text-dim tabular">
                     {reason.length} / {REJECT_REASON_MAX_LENGTH}
                   </span>
                 </div>
@@ -143,7 +143,7 @@ export function ProducerDecisionDialog({
               </div>
             )}
 
-            <div className="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-2">
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Dialog.Close asChild>
                 <Button type="button" variant="outline" disabled={submitting}>
                   Cancel

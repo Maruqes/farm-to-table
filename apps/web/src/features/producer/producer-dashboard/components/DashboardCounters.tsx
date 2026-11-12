@@ -37,9 +37,9 @@ export function DashboardCounters({ stats }: DashboardCountersProps) {
     <dl className="board">
       {counters.map((counter) => (
         <div key={counter.label} className="board-row flex-wrap">
-          <dt className="min-w-0 flex-grow-1">
+          <dt className="min-w-0 grow">
             <span className="label-line">{counter.label}</span>
-            <span className="d-block mt-1 small text-body-secondary">
+            <span className="mt-1 block text-sm text-dim">
               {counter.hint}
             </span>
           </dt>

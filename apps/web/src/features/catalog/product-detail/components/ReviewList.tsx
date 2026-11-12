@@ -10,15 +10,15 @@ export function ReviewList({
   averageRating: number
 }) {
   return (
-    <section aria-labelledby="reviews-title" className="rule pt-4">
-      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
+    <section aria-labelledby="reviews-title" className="border-t-2 border-ink pt-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 id="reviews-title">
           Reviews
         </h2>
         {reviews.length > 0 && (
-          <p className="d-flex align-items-center gap-2 small text-body-secondary">
+          <p className="flex items-center gap-2 text-sm text-dim">
             <RatingStars rating={averageRating} />
-            <span className="tabular fw-semibold">
+            <span className="tabular font-semibold">
               {averageRating.toFixed(1)}
             </span>
             <span>
@@ -30,7 +30,7 @@ export function ReviewList({
       </div>
 
       {reviews.length === 0 ? (
-        <p className="product-reviews-empty mt-4 small text-body-secondary">
+        <p className="mt-6 border border-dashed border-dim px-4 py-8 text-center text-sm text-dim">
           No reviews yet. After your first order you can tell other buyers what
           you thought.
         </p>
@@ -38,17 +38,17 @@ export function ReviewList({
         <ul className="board mt-2">
           {reviews.map((review) => (
             <li key={review.id} className="board-row flex-wrap">
-              <p className="fw-semibold">{review.author}</p>
+              <p className="font-semibold">{review.author}</p>
               <RatingStars rating={review.rating} />
-              <span className="small tabular">{review.rating.toFixed(1)}</span>
+              <span className="text-sm tabular">{review.rating.toFixed(1)}</span>
               <time
                 dateTime={review.date}
-                className="ms-auto small text-body-secondary"
+                className="ml-auto text-sm text-dim"
               >
                 {formatDate(review.date)}
               </time>
               {review.text && (
-                <p className="w-100 measure text-body-secondary">
+                <p className="w-full measure text-dim">
                   {review.text}
                 </p>
               )}

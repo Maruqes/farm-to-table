@@ -48,31 +48,31 @@ export function ProducerPagePreview({
         <FarmPhoto
           src={preview.photoUrl}
           alt={`Photo of ${page.name}`}
-          className="pa-rule-bottom"
+          className="border-b-2 border-ink"
         />
       )}
 
-      <div className="vstack gap-4 p-4 p-md-5">
-        <header className="vstack gap-2">
+      <div className="flex flex-col gap-6 p-4 md:p-12">
+        <header className="flex flex-col gap-2">
           <p className="label-line">Public page</p>
-          <h3 className="fs-4 text-break">{page.name}</h3>
+          <h3 className="text-2xl break-words">{page.name}</h3>
           {preview.location && (
-            <p className="d-flex align-items-start gap-2 small text-body-secondary">
-              <MapPin size={16} className="flex-shrink-0" aria-hidden="true" />
-              <span className="min-w-0 text-break">{preview.location}</span>
+            <p className="flex items-start gap-2 text-sm text-dim">
+              <MapPin size={16} className="shrink-0" aria-hidden="true" />
+              <span className="min-w-0 break-words">{preview.location}</span>
             </p>
           )}
           <div aria-hidden="true" className="double-rule pt-1" />
         </header>
 
         {preview.bio && (
-          <p className="measure text-break text-body-secondary">
+          <p className="measure break-words text-dim">
             {preview.bio}
           </p>
         )}
 
         {hasCoordinates && preview.lat !== null && preview.lng !== null && (
-          <section aria-labelledby="preview-map-heading" className="vstack gap-2 rule pt-4">
+          <section aria-labelledby="preview-map-heading" className="flex flex-col gap-2 rule pt-6">
             <h4 id="preview-map-heading" className="label-line">
               Where to find them
             </h4>
@@ -80,9 +80,9 @@ export function ProducerPagePreview({
               fallback={
                 <div
                   role="status"
-                  className="frame w-100 pa-map d-flex align-items-center justify-content-center"
+                  className="frame flex h-64 w-full items-center justify-center md:h-72"
                 >
-                  <span className="visually-hidden">Loading map…</span>
+                  <span className="sr-only">Loading map…</span>
                 </div>
               }
             >
@@ -90,7 +90,7 @@ export function ProducerPagePreview({
                 lat={preview.lat}
                 lng={preview.lng}
                 interactive={false}
-                className="pa-map-tall"
+                className="h-64 md:h-80"
               />
             </Suspense>
           </section>

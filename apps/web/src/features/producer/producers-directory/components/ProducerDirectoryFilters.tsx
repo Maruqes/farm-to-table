@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { ProducersDirectoryFilterDraft } from '../useProducersDirectoryFilters'
 
-const selectClassName = 'form-select'
+const SELECT_CLASS =
+  'block min-h-10 w-full border-2 border-ink bg-transparent px-3 py-1.5 text-[0.9375rem] text-ink'
 
 interface ProducerDirectoryFiltersProps {
   initial: ProducersDirectoryFilterDraft
@@ -44,9 +45,9 @@ export function ProducerDirectoryFilters({
       aria-label="Search and filter producers"
       onSubmit={handleSubmit}
     >
-      <div className="row g-3 align-items-end">
-        <div className="col-12 col-md-6">
-          <label htmlFor="producers-q" className="label-line form-label d-block">
+      <div className="grid items-end gap-4 md:grid-cols-4">
+        <div className="md:col-span-2">
+          <label htmlFor="producers-q" className="label-line mb-1 block">
             Search producers
           </label>
           <Input
@@ -62,14 +63,14 @@ export function ProducerDirectoryFilters({
           />
         </div>
 
-        <div className="col-12 col-md-3">
-          <label htmlFor="producers-location" className="label-line form-label d-block">
+        <div>
+          <label htmlFor="producers-location" className="label-line mb-1 block">
             Locality
           </label>
           <select
             id="producers-location"
             name="location"
-            className={selectClassName}
+            className={SELECT_CLASS}
             value={draft.location}
             onChange={(event) =>
               setDraft((current) => ({ ...current, location: event.target.value }))
@@ -84,14 +85,14 @@ export function ProducerDirectoryFilters({
           </select>
         </div>
 
-        <div className="col-12 col-md-3 d-flex gap-2 justify-content-md-end">
-          <Button type="submit" className="flex-grow-1 flex-md-grow-0">
+        <div className="flex gap-2 md:justify-end">
+          <Button type="submit" className="grow md:grow-0">
             Apply
           </Button>
           <Button
             type="button"
             variant="outline"
-            className="flex-grow-1 flex-md-grow-0"
+            className="grow md:grow-0"
             onClick={handleClear}
             disabled={!canClear}
           >

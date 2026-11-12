@@ -19,11 +19,11 @@ export function HomeCatalog() {
         }`
 
   return (
-    <div className="vstack gap-4">
-      <section id="catalog" aria-labelledby="catalog-title" className="catalog-section">
-        <div className="mb-4">
+    <div className="flex flex-col gap-6">
+      <section id="catalog" aria-labelledby="catalog-title" className="scroll-mt-24">
+        <div className="mb-6">
           <h1 id="catalog-title">Browse the catalog</h1>
-          <p className="mt-1 small text-body-secondary">{resultSummary}</p>
+          <p className="mt-1 text-sm text-dim">{resultSummary}</p>
         </div>
         <CatalogFilters
           key={`${draft.q}|${draft.location}|${draft.category}|${draft.season}|${draft.organic}|${draft.sort}`}
@@ -35,7 +35,7 @@ export function HomeCatalog() {
           onClearProducer={clearProducer}
         />
 
-        <div className="mt-4">
+        <div className="mt-6">
           <PageState
             loading={loading}
             error={error}
@@ -48,7 +48,7 @@ export function HomeCatalog() {
           </PageState>
 
           {!loading && !error && products.length === 0 && hasActiveFilters && (
-            <div className="mt-4 d-flex justify-content-center">
+            <div className="mt-6 flex justify-center">
               <Button variant="outline" onClick={clearFilters}>
                 Clear filters
               </Button>

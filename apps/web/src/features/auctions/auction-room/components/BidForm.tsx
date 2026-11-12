@@ -68,14 +68,14 @@ export function BidForm({ auction, bidding, onPlaceBid, onEdit }: BidFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="vstack gap-4" noValidate>
-      <div className="vstack gap-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
+      <div className="flex flex-col gap-2">
         <label htmlFor={inputId} className="form-label">
           Your bid
         </label>
-        <div className="d-flex flex-column flex-sm-row gap-2">
-          <div className="room-bid-field">
-            <span aria-hidden="true" className="room-bid-prefix">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="relative min-w-0 flex-auto">
+            <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm">
               €
             </span>
             <Input
@@ -92,27 +92,27 @@ export function BidForm({ auction, bidding, onPlaceBid, onEdit }: BidFormProps) 
               aria-describedby={`${hintId}${localError ? ` ${errorId}` : ''}`}
               aria-invalid={localError ? true : undefined}
               disabled={bidding}
-              className="room-bid-input"
+              className="pl-7"
             />
           </div>
           <Button type="submit" variant="amber" size="lg" disabled={bidding}>
             {bidding ? 'Placing bid…' : 'Place bid'}
           </Button>
         </div>
-        <p id={hintId} className="small opacity-75 mb-0">
+        <p id={hintId} className="mb-0 text-sm opacity-75">
           Minimum {formatMoney(minimum)} — current price {formatMoney(auction.currentPrice)} plus{' '}
           {formatMoney(auction.increment)} increment.
         </p>
         {localError && (
-          <p id={errorId} role="alert" className="small mb-0">
+          <p id={errorId} role="alert" className="mb-0 text-sm">
             {localError}
           </p>
         )}
       </div>
 
-      <div className="vstack gap-2">
+      <div className="flex flex-col gap-2">
         <p className="form-label mb-0">Quick bids</p>
-        <div className="d-flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           {[5, 10, 25].map((delta) => {
             const value = roundMoney(Math.max(minimum, auction.currentPrice + delta))
             return (
@@ -129,7 +129,7 @@ export function BidForm({ auction, bidding, onPlaceBid, onEdit }: BidFormProps) 
             )
           })}
         </div>
-        <p className="small opacity-75 mb-0">
+        <p className="mb-0 text-sm opacity-75">
           Quick bids add to the current price. Your bid must reach the minimum.
         </p>
       </div>

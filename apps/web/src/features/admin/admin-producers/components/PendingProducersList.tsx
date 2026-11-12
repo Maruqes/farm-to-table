@@ -28,24 +28,24 @@ function PendingProducerRow({
     : ''
 
   return (
-    <li className="admin-producer-row">
-      <div className="min-w-0 vstack gap-1">
-        <h2 className="text-break">{producer.name}</h2>
+    <li className="grid gap-3 border-b border-dim py-[0.7rem] md:grid-cols-[minmax(0,1fr)_9rem_8rem_auto] md:items-center md:gap-4">
+      <div className="min-w-0 flex flex-col gap-1">
+        <h2 className="break-words font-sans text-base font-semibold normal-case leading-[1.4]">{producer.name}</h2>
 
         {producer.bio && (
-          <p className="admin-clamp-2 small text-body-secondary mb-0">
+          <p className="line-clamp-2 text-sm text-dim mb-0">
             {producer.bio}
           </p>
         )}
 
-        <div className="d-flex flex-wrap align-items-baseline column-gap-3 row-gap-1 small text-body-secondary">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm text-dim">
           {producer.categories.length > 0 && (
             <span>{producer.categories.join(' · ')}</span>
           )}
           {producer.email && (
             <a
               href={`mailto:${producer.email}`}
-              className="text-break"
+              className="break-words"
             >
               {producer.email}
             </a>
@@ -58,30 +58,30 @@ function PendingProducerRow({
         </div>
       </div>
 
-      <div className="d-flex align-items-baseline justify-content-between gap-3 d-md-block">
-        <span className="label-line d-md-none">
+      <div className="flex items-baseline justify-between gap-4 md:block">
+        <span className="label-line md:hidden">
           Location
         </span>
-        <span className="text-md-end">{producer.location}</span>
+        <span className="md:text-right">{producer.location}</span>
       </div>
 
-      <div className="d-flex align-items-baseline justify-content-between gap-3 d-md-block">
-        <span className="label-line d-md-none">
+      <div className="flex items-baseline justify-between gap-4 md:block">
+        <span className="label-line md:hidden">
           Applied
         </span>
         {producer.appliedAt ? (
           <time
             dateTime={producer.appliedAt}
-            className="text-md-end tabular"
+            className="md:text-right tabular"
           >
             {formatDate(producer.appliedAt)}
           </time>
         ) : (
-          <span className="text-body-secondary text-md-end">—</span>
+          <span className="text-dim md:text-right">—</span>
         )}
       </div>
 
-      <div className="admin-decision-actions">
+      <div className="flex flex-wrap gap-2 md:flex-nowrap md:justify-end">
         <ProducerDecisionDialog
           producer={producer}
           action="approve"
@@ -118,12 +118,12 @@ export function PendingProducersList({
     <div>
       <div
         aria-hidden="true"
-        className="admin-cols admin-producer-cols label-line"
+        className="label-line hidden py-2 md:grid md:grid-cols-[minmax(0,1fr)_9rem_8rem_auto] md:gap-4"
       >
         <span>Producer</span>
         <span>Location</span>
         <span>Applied</span>
-        <span className="text-end">Actions</span>
+        <span className="text-right">Actions</span>
       </div>
 
       <ul

@@ -66,20 +66,20 @@ export function ServiceStatusCard({ service }: ServiceStatusCardProps) {
 
   return (
     <article aria-labelledby={headingId}>
-      <div className="d-flex align-items-start justify-content-between gap-3">
-        <h2 id={headingId} className="min-w-0 text-break">
+      <div className="flex items-start justify-between gap-4">
+        <h2 id={headingId} className="min-w-0 break-words font-sans text-base font-semibold normal-case leading-[1.4]">
           {service.service}
         </h2>
         <ServiceStateBadge state={service.status} />
       </div>
 
-      <p className="small text-body-secondary mt-1 mb-0">
+      <p className="text-sm text-dim mt-1 mb-0">
         {service.detail}
       </p>
 
-      <p className="d-flex align-items-baseline justify-content-between gap-3 small mt-2 mb-0">
+      <p className="flex items-baseline justify-between gap-4 text-sm mt-2 mb-0">
         <span className="label-line">Latency</span>
-        <span className="fw-semibold tabular">
+        <span className="font-semibold tabular">
           <Latency latencyMs={service.latencyMs} />
         </span>
       </p>

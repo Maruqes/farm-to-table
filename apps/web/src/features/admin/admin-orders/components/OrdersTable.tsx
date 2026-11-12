@@ -36,24 +36,24 @@ interface OrdersTableProps {
 
 export function OrdersTable({ orders }: OrdersTableProps) {
   return (
-    <table className="table admin-table">
-      <caption className="visually-hidden">
+    <table className="table">
+      <caption className="sr-only">
         All orders with buyer, producer, item count, total, state and date
         placed
       </caption>
       <thead>
         <tr>
           <th scope="col">Order</th>
-          <th scope="col" className="d-none d-md-table-cell">
+          <th scope="col" className="hidden md:table-cell">
             Buyer
           </th>
-          <th scope="col" className="d-none d-md-table-cell">
+          <th scope="col" className="hidden md:table-cell">
             Producer
           </th>
-          <th scope="col" className="d-none d-md-table-cell text-end">
+          <th scope="col" className="hidden md:table-cell text-right">
             Items
           </th>
-          <th scope="col" className="text-end">
+          <th scope="col" className="text-right">
             Total
           </th>
           <th scope="col">Status</th>
@@ -62,8 +62,8 @@ export function OrdersTable({ orders }: OrdersTableProps) {
       <tbody>
         {orders.map((order) => (
           <tr key={order.id}>
-            <th scope="row">
-              <span className="d-block fw-semibold">
+            <th scope="row" className="text-base font-normal normal-case tracking-normal text-ink">
+              <span className="block font-semibold">
                 Order{' '}
                 <data
                   value={order.id}
@@ -73,25 +73,25 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                   {shortOrderRef(order.id)}
                 </data>
               </span>
-              <span className="d-block small text-body-secondary">
+              <span className="block text-sm text-dim">
                 Placed{' '}
                 <PlacedDate createdAt={order.createdAt} />
               </span>
-              <span className="d-block small d-md-none mt-1">
+              <span className="block text-sm md:hidden mt-1">
                 {order.buyerName} · {order.producerName}
               </span>
-              <span className="d-block small text-body-secondary d-md-none">
+              <span className="block text-sm text-dim md:hidden">
                 {order.itemCount} {order.itemCount === 1 ? 'item' : 'items'}
               </span>
             </th>
-            <td className="d-none d-md-table-cell text-break">{order.buyerName}</td>
-            <td className="d-none d-md-table-cell text-break">
+            <td className="hidden md:table-cell break-words">{order.buyerName}</td>
+            <td className="hidden md:table-cell break-words">
               {order.producerName}
             </td>
-            <td className="d-none d-md-table-cell text-end tabular">
+            <td className="hidden md:table-cell text-right tabular">
               {order.itemCount}
             </td>
-            <td className="text-end font-display text-nowrap tabular">
+            <td className="text-right font-display whitespace-nowrap tabular">
               {formatMoney(order.total)}
             </td>
             <td>

@@ -32,7 +32,7 @@ import type {
 
 function FormAlert({ children }: { children: ReactNode }) {
   return (
-    <div role="alert" className="pa-alert-error">
+    <div role="alert" className="flex items-start gap-2 border-2 border-alarm p-2 px-3 text-sm text-alarm [&>p]:m-0 [&>svg]:mt-0.5 [&>svg]:shrink-0">
       <AlertTriangle size={16} aria-hidden="true" />
       <p>{children}</p>
     </div>
@@ -85,14 +85,14 @@ interface FieldMessageProps {
 function FieldMessage({ id, error, hint }: FieldMessageProps) {
   if (error) {
     return (
-      <p id={`${id}-error`} className="small text-danger">
+      <p id={`${id}-error`} className="text-sm text-alarm">
         {error}
       </p>
     )
   }
   if (hint) {
     return (
-      <p id={`${id}-hint`} className="small text-body-secondary">
+      <p id={`${id}-hint`} className="text-sm text-dim">
         {hint}
       </p>
     )
@@ -122,7 +122,7 @@ function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="vstack gap-2">
+    <div className="flex flex-col gap-2">
       <label htmlFor={id} className="form-label">
         {label}
       </label>
@@ -206,13 +206,13 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="vstack gap-4">
+    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="flex flex-col gap-6">
       {formError && <FormAlert>{formError}</FormAlert>}
 
       {productsError && (
-        <div role="alert" className="pa-alert-error">
+        <div role="alert" className="flex items-start gap-2 border-2 border-alarm p-2 px-3 text-sm text-alarm [&>p]:m-0 [&>svg]:mt-0.5 [&>svg]:shrink-0">
           <AlertTriangle size={16} aria-hidden="true" />
-          <p className="min-w-0 flex-grow-1">{productsError}</p>
+          <p className="min-w-0 grow">{productsError}</p>
           <Button type="button" variant="outline" size="sm" onClick={reload}>
             Try again
           </Button>
@@ -220,9 +220,9 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
       )}
 
       {!productsLoading && !productsError && products.length === 0 && (
-        <div className="pa-empty d-flex flex-wrap align-items-center gap-3">
-          <Package size={16} className="flex-shrink-0 text-body-secondary" aria-hidden="true" />
-          <p className="min-w-0 flex-grow-1">
+        <div className="flex flex-wrap items-center gap-4 border border-dashed border-dim p-6 px-4 text-sm text-dim [&>p]:m-0">
+          <Package size={16} className="shrink-0 text-dim" aria-hidden="true" />
+          <p className="min-w-0 grow">
             You have no products yet. Add one before creating an auction.
           </p>
           <Button asChild variant="outline" size="sm">
@@ -231,7 +231,7 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
         </div>
       )}
 
-      <div className="vstack gap-2">
+      <div className="flex flex-col gap-2">
         <label htmlFor="productId" className="form-label">
           Product
         </label>
@@ -265,8 +265,8 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
         />
       </div>
 
-      <div className="row g-3 rule pt-4">
-        <div className="col-md-4">
+      <div className="rule grid gap-4 pt-6 md:grid-cols-3">
+        <div>
           <TextField
             id="quantity"
             label="Lot quantity"
@@ -282,7 +282,7 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
           />
         </div>
 
-        <div className="col-md-4">
+        <div>
           <TextField
             id="basePrice"
             label="Base price (€)"
@@ -298,7 +298,7 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
           />
         </div>
 
-        <div className="col-md-4">
+        <div>
           <TextField
             id="increment"
             label="Minimum increment (€)"
@@ -315,9 +315,9 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
         </div>
       </div>
 
-      <div className="row g-3 rule pt-4">
-        <div className="col-md-6">
-          <div className="vstack gap-2">
+      <div className="rule grid gap-4 pt-6 md:grid-cols-2">
+        <div>
+          <div className="flex flex-col gap-2">
             <label htmlFor="duration" className="form-label">
               Duration
             </label>
@@ -337,7 +337,7 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
             </select>
 
             {values.duration === 'custom' && (
-              <div className="vstack gap-2 pt-1">
+              <div className="flex flex-col gap-2 pt-1">
                 <label htmlFor="customMinutes" className="form-label">
                   Custom length (minutes)
                 </label>
@@ -360,8 +360,8 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
           </div>
         </div>
 
-        <div className="col-md-6">
-          <div className="vstack gap-2">
+        <div>
+          <div className="flex flex-col gap-2">
             <label htmlFor="startAt" className="form-label">
               Start time
             </label>
@@ -384,7 +384,7 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
         </div>
       </div>
 
-      <div className="pa-info">
+      <div className="flex items-start gap-2 border border-dim p-3 text-sm text-dim [&>p]:m-0 [&>svg]:mt-0.5 [&>svg]:shrink-0">
         <CalendarClock size={16} aria-hidden="true" />
         <p>
           Publish to schedule the lot. You can still edit or cancel it until the first
@@ -392,7 +392,7 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
         </p>
       </div>
 
-      <div className="d-flex flex-wrap gap-2 pt-1">
+      <div className="flex flex-wrap gap-2 pt-1">
         <Button
           type="submit"
           variant="outline"

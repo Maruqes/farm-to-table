@@ -41,12 +41,12 @@ export function ProducerStatusView() {
 
   if (!status) {
     return (
-      <div className="auth-column-wide py-4 py-md-5">
+      <div className="mx-auto w-full max-w-xl py-6 md:py-12">
         <PageState
           error="missing-producer-status"
           errorMessage="We couldn’t find your producer status for this account. Log out and sign in again, or contact the site administrator."
         />
-        <div className="mt-4 d-flex justify-content-center">
+        <div className="mt-6 flex justify-center">
           <Button variant="outline" size="lg" onClick={handleLogout}>
             <LogOut size={16} aria-hidden="true" />
             Log out
@@ -58,24 +58,24 @@ export function ProducerStatusView() {
 
   const content = STATUS_CONTENT[status]
   const StatusIcon = status === 'pending' ? Clock : CircleAlert
-  const iconClassName = status === 'pending' ? 'text-body-secondary' : 'text-danger'
+  const iconClassName = status === 'pending' ? 'text-dim' : 'text-alarm'
 
   return (
-    <section aria-labelledby="producer-status-title" className="auth-column-wide py-4 py-md-5">
-      <p className="d-flex align-items-center gap-2 mb-0">
+    <section aria-labelledby="producer-status-title" className="mx-auto w-full max-w-xl py-6 md:py-12">
+      <p className="mb-0 flex items-center gap-2">
         <StatusIcon size={20} className={iconClassName} aria-hidden="true" />
         <Badge variant="outline">
           {status === 'pending' ? 'Pending' : 'Rejected'}
         </Badge>
       </p>
-      <h1 id="producer-status-title" className="mt-4">
+      <h1 id="producer-status-title" className="mt-6">
         {content.title}
       </h1>
-      <div className="rule mt-4 pt-4 vstack gap-2 text-body-secondary">
+      <div className="rule mt-6 flex flex-col gap-2 pt-6 text-dim">
         <p className="mb-0">{content.body}</p>
         <p className="mb-0">{content.help}</p>
       </div>
-      <Button variant="outline" size="lg" className="mt-4" onClick={handleLogout}>
+      <Button variant="outline" size="lg" className="mt-6" onClick={handleLogout}>
         <LogOut size={16} aria-hidden="true" />
         Log out
       </Button>

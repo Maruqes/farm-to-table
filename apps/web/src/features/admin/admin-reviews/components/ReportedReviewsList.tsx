@@ -28,36 +28,36 @@ function ReviewRow({ review, pending, onDecision }: ReviewRowProps) {
   const busy = pending !== null
 
   return (
-    <li className="admin-review-row">
-      <div className="min-w-0 vstack gap-2">
-        <div className="d-flex flex-wrap align-items-center column-gap-2 row-gap-1">
-          <h2 className="text-break">
+    <li className="grid gap-4 border-b border-dim py-[0.7rem] lg:grid-cols-[minmax(0,1fr)_minmax(0,14rem)_7rem_auto] lg:items-start lg:gap-5">
+      <div className="min-w-0 flex flex-col gap-2">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <h2 className="break-words font-sans text-base font-semibold normal-case leading-[1.4]">
             {review.author}
           </h2>
-          <span className="text-body-secondary" aria-hidden="true">
+          <span className="text-dim" aria-hidden="true">
             ·
           </span>
-          <span className="d-flex align-items-center gap-2">
+          <span className="flex items-center gap-2">
             <RatingStars rating={review.rating} />
             <data
               value={review.rating}
-              className="small fw-semibold tabular"
+              className="text-sm font-semibold tabular"
             >
               {review.rating > 0 ? review.rating.toFixed(1) : '—'}
             </data>
-            <span className="visually-hidden">out of 5</span>
+            <span className="sr-only">out of 5</span>
           </span>
         </div>
 
-        <p className="small text-body-secondary mb-0">{reviewSubject(review)}</p>
+        <p className="text-sm text-dim mb-0">{reviewSubject(review)}</p>
 
         {review.text ? (
-          <p className="measure small text-break mb-0">{review.text}</p>
+          <p className="measure text-sm break-words mb-0">{review.text}</p>
         ) : (
-          <p className="small text-body-secondary mb-0">No comment left.</p>
+          <p className="text-sm text-dim mb-0">No comment left.</p>
         )}
 
-        <p className="small text-body-secondary mb-0">
+        <p className="text-sm text-dim mb-0">
           Reviewed{' '}
           {review.createdAt ? (
             <time dateTime={review.createdAt}>
@@ -70,15 +70,15 @@ function ReviewRow({ review, pending, onDecision }: ReviewRowProps) {
       </div>
 
       <div>
-        <span className="label-line d-lg-none">
+        <span className="label-line lg:hidden">
           Report reason
         </span>
-        <p className="small fw-semibold mb-0">{review.reportReason}</p>
+        <p className="text-sm font-semibold mb-0">{review.reportReason}</p>
         {review.reportNote && (
-          <p className="small text-body-secondary text-break mb-0">{review.reportNote}</p>
+          <p className="text-sm text-dim break-words mb-0">{review.reportNote}</p>
         )}
         {review.reportedAt && (
-          <p className="small text-body-secondary mb-0">
+          <p className="text-sm text-dim mb-0">
             Reported{' '}
             <time dateTime={review.reportedAt}>
               {formatDate(review.reportedAt)}
@@ -87,17 +87,17 @@ function ReviewRow({ review, pending, onDecision }: ReviewRowProps) {
         )}
       </div>
 
-      <div className="d-flex align-items-center justify-content-between gap-3 d-lg-block">
-        <span className="label-line d-lg-none">Status</span>
+      <div className="flex items-center justify-between gap-4 lg:block">
+        <span className="label-line lg:hidden">Status</span>
         <Badge variant={hidden ? 'secondary' : 'outline'}>
           {hidden && <EyeOff size={16} aria-hidden="true" />}
           {REVIEW_STATUS_LABELS[review.status]}
         </Badge>
       </div>
 
-      <div className="admin-decision-actions">
+      <div className="flex flex-wrap gap-2 md:flex-nowrap md:justify-end">
         {hidden ? (
-          <p className="small text-body-secondary text-lg-end mb-0">
+          <p className="text-sm text-dim lg:text-right mb-0">
             Hidden from buyers
           </p>
         ) : (
@@ -139,12 +139,12 @@ export function ReportedReviewsList({
     <div>
       <div
         aria-hidden="true"
-        className="admin-cols admin-review-cols label-line"
+        className="label-line hidden py-2 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,14rem)_7rem_auto] lg:gap-5"
       >
         <span>Review</span>
         <span>Report</span>
         <span>Status</span>
-        <span className="text-end">Decision</span>
+        <span className="text-right">Decision</span>
       </div>
 
       <ul

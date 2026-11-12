@@ -103,12 +103,12 @@ export function ReviewDecisionDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-panel">
-          <div className="d-flex align-items-start justify-content-between gap-3 mb-4">
+          <div className="flex items-start justify-between gap-4 mb-6">
             <div>
               <Dialog.Title>
                 {copy.title(review.author)}
               </Dialog.Title>
-              <Dialog.Description className="small text-body-secondary mb-0">
+              <Dialog.Description className="text-sm text-dim mb-0">
                 {copy.description}
               </Dialog.Description>
             </div>
@@ -124,29 +124,29 @@ export function ReviewDecisionDialog({
             </Dialog.Close>
           </div>
 
-          <blockquote className="admin-quote vstack gap-1 mb-4">
-            <p className="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 small fw-semibold mb-0">
+          <blockquote className="border-2 border-ink p-3 flex flex-col gap-1 mb-6">
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold mb-0">
               {review.author}
               <RatingStars rating={review.rating} />
               <data value={review.rating} className="tabular">
                 {review.rating > 0 ? review.rating.toFixed(1) : '—'}
               </data>
-              <span className="visually-hidden">out of 5</span>
+              <span className="sr-only">out of 5</span>
             </p>
-            <p className="small text-body-secondary mb-0">{reviewSubject(review)}</p>
+            <p className="text-sm text-dim mb-0">{reviewSubject(review)}</p>
             {review.text && (
-              <p className="admin-clamp-3 small text-break mb-0">{review.text}</p>
+              <p className="line-clamp-3 text-sm break-words mb-0">{review.text}</p>
             )}
           </blockquote>
 
-          <form onSubmit={handleSubmit} className="vstack gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {error && (
-              <p id={errorId} role="alert" className="admin-error mb-0">
+              <p id={errorId} role="alert" className="border-2 border-alarm px-3 py-2 text-sm text-alarm mb-0">
                 {error}
               </p>
             )}
 
-            <div className="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-2">
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Dialog.Close asChild>
                 <Button type="button" variant="outline" disabled={submitting}>
                   Cancel

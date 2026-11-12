@@ -17,26 +17,26 @@ export function UsersPagination({
   return (
     <nav
       aria-label="Users pagination"
-      className="d-flex flex-column-reverse flex-md-row align-items-md-center justify-content-md-between gap-3"
+      className="flex flex-col-reverse gap-4 md:flex-row md:items-center md:justify-between"
     >
-      <p className="small text-body-secondary text-center text-md-start mb-0">
+      <p className="text-center text-sm text-dim md:text-left mb-0">
         Page{' '}
         <data
           value={page}
-          className="fw-semibold tabular"
+          className="font-semibold tabular"
         >
           {page}
         </data>{' '}
         of{' '}
         <data
           value={pageCount}
-          className="fw-semibold tabular"
+          className="font-semibold tabular"
         >
           {pageCount}
         </data>
       </p>
 
-      <div className="admin-pagination-actions">
+      <div className="flex gap-2 [&>*]:flex-1 md:[&>*]:flex-none">
         <Button
           type="button"
           variant="outline"

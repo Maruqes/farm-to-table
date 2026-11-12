@@ -47,9 +47,9 @@ export function SiteHeader() {
   const links = [...PUBLIC_LINKS, ...ROLE_LINKS[role], ...(isAuthenticated ? [{ to: '/account', label: 'Account' }] : [])]
 
   return (
-    <header className="site-header sticky-top">
-      <div className="container">
-        <div className="d-flex flex-wrap align-items-center gap-3 py-3">
+    <header className="site-header">
+      <div className="mx-auto w-full max-w-6xl px-4">
+        <div className="flex flex-wrap items-center gap-3 py-3">
           <Link to="/" className="wordmark">
             Farm to table
           </Link>
@@ -58,12 +58,12 @@ export function SiteHeader() {
             <SearchBox />
           </div>
 
-          <div className="ms-auto d-flex align-items-center gap-2">
+          <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
             <Notifications />
             {isAuthenticated && user ? (
               <>
-                <span className="d-none d-md-inline small text-body-secondary">
+                <span className="hidden text-sm text-dim md:inline">
                   {user.name} · {ROLE_LABELS[role]}
                 </span>
                 <Button variant="outline" size="sm" onClick={logout}>
@@ -79,7 +79,7 @@ export function SiteHeader() {
           </div>
         </div>
 
-        <nav aria-label="Main navigation" className="d-flex gap-1 overflow-x-auto">
+        <nav aria-label="Main navigation" className="flex gap-1 overflow-x-auto">
           {links.map((link) => (
             <NavLink
               key={link.to}

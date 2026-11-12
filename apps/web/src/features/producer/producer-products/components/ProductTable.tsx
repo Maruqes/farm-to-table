@@ -31,12 +31,12 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
     <div>
       <div
         aria-hidden="true"
-        className="label-line d-none d-md-grid pa-product-head px-0 py-2"
+        className="label-line hidden px-0 py-2 md:grid md:grid-cols-[minmax(0,1fr)_7rem_6rem_12rem] md:items-center"
       >
         <span>Product</span>
         <span>Price</span>
         <span>Stock</span>
-        <span className="text-end">Actions</span>
+        <span className="text-right">Actions</span>
       </div>
 
       <ul aria-label="Your products" className="board">
@@ -47,16 +47,16 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
           const descriptionId = `delete-desc-${product.id}`
 
           return (
-            <li key={product.id} className="board-row pa-product-row">
-              <div className="d-flex min-w-0 align-items-center gap-3">
+            <li key={product.id} className="board-row grid gap-4 md:grid-cols-[minmax(0,1fr)_7rem_6rem_12rem] md:items-center">
+              <div className="flex min-w-0 items-center gap-3">
                 <CrateChip category={product.category} />
                 <span aria-hidden="true" className="lot">
                   {lotNumber(product.id)}
                 </span>
 
                 <div className="min-w-0">
-                  <p className="text-break fw-semibold">{product.name}</p>
-                  <div className="d-flex flex-wrap align-items-center gap-2 mt-1 small text-body-secondary">
+                  <p className="break-words font-semibold">{product.name}</p>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-dim">
                     <span>{categoryLabel(product.category)}</span>
                     <span aria-hidden="true">·</span>
                     <span>{seasonLabel(product.season)}</span>
@@ -66,29 +66,29 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                 </div>
               </div>
 
-              <div className="d-flex align-items-baseline justify-content-between gap-2 pa-md-block">
-                <span className="label-line pa-col-label">Price</span>
+              <div className="flex items-baseline justify-between gap-2 md:block">
+                <span className="label-line md:sr-only">Price</span>
                 <span>
                   <data value={product.price} className="price tabular">
                     {formatMoney(product.price)}
                   </data>{' '}
-                  <span className="d-block pa-xs text-body-secondary">
+                  <span className="block text-xs text-dim">
                     per {product.unit}
                   </span>
                 </span>
               </div>
 
-              <div className="d-flex align-items-baseline justify-content-between gap-2 pa-md-block">
-                <span className="label-line pa-col-label">Stock</span>
+              <div className="flex items-baseline justify-between gap-2 md:block">
+                <span className="label-line md:sr-only">Stock</span>
                 <span className="text-nowrap">
-                  <data value={product.stock} className="tabular fw-semibold">
+                  <data value={product.stock} className="tabular font-semibold">
                     {product.stock}
                   </data>{' '}
-                  <span className="pa-xs text-body-secondary">{product.unit}</span>
+                  <span className="text-xs text-dim">{product.unit}</span>
                 </span>
               </div>
 
-              <div className="pa-actions">
+              <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:justify-end">
                 <Button
                   type="button"
                   variant="outline"
@@ -123,16 +123,16 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                   onKeyDown={(event) => {
                     if (event.key === 'Escape') setConfirmingId(null)
                   }}
-                  className="frame-alarm p-3 pa-confirm-span"
+                  className="frame-alarm p-3 md:col-span-full"
                 >
-                  <p id={titleId} className="fw-semibold">
+                  <p id={titleId} className="font-semibold">
                     Delete {product.name}?
                   </p>
-                  <p id={descriptionId} className="mt-1 small text-body-secondary">
+                  <p id={descriptionId} className="mt-1 text-sm text-dim">
                     This removes it from your catalog and the shop. Orders already placed
                     keep their copy.
                   </p>
-                  <div className="d-flex flex-wrap gap-2 mt-3">
+                  <div className="mt-3 flex flex-wrap gap-2">
                     <Button
                       type="button"
                       variant="outline"

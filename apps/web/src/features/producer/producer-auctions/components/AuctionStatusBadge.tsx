@@ -6,7 +6,7 @@ export function AuctionStatusBadge({ status }: { status: AuctionStatus }) {
   if (status === 'active') {
     return (
       <Badge variant="live">
-        <span aria-hidden="true" className="pa-live-dot" />
+        <span aria-hidden="true" className="size-1.5 bg-current" />
         {AUCTION_STATUS_LABELS.active}
       </Badge>
     )

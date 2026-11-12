@@ -11,7 +11,7 @@ export function CategoryIcon({
   size?: number
   className?: string
 }) {
-  const props = { size, className: cn('catalog-category-icon', className), 'aria-hidden': true, strokeWidth: 1.5 } as const
+  const props = { size, className: cn('shrink-0 text-dim', className), 'aria-hidden': true, strokeWidth: 1.5 } as const
   switch (category) {
     case 'fruit':
       return <Apple {...props} />

@@ -6,7 +6,7 @@ export function LotTile({ category }: { category: string }) {
   return (
     <div
       aria-hidden="true"
-      className={cn('room-lot-tile frame-thick', crateClass(category))}
+      className={cn('size-16 frame-thick md:size-20', crateClass(category))}
     />
   )
 }

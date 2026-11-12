@@ -10,20 +10,20 @@ Reference prototypes (static HTML, open in a browser): [painted board](../../doc
 3. **Everything for sale has a lot number.** Three digits, shown first in every row and on every label. Auctions use the same numbering ("lot 009").
 
 ## Tokens
-Defined once in `src/styles/_variables.scss` (Sass values) and `_tokens.scss` (CSS variables, light and dark); use them through the classes below or `var(--ink)` etc. in SASS, never raw colours in components.
+Defined once in `src/styles/globals.css` (CSS variables, light and dark, exposed as Tailwind colours: `paper`, `ink`, `dim`, `tag`, `tag-ink`, `wash`, `alarm`, `crate-ink`, `board`, `board-ink`, `amber`, `tile-*`); use them through Tailwind utilities (`text-dim`, `border-ink`, `bg-wash`) or the classes below, never raw colours in components.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
 | paper (`--paper`) | `#f6ecd6` | `#16130e` | page |
-| ink (`--ink`, Bootstrap `primary`) | `#14301b` | `#f3e9d2` | text, rules, borders, primary buttons |
+| ink (`--ink`) | `#14301b` | `#f3e9d2` | text, rules, borders, primary buttons |
 | dim (`--dim`, `text-body-secondary`) | `#5d6b55` | `#a39c88` | secondary text, row rules |
 | tag (`--tag`) | `#c8102e` | `#ff5a6e` | price tags, "live"; nothing else |
 | tag ink (`--tag-ink`) | `#ffffff` | `#20040a` | text on tag |
 | crate colours (`--tile-*`) | cheese `#f2c14e`, honey `#e8962e`, bakery `#d9a066`, wine `#a8496c`, fruit `#a8c256`, veg `#5c9e4a` | same hues, darker | category chips and label backgrounds only |
 
 - Light and dark are both first-class; every token has both values. Text on a crate colour is always dark (`#14301b`), in both themes.
-- There is no white card surface. Bootstrap's `.card`, `.shadow*`, `.rounded*` and `.bg-white/.bg-light` are not used.
-- Dark mode is Bootstrap's `data-bs-theme="dark"` on `<html>`; never write a `.dark` selector.
+- There is no white card surface: no `.card`, shadows, rounded corners or white backgrounds.
+- Dark mode follows the existing theme toggle and the tokens in `globals.css`.
 
 ## Type
 - **Display: Big Shoulders Display 800**, uppercase, tight leading (0.85–0.95). Page titles, label names, prices in rows, price tags.
@@ -51,17 +51,17 @@ Defined once in `src/styles/_variables.scss` (Sass values) and `_tokens.scss` (C
 ## Banned (fails review)
 Rounded corners · pill buttons or badges · card grids for lists · white cards on a tinted page · shadows · gradients · the tag red or a crate colour used as decoration · a second tilted element in the same block · any font besides the two above · Bricolage Grotesque, Figtree, Inter · plus everything already banned in DESIGN.md.
 
-## Bootstrap vocabulary
-The app is **Bootstrap 5 + SASS** (`src/styles/main.scss`); there is no Tailwind. A class that is not in Bootstrap or in our partials does nothing: run `node scripts/check-classes.mjs <paths>` from `apps/web`, it lists every unknown class.
+## Vocabulary
+The app is **Tailwind v4** (`src/styles/globals.css`). Layout, spacing and type use Tailwind utilities. Breakpoints: `sm` 576, `md` 768, `lg` 1024, `xl` 1280.
 
-- **Layout:** `container`, `row` / `col-md-6` / `g-3`, `d-flex`, `flex-column`, `flex-wrap`, `align-items-center`, `justify-content-between`, `gap-0..5`, `vstack gap-3` (stacked blocks), `hstack gap-2`, `flex-grow-1`, `flex-shrink-0`, `ms-auto`, `w-100`, `min-w-0`, `d-none d-md-block` (drop a column on phones), `text-end`, `text-truncate`, `sticky-top`, `visually-hidden`. Spacing is `m*-0..5` / `p*-0..5` only. Breakpoints: `sm` 576, `md` 768, `lg` 1024, `xl` 1280.
-- **Type:** `h1`-`h3` are already the display face (uppercase); `font-display` puts it on other text; `small`, `fs-1..6`, `fw-semibold`, `text-uppercase`, `text-body-secondary` (dim), `text-danger`, `tabular`, `measure` (65ch), `label-line`.
-- **Rules and frames:** `rule` (2px ink top rule), `rule-thick` (4px), `rule-dim` (1px), `frame` (2px ink border), `frame-thick` (4px), `frame-alarm`, `ink-fill` (ink background, paper text), `border-bottom` etc. for 1px dim lines.
-- **Board:** `board`, `board-row`, `lot`, `price`, `price-tag`, `crate-chip`, `crate-label`, `stamp`, `double-rule`, `bg-tile-veg|fruit|honey|wine|cheese|bakery` (`_board.scss`).
-- **Controls:** `Button` (`variant`: default, outline, secondary, ghost, link, destructive, amber; `size`: sm, lg = 52px main action, icon), `Badge` (`variant`: default, outline, secondary, destructive, live), `Input`; or the raw classes `btn btn-primary`, `form-control`, `form-select`, `form-check` + `form-check-input` + `form-check-label`, `form-label` (already the small uppercase label), `form-text`, `is-invalid` + `invalid-feedback`, `table` (already board-styled).
+Shared classes from `globals.css` (compose these, do not restyle them per page):
+- **Type:** `h1`-`h3` are already the display face (uppercase); `font-display` puts it on other text; `tabular`, `measure` (65ch), `label-line`.
+- **Rules and frames:** `rule` (2px ink top rule), `rule-thick` (4px), `rule-dim` (1px), `frame` (2px ink border), `frame-thick` (4px), `frame-alarm`, `ink-fill` (ink background, paper text).
+- **Board:** `board`, `board-row`, `lot`, `price`, `price-tag`, `crate-chip`, `crate-label`, `stamp`, `double-rule`, `bg-tile-veg|fruit|honey|wine|cheese|bakery`.
+- **Controls:** `Button` (`variant`: default, outline, secondary, ghost, link, destructive, amber; `size`: sm, lg = 52px main action, icon), `Badge` (`variant`: default, outline, secondary, destructive, live), `Input`; or the raw classes `form-control`, `form-select`, `form-check` + `form-check-input` + `form-check-label`, `form-label`, `form-text`, `is-invalid` + `invalid-feedback`, `table` (already board-styled).
 - **Dialogs:** radix `Dialog.Overlay className="dialog-overlay"` and `Dialog.Content className="dialog-panel"`.
 - **Icons:** lucide with the `size` prop (`<Star size={16} />`), not size classes.
-- **Page-specific styles** go in the feature's partial in `src/styles/features/`, written with the tokens (`var(--ink)`, `var(--dim)`, `var(--paper)`, `var(--tag)`, `var(--wash)`, `var(--alarm)`, `$font-display`, `$font-mono`, `@include up(md)`), only for what the classes above cannot express. No inline `style` except computed values (a bar width, a chart height).
+- **Page-specific styles** are inline Tailwind utilities with the tokens above. No inline `style` except computed values (a bar width, a chart height).
 
 ## Status
-Shared pieces: the SASS partials in `src/styles/` (`_variables`, `_tokens`, `_base`, `_board`, `_components`, `_shell`, `features/`); `CrateChip` in `src/components/board.tsx`; `crateClass` and `lotNumber` in `src/components/crate.ts`. New UI composes these instead of restyling per page. Lot numbers are derived from the id in the frontend until the API has a field for them.
+Shared pieces: `src/styles/globals.css` (tokens and the shared classes above); `CrateChip` in `src/components/board.tsx`; `crateClass` and `lotNumber` in `src/components/crate.ts`. New UI composes these instead of restyling per page. Lot numbers are derived from the id in the frontend until the API has a field for them.

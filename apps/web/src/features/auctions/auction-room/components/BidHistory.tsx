@@ -15,18 +15,18 @@ interface BidHistoryProps {
 
 export function BidHistory({ auction, currentUserId }: BidHistoryProps) {
   return (
-    <section aria-labelledby="bid-history-heading" className="vstack gap-3">
-      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
-        <h2 id="bid-history-heading" className="fs-4">
+    <section aria-labelledby="bid-history-heading" className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 id="bid-history-heading" className="text-2xl">
           Bid history
         </h2>
-        <p className="small tabular opacity-75 mb-0">
+        <p className="mb-0 text-sm tabular opacity-75">
           {auction.bids.length} {auction.bids.length === 1 ? 'bid' : 'bids'}
         </p>
       </div>
 
       {auction.bids.length === 0 ? (
-        <p className="room-empty">
+        <p className="border-2 border-dashed border-dim px-4 py-6 text-center text-sm">
           {emptyMessage(auction)}
         </p>
       ) : (
@@ -34,9 +34,9 @@ export function BidHistory({ auction, currentUserId }: BidHistoryProps) {
           tabIndex={0}
           role="region"
           aria-label="Bid history, newest first"
-          className="room-history"
+          className="max-h-96 overflow-y-auto border-y border-ink"
         >
-          <ol className="room-history-list">
+          <ol className="m-0 list-none p-0">
             {auction.bids.map((bid, index) => {
               const leading = index === 0 && auction.status === 'active'
               const winning =
@@ -48,12 +48,12 @@ export function BidHistory({ auction, currentUserId }: BidHistoryProps) {
               return (
                 <li
                   key={bid.id}
-                  className="room-history-row"
+                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink py-3 [&:last-child]:border-b-0"
                 >
-                  <div className="d-flex flex-wrap align-items-baseline gap-2 min-w-0">
+                  <div className="flex min-w-0 flex-wrap items-baseline gap-2">
                     <data
                       value={bid.amount}
-                      className="room-bid-amount tabular"
+                      className="font-display text-lg leading-[1.2] normal-case tabular"
                     >
                       {formatMoney(bid.amount)}
                     </data>
@@ -68,8 +68,8 @@ export function BidHistory({ auction, currentUserId }: BidHistoryProps) {
                       </Badge>
                     )}
                   </div>
-                  <div className="d-flex flex-wrap align-items-baseline gap-2 small">
-                    <span className="fw-semibold">
+                  <div className="flex flex-wrap items-baseline gap-2 text-sm">
+                    <span className="font-semibold">
                       {bid.bidderName}
                       {bid.bidderId === currentUserId && (
                         <span className="opacity-75"> (you)</span>

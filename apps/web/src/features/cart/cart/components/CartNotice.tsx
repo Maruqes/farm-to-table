@@ -4,14 +4,14 @@ export function CartNotice({ message }: { message: string }) {
   return (
     <div
       role="alert"
-      className="frame-alarm d-flex align-items-start gap-2 px-4 py-3 small"
+      className="frame-alarm flex items-start gap-2 px-6 py-4 text-sm"
     >
       <AlertCircle
         size={16}
-        className="flex-shrink-0 mt-1 text-danger"
+        className="mt-1 shrink-0 text-alarm"
         aria-hidden="true"
       />
-      <p className="mb-0">{message}</p>
+      <p>{message}</p>
     </div>
   )
 }

@@ -12,7 +12,7 @@ function AuctionStatusBadge({ status }: { status: AdminAuctionStatus }) {
   if (status === 'active') {
     return (
       <Badge variant="live">
-        <span aria-hidden="true" className="admin-live-dot" />
+        <span aria-hidden="true" className="inline-block size-1.5 flex-none bg-current" />
         {AUCTION_STATUS_LABELS.active}
       </Badge>
     )
@@ -44,7 +44,7 @@ function AuctionWhen({ auction }: { auction: AdminAuction }) {
 
 function RoomLink({ auction }: { auction: AdminAuction }) {
   if (auction.status === 'draft') {
-    return <span className="small text-body-secondary">Not published</span>
+    return <span className="text-sm text-dim">Not published</span>
   }
 
   const label = auction.status === 'ended' ? 'View result' : 'Open room'
@@ -53,7 +53,7 @@ function RoomLink({ auction }: { auction: AdminAuction }) {
     <Link
       to={`/auctions/${encodeURIComponent(auction.id)}`}
       aria-label={`${label} for ${auction.productName}`}
-      className="admin-room-link"
+      className="inline-flex min-h-10 items-center gap-1 whitespace-nowrap text-sm font-semibold hover:underline"
     >
       <ArrowUpRight size={16} aria-hidden="true" />
       {label}
@@ -67,21 +67,21 @@ interface AuctionsTableProps {
 
 export function AuctionsTable({ auctions }: AuctionsTableProps) {
   return (
-    <table className="table admin-table">
-      <caption className="visually-hidden">
+    <table className="table">
+      <caption className="sr-only">
         All auctions with product, producer, state, current price, bid count
         and a link to the room
       </caption>
       <thead>
         <tr>
           <th scope="col">Auction</th>
-          <th scope="col" className="d-none d-md-table-cell">
+            <th scope="col" className="hidden md:table-cell">
             State
           </th>
-          <th scope="col" className="text-end">
+          <th scope="col" className="text-right">
             Current price
           </th>
-          <th scope="col" className="d-none d-md-table-cell text-end">
+          <th scope="col" className="hidden md:table-cell text-right">
             Bids
           </th>
           <th scope="col">Room</th>
@@ -90,33 +90,33 @@ export function AuctionsTable({ auctions }: AuctionsTableProps) {
       <tbody>
         {auctions.map((auction) => (
           <tr key={auction.id}>
-            <th scope="row">
-              <span className="d-block fw-semibold text-break">
+            <th scope="row" className="text-base font-normal normal-case tracking-normal text-ink">
+              <span className="block font-semibold break-words">
                 {auction.productName}
               </span>
-              <span className="d-block small text-body-secondary text-break">
+              <span className="block text-sm text-dim break-words">
                 {auction.producerName}
               </span>
-              <span className="d-block small text-body-secondary">
+              <span className="block text-sm text-dim">
                 <AuctionWhen auction={auction} />
               </span>
-              <span className="d-block d-md-none mt-1">
+              <span className="block md:hidden mt-1">
                 <AuctionStatusBadge status={auction.status} />
               </span>
-              <span className="d-block small text-body-secondary d-md-none">
+              <span className="block text-sm text-dim md:hidden">
                 <data value={auction.bidCount}>{auction.bidCount}</data>{' '}
                 {auction.bidCount === 1 ? 'bid' : 'bids'}
               </span>
             </th>
-            <td className="d-none d-md-table-cell">
+            <td className="hidden md:table-cell">
               <AuctionStatusBadge status={auction.status} />
             </td>
-            <td className="text-end font-display text-nowrap tabular">
+            <td className="text-right font-display whitespace-nowrap tabular">
               <data value={auction.currentPrice}>
                 {formatMoney(auction.currentPrice)}
               </data>
             </td>
-            <td className="d-none d-md-table-cell text-end tabular">
+            <td className="hidden md:table-cell text-right tabular">
               <data value={auction.bidCount}>{auction.bidCount}</data>
             </td>
             <td>

@@ -25,8 +25,8 @@ export function CartQuantityStepper({
   const upper = Math.max(1, stock)
 
   return (
-    <div className="d-flex align-items-center gap-2">
-      <label htmlFor={inputId} className="visually-hidden">
+    <div className="flex items-center gap-2">
+      <label htmlFor={inputId} className="sr-only">
         Quantity for {productName}
       </label>
       <Button
@@ -51,7 +51,7 @@ export function CartQuantityStepper({
           if (Number.isNaN(next)) return
           onChange(clamp(Math.floor(next), stock))
         }}
-        className="cart-qty-input tabular"
+        className="w-16 text-center tabular"
       />
       <Button
         type="button"

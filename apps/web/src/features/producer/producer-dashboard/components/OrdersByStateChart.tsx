@@ -15,15 +15,15 @@ export function OrdersByStateChart({ byStatus }: OrdersByStateChartProps) {
   )
 
   return (
-    <section aria-labelledby="orders-by-state-heading" className="vstack gap-3">
-      <div className="vstack gap-1">
+    <section aria-labelledby="orders-by-state-heading" className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1">
         <h2 id="orders-by-state-heading">Orders by state</h2>
-        <p className="small text-body-secondary">
+        <p className="text-sm text-dim">
           Where your orders are in the pickup or delivery process.
         </p>
       </div>
 
-      <div className="rule pt-4">
+      <div className="rule pt-6">
       {total > 0 ? (
         <ul className="board">
           {DASHBOARD_ORDER_STATUSES.map((status) => {
@@ -32,18 +32,18 @@ export function OrdersByStateChart({ byStatus }: OrdersByStateChartProps) {
 
             return (
               <li key={status} className="board-row">
-                <div className="pa-status-label min-w-0 flex-grow-1 vstack gap-2">
-                  <div className="d-flex align-items-baseline justify-content-between gap-3 small">
+                <div className="flex min-w-28 grow flex-col gap-2">
+                  <div className="flex items-baseline justify-between gap-4 text-sm">
                     <span>{DASHBOARD_STATUS_LABELS[status]}</span>
-                    <span className="text-body-secondary">
-                      <data value={count} className="fw-semibold tabular">
+                    <span className="text-dim">
+                      <data value={count} className="font-semibold tabular">
                         {count}
                       </data>{' '}
                       <span className="tabular">({share}%)</span>
                     </span>
                   </div>
-                  <div aria-hidden="true" className="pa-bar-track">
-                    <div className="pa-bar-fill" style={{ width: `${share}%` }} />
+                  <div aria-hidden="true" className="h-2 bg-wash">
+                    <div className="h-full bg-ink" style={{ width: `${share}%` }} />
                   </div>
                 </div>
               </li>
@@ -51,7 +51,7 @@ export function OrdersByStateChart({ byStatus }: OrdersByStateChartProps) {
           })}
         </ul>
       ) : (
-        <p className="py-5 small text-body-secondary">
+          <p className="py-12 text-sm text-dim">
           No orders yet. New orders will appear here as they arrive.
         </p>
       )}

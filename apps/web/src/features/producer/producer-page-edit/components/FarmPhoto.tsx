@@ -21,7 +21,7 @@ export function FarmPhoto({
   if (!src) {
     return (
       <div
-        className={cn('pa-farm-photo pa-photo-empty', className)}
+        className={cn('flex aspect-video w-full flex-col items-center justify-center gap-2 bg-wash p-4 text-center text-sm text-dim', className)}
       >
         <ImagePlus size={24} aria-hidden="true" />
         <span>{emptyLabel}</span>
@@ -33,7 +33,7 @@ export function FarmPhoto({
     return (
       <div
         role="status"
-        className={cn('pa-farm-photo pa-photo-empty', className)}
+        className={cn('flex aspect-video w-full flex-col items-center justify-center gap-2 bg-wash p-4 text-center text-sm text-dim', className)}
       >
         <ImageOff size={24} aria-hidden="true" />
         <span>This image could not be loaded. Check the URL.</span>
@@ -48,7 +48,7 @@ export function FarmPhoto({
       loading="lazy"
       decoding="async"
       onError={() => setFailedSrc(src)}
-      className={cn('pa-farm-photo', className)}
+      className={cn('block aspect-video w-full object-cover', className)}
     />
   )
 }

@@ -17,26 +17,26 @@ export function CheckoutSummary({
   return (
     <aside
       aria-labelledby="checkout-summary-heading"
-      className="rule pt-4"
+      className="rule pt-6"
     >
-      <h2 id="checkout-summary-heading" className="mb-0">
+      <h2 id="checkout-summary-heading">
         Order summary
       </h2>
-      <p className="mt-1 small text-body-secondary mb-0">
+      <p className="mt-1 text-sm text-dim">
         {groups.length === 1
           ? 'This cart becomes one order, sent to the producer.'
           : `This cart becomes ${groups.length} orders, one per producer.`}
       </p>
 
-      <div className="mt-4 vstack gap-4">
+      <div className="mt-6 flex flex-col gap-6">
         {groups.map((group) => (
           <section
             key={group.producer.id || group.producer.name}
             aria-label={`Summary for ${group.producer.name}`}
           >
-            <p className="d-flex align-items-baseline justify-content-between gap-3 small fw-medium mb-0">
+            <p className="flex items-baseline justify-between gap-4 text-sm font-medium">
               <span className="min-w-0">{group.producer.name}</span>
-              <data value={group.subtotal} className="flex-shrink-0 tabular fw-semibold">
+              <data value={group.subtotal} className="shrink-0 tabular font-semibold">
                 {formatMoney(group.subtotal)}
               </data>
             </p>
@@ -44,18 +44,18 @@ export function CheckoutSummary({
               {group.items.map((item) => (
                 <li
                   key={item.productId}
-                  className="board-row justify-content-between gap-3 small checkout-compact"
+                  className="board-row justify-between gap-4 py-1.5 text-sm"
                 >
                   <span className="min-w-0">
                     {item.name}{' '}
-                    <span className="text-nowrap text-body-secondary tabular">
+                    <span className="whitespace-nowrap text-dim tabular">
                       × {item.quantity} {item.unit}
                       {item.quantity === 1 ? '' : 's'}
                     </span>
                   </span>
                   <data
                     value={item.price * item.quantity}
-                    className="flex-shrink-0 text-body-secondary tabular"
+                    className="shrink-0 text-dim tabular"
                   >
                     {formatMoney(item.price * item.quantity)}
                   </data>
@@ -66,14 +66,14 @@ export function CheckoutSummary({
         ))}
       </div>
 
-      <div className="mt-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
-        <span className="fw-semibold">Total</span>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+        <span className="font-semibold">Total</span>
         <data value={total} className="price-tag tabular">
           {formatMoney(total)}
         </data>
       </div>
 
-      <p className="mt-3 checkout-note mb-0">
+      <p className="mt-4 text-xs text-dim">
         You pay each producer directly when you collect or receive the order.
       </p>
 
@@ -81,13 +81,13 @@ export function CheckoutSummary({
         type="submit"
         form={CHECKOUT_FORM_ID}
         size="lg"
-        className="mt-4 w-100"
+        className="mt-6 w-full"
         disabled={placing}
       >
         {placing ? 'Placing order…' : 'Place order'}
       </Button>
 
-      <p className="mt-2 checkout-note mb-0">
+      <p className="mt-2 text-xs text-dim">
         {groups.length === 1
           ? 'One order will be created.'
           : `${groups.length} separate orders will be created.`}

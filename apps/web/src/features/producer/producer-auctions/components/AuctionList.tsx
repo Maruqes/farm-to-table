@@ -78,16 +78,16 @@ function AuctionRow({ auction, busy, onEdit, onPublish, onCancel }: AuctionRowPr
   }
 
   return (
-    <li className="board-row pa-auction-row">
-      <div className="d-flex min-w-0 align-items-center gap-3">
+    <li className="board-row grid gap-4 md:grid-cols-[minmax(0,1fr)_10rem_6.5rem_minmax(14rem,auto)] md:items-center">
+      <div className="flex min-w-0 items-center gap-3">
         <CrateChip category={auction.product.category} />
         <span aria-hidden="true" className="lot">
           {lotNumber(auction.id)}
         </span>
 
-        <div className="min-w-0 vstack gap-1">
-          <p className="text-break fw-semibold">{auction.product.name}</p>
-          <p className="small text-body-secondary">
+        <div className="min-w-0 flex flex-col gap-1">
+          <p className="break-words font-semibold">{auction.product.name}</p>
+          <p className="text-sm text-dim">
             <span className="tabular">
               {auction.quantity} {auction.unit}
             </span>
@@ -102,28 +102,28 @@ function AuctionRow({ auction, busy, onEdit, onPublish, onCancel }: AuctionRowPr
             )}
           </p>
           {auction.leader && (
-            <p className="text-break small text-body-secondary">
-              Leading: <span className="fw-semibold">{auction.leader.name}</span>
+            <p className="break-words text-sm text-dim">
+              Leading: <span className="font-semibold">{auction.leader.name}</span>
             </p>
           )}
           {auction.status === 'ended' && !hasBids && (
-            <p className="small text-body-secondary">Ended with no bids.</p>
+            <p className="text-sm text-dim">Ended with no bids.</p>
           )}
         </div>
       </div>
 
-      <div className="d-flex align-items-baseline justify-content-between gap-2 pa-md-block">
-        <span className="label-line pa-col-label">Price</span>
-        <div className="vstack gap-1 text-md-end">
-          <p className="text-nowrap small">
-            <span className="text-body-secondary">Base </span>
-            <data value={auction.basePrice} className="fw-semibold tabular">
+      <div className="flex items-baseline justify-between gap-2 md:block">
+        <span className="label-line md:sr-only">Price</span>
+        <div className="flex flex-col gap-1 md:text-right">
+          <p className="text-nowrap text-sm">
+            <span className="text-dim">Base </span>
+            <data value={auction.basePrice} className="font-semibold tabular">
               {formatMoney(auction.basePrice)}
             </data>
           </p>
           {hasBids && (
-            <p className="text-nowrap small">
-              <span className="text-body-secondary">Current </span>
+            <p className="text-nowrap text-sm">
+              <span className="text-dim">Current </span>
               <data
                 value={auction.currentPrice}
                 className="font-display tabular"
@@ -132,25 +132,25 @@ function AuctionRow({ auction, busy, onEdit, onPublish, onCancel }: AuctionRowPr
               </data>
             </p>
           )}
-          <p className="text-nowrap pa-xs text-body-secondary">
+          <p className="text-nowrap text-xs text-dim">
             {hasBids ? `${auction.bidCount} bids` : 'No bids yet'}
           </p>
         </div>
       </div>
 
-      <div className="d-flex align-items-center justify-content-between gap-2 pa-md-block">
-        <span className="label-line pa-col-label">Status</span>
+      <div className="flex items-center justify-between gap-2 md:block">
+        <span className="label-line md:sr-only">Status</span>
         <AuctionStatusBadge status={auction.status} />
       </div>
 
-      <div className="vstack gap-2">
+      <div className="flex flex-col gap-2">
         {hasBids && auction.status !== 'ended' && (
-          <p className="pa-xs text-body-secondary">
+          <p className="text-xs text-dim">
             Bids are in, so cancellation is closed.
           </p>
         )}
 
-        <div className="pa-actions">
+        <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:justify-end">
           {canEdit && (
             <Button
               type="button"
@@ -195,7 +195,7 @@ function AuctionRow({ auction, busy, onEdit, onPublish, onCancel }: AuctionRowPr
               type="button"
               variant="outline"
               size="sm"
-              className="text-danger"
+              className="text-alarm"
               onClick={() => {
                 setCancelError(null)
                 setConfirming(true)
@@ -219,26 +219,26 @@ function AuctionRow({ auction, busy, onEdit, onPublish, onCancel }: AuctionRowPr
           onKeyDown={(event) => {
             if (event.key === 'Escape' && !cancelling) setConfirming(false)
           }}
-          className="frame-alarm p-3 pa-confirm-span"
+          className="frame-alarm p-3 md:col-span-full"
         >
-          <p id={`cancel-title-${auction.id}`} className="fw-semibold">
+          <p id={`cancel-title-${auction.id}`} className="font-semibold">
             Cancel the auction for {auction.product.name}?
           </p>
           <p
             id={`cancel-desc-${auction.id}`}
-            className="mt-1 small text-body-secondary"
+            className="mt-1 text-sm text-dim"
           >
             No bids have arrived yet, so the lot can be cancelled. It moves to Ended
             and cannot be reopened.
           </p>
 
           {cancelError && (
-            <p role="alert" className="mt-2 small text-danger">
+            <p role="alert" className="mt-2 text-sm text-alarm">
               {cancelError}
             </p>
           )}
 
-          <div className="d-flex flex-wrap gap-2 mt-3">
+          <div className="mt-3 flex flex-wrap gap-2">
             <Button
               type="button"
               variant="outline"
@@ -311,11 +311,11 @@ export function AuctionList({
   const totalVisible = visible.reduce((sum, status) => sum + grouped[status].length, 0)
 
   return (
-    <div className="vstack gap-4">
+    <div className="flex flex-col gap-6">
       <div
         role="group"
         aria-label="Filter auctions by state"
-        className="d-flex flex-wrap gap-2"
+        className="flex flex-wrap gap-2"
       >
         {FILTER_OPTIONS.map((option) => {
           const count = option.value === 'all' ? auctions.length : counts[option.value]
@@ -327,10 +327,10 @@ export function AuctionList({
               aria-pressed={active}
               aria-label={`${option.label} (${count})`}
               onClick={() => setFilter(option.value)}
-              className="pa-filter"
+              className="inline-flex min-h-10 items-center gap-2 border-2 border-ink bg-transparent px-4 text-sm font-semibold text-ink transition-colors duration-150 ease-out hover:bg-wash aria-[pressed=true]:bg-ink aria-[pressed=true]:text-paper"
             >
               {option.label}
-              <span className="pa-filter-count tabular" aria-hidden="true">
+              <span className="text-xs tabular opacity-80" aria-hidden="true">
                 {count}
               </span>
             </button>
@@ -339,22 +339,22 @@ export function AuctionList({
       </div>
 
       {totalVisible === 0 ? (
-        <p className="pa-empty text-center">No auctions in this state yet.</p>
+        <p className="border border-dashed border-dim p-6 px-4 text-center text-sm text-dim">No auctions in this state yet.</p>
       ) : (
         visible.map((status) => {
           const items = grouped[status]
           if (items.length === 0) return null
           const headingId = `auction-group-${status}`
           return (
-            <section key={status} aria-labelledby={headingId} className="vstack gap-3">
-              <div className="d-flex flex-wrap align-items-baseline gap-2">
+            <section key={status} aria-labelledby={headingId} className="flex flex-col gap-4">
+              <div className="flex flex-wrap items-baseline gap-2">
                 <h2 id={headingId}>
                   {AUCTION_STATUS_LABELS[status]}
-                  <span className="ms-2 small text-body-secondary tabular">
+                  <span className="ml-2 text-sm tabular text-dim">
                     {items.length}
                   </span>
                 </h2>
-                <p className="small text-body-secondary">
+                <p className="text-sm text-dim">
                   {AUCTION_STATUS_DESCRIPTIONS[status]}
                 </p>
               </div>
@@ -362,12 +362,12 @@ export function AuctionList({
               <div>
                 <div
                   aria-hidden="true"
-                  className="label-line d-none d-md-grid pa-auction-head py-2"
+                  className="label-line hidden py-2 md:grid md:grid-cols-[minmax(0,1fr)_10rem_6.5rem_minmax(14rem,auto)] md:items-center"
                 >
                   <span>Lot</span>
                   <span>Price</span>
                   <span>State</span>
-                  <span className="text-end">Actions</span>
+                  <span className="text-right">Actions</span>
                 </div>
 
                 <ul aria-labelledby={headingId} className="board">

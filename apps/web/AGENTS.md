@@ -1,6 +1,6 @@
 # apps/web — frontend guide
 
-React + Vite + TS SPA, Tailwind + shadcn/ui (Bootstrap 5 + SASS comes back in a final migration phase), react-router. Product scope: [../../docs/SCOPE.md](../../docs/SCOPE.md) (anything not there is not built). Repo-wide rules: [../../AGENTS.md](../../AGENTS.md). Code, comments, docs, product text, API fields, states and socket events are all in English (`pending`, `active`, `order-updated`, ...); SCOPE.md is the source of truth.
+React + Vite + TS SPA, Tailwind + shadcn/ui, react-router. Product scope: [../../docs/SCOPE.md](../../docs/SCOPE.md) (anything not there is not built). Repo-wide rules: [../../AGENTS.md](../../AGENTS.md). Code, comments, docs, product text, API fields, states and socket events are all in English (`pending`, `active`, `order-updated`, ...); SCOPE.md is the source of truth.
 
 ## Work from tickets
 - Work is defined in `.tickets/frontend/FE-nn-<page>.md`. Workflow and status flow are in the root [AGENTS.md](../../AGENTS.md) and `.tickets/README.md`.
@@ -24,7 +24,7 @@ The API does not exist yet and, once it does, **its responses are a draft and wi
 ## Conventions
 - **For frontend rules see [RULES.md](RULES.md)**; it wins over DESIGN.md wherever they disagree.
 - **Visual style: follow [DESIGN.md](DESIGN.md) and use the `/ui-ux-pro-max`, `/impeccable` and `/ui-unslop` skills for every UI change** (see "UI style and delegation" in the root AGENTS.md). Same rule for anything you delegate.
-- Mobile first with Tailwind (`md` 768 / `lg` 1024 / `xl` 1280 to match SCOPE.md). shadcn/ui components first; add new ones with the shadcn CLI. Leave `styles/_*.scss` untouched for the Bootstrap phase.
+- Mobile first with Tailwind (`md` 768 / `lg` 1024 / `xl` 1280 to match SCOPE.md). shadcn/ui components first; add new ones with the shadcn CLI.
 - Semantic HTML (`header`, `nav`, `main`, `article`), labelled form controls, visible focus, keyboard-operable.
 - Routes in `app/`, one component per route in `pages/`, feature logic in `features/<name>/`, shared UI in `components/`, session/cart in `context/`.
 - `services/api.ts` is the only `fetch` wrapper (base URL, JWT header, error normalisation to one `ApiError`).

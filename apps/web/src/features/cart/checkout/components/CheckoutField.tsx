@@ -18,8 +18,8 @@ export function CheckoutField({
   const errorId = `${id}-error`
 
   return (
-    <div className="vstack gap-2">
-      <label htmlFor={id} className="label-line d-block mb-0">
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="label-line mb-1 block">
         {label}
       </label>
       <Input
@@ -33,7 +33,7 @@ export function CheckoutField({
         {...props}
       />
       {error && (
-        <p id={errorId} className="small text-danger mb-0">
+        <p id={errorId} className="text-sm text-alarm">
           {error}
         </p>
       )}

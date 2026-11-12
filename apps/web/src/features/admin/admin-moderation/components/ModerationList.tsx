@@ -20,10 +20,10 @@ function ModerationRow({ item, pending, onToggle }: ModerationRowProps) {
   const nextHidden = !item.hidden
 
   return (
-    <li className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3 py-3 border-bottom">
-      <div className="min-w-0 vstack gap-1">
-        <h2 className="text-break">{item.name}</h2>
-        <div className="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 small text-body-secondary">
+    <li className="flex flex-col gap-4 border-b border-dim py-4 md:flex-row md:items-center md:justify-between">
+      <div className="min-w-0 flex flex-col gap-1">
+        <h2 className="break-words font-sans text-base font-semibold normal-case leading-[1.4]">{item.name}</h2>
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-dim">
           <Badge variant={item.hidden ? 'secondary' : 'outline'}>
             {item.hidden ? (
               <EyeOff size={16} aria-hidden="true" />

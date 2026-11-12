@@ -33,7 +33,7 @@ import type {
 
 function FormAlert({ children }: { children: ReactNode }) {
   return (
-    <div role="alert" className="pa-alert-error">
+    <div role="alert" className="flex items-start gap-2 border-2 border-alarm p-2 px-3 text-sm text-alarm [&>p]:m-0 [&>svg]:mt-0.5 [&>svg]:shrink-0">
       <AlertTriangle size={16} aria-hidden="true" />
       <p>{children}</p>
     </div>
@@ -89,14 +89,14 @@ interface FieldMessageProps {
 function FieldMessage({ id, error, hint }: FieldMessageProps) {
   if (error) {
     return (
-      <p id={`${id}-error`} className="small text-danger">
+      <p id={`${id}-error`} className="text-sm text-alarm">
         {error}
       </p>
     )
   }
   if (hint) {
     return (
-      <p id={`${id}-hint`} className="small text-body-secondary">
+      <p id={`${id}-hint`} className="text-sm text-dim">
         {hint}
       </p>
     )
@@ -126,7 +126,7 @@ function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="vstack gap-2">
+    <div className="flex flex-col gap-2">
       <label htmlFor={id} className="form-label">
         {label}
       </label>
@@ -159,7 +159,7 @@ function SelectField({
   ...props
 }: SelectFieldProps) {
   return (
-    <div className="vstack gap-2">
+    <div className="flex flex-col gap-2">
       <label htmlFor={id} className="form-label">
         {label}
       </label>
@@ -278,7 +278,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
       onSubmit={handleSubmit}
       noValidate
       aria-busy={saving}
-      className="vstack gap-4"
+      className="flex flex-col gap-6"
     >
       {formError && <FormAlert>{formError}</FormAlert>}
 
@@ -293,8 +293,8 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
         required
       />
 
-      <div className="row g-3 rule pt-4">
-        <div className="col-md-4">
+      <div className="rule grid gap-4 pt-6 md:grid-cols-3">
+        <div>
           <SelectField
             id="category"
             label="Category"
@@ -311,7 +311,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
           </SelectField>
         </div>
 
-        <div className="col-md-4">
+        <div>
           <SelectField
             id="unit"
             label="Unit"
@@ -328,7 +328,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
           </SelectField>
         </div>
 
-        <div className="col-md-4">
+        <div>
           <SelectField
             id="season"
             label="Season"
@@ -346,8 +346,8 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
         </div>
       </div>
 
-      <div className="row g-3 rule pt-4">
-        <div className="col-md-6">
+      <div className="rule grid gap-4 pt-6 md:grid-cols-2">
+        <div>
           <TextField
             id="price"
             label="Price per unit"
@@ -363,7 +363,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
           />
         </div>
 
-        <div className="col-md-6">
+        <div>
           <TextField
             id="stock"
             label="Stock"
@@ -380,8 +380,8 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
         </div>
       </div>
 
-      <div className="vstack gap-2">
-        <label htmlFor="organic" className="label-line pa-check">
+      <div className="flex flex-col gap-2">
+        <label htmlFor="organic" className="label-line flex min-h-10 w-fit cursor-pointer items-center gap-2 [&_input]:size-4">
           <input
             id="organic"
             type="checkbox"
@@ -392,31 +392,31 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
           />
           Organic
         </label>
-        <p id="organic-hint" className="small text-body-secondary">
+        <p id="organic-hint" className="text-sm text-dim">
           Adds an organic badge to the product in the catalog.
         </p>
       </div>
 
-      <div className="vstack gap-2">
+      <div className="flex flex-col gap-2">
         <label htmlFor="image" className="form-label">
           Photo
         </label>
-        <div className="d-flex flex-column flex-sm-row align-items-sm-start gap-3">
-          <div className={cn('pa-photo-frame frame', crateClass(values.category))}>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+          <div className={cn('frame flex size-24 flex-none items-center justify-center overflow-hidden', crateClass(values.category))}>
             {previewUrl ? (
               <img
                 src={previewUrl}
                 alt={`Photo preview for ${values.name.trim() || 'this product'}`}
-                className="h-100 w-100 object-fit-cover"
+                className="h-full w-full object-cover"
               />
             ) : (
-              <div className="d-flex align-items-center justify-content-center h-100 w-100">
-                <CategoryIcon category={values.category} className="pa-category-icon" />
+              <div className="flex h-full w-full items-center justify-center">
+                <CategoryIcon category={values.category} className="size-10" />
               </div>
             )}
           </div>
 
-          <div className="min-w-0 vstack gap-2">
+          <div className="min-w-0 flex flex-col gap-2">
             <input
               id="image"
               type="file"
@@ -427,7 +427,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
               className={cn('form-control', errors.image && 'is-invalid')}
             />
             <FieldMessage id="image" error={errors.image} hint={imageHint} />
-            <p className="d-flex align-items-center gap-2 pa-xs text-body-secondary">
+            <p className="flex items-center gap-2 text-xs text-dim">
               <ImagePlus size={14} aria-hidden="true" />
               The photo is cropped to fill the frame.
             </p>
@@ -435,7 +435,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
         </div>
       </div>
 
-      <div className="d-flex flex-wrap gap-2 pt-1">
+      <div className="flex flex-wrap gap-2 pt-1">
         <Button type="submit" disabled={saving}>
           {saving ? 'Saving…' : product ? 'Save changes' : 'Add product'}
         </Button>

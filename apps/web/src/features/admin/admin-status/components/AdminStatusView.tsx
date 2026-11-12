@@ -46,22 +46,22 @@ export function AdminStatusView() {
   const seconds = ADMIN_STATUS_REFRESH_MS / 1000
 
   return (
-    <section aria-labelledby="admin-status-heading" className="vstack gap-4">
-      <Link to="/admin" className="admin-back">
+    <section aria-labelledby="admin-status-heading" className="flex flex-col gap-6">
+      <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink hover:underline">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
-      <header className="d-flex flex-column flex-md-row align-items-md-end justify-content-md-between gap-3">
+      <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h1 id="admin-status-heading">Service status</h1>
-          <p className="measure text-body-secondary mb-0">
+          <p className="measure text-dim mb-0">
             Live health of the platform behind Farm to Table. The panel refreshes
             every {seconds} seconds, and you can check again at any time.
           </p>
         </div>
 
-        <div className="d-flex flex-column flex-shrink-0 align-items-start align-items-md-end gap-2">
+        <div className="flex shrink-0 flex-col items-start gap-2 md:items-end">
           <Button
             type="button"
             variant="outline"
@@ -76,7 +76,7 @@ export function AdminStatusView() {
             Refresh now
           </Button>
 
-          <p className="small text-body-secondary mb-0">
+          <p className="text-sm text-dim mb-0">
             {refreshing && <span>Refreshing… </span>}
             {checkedAt ? (
               <>
@@ -93,15 +93,15 @@ export function AdminStatusView() {
       {refreshError && (
         <div
           role="alert"
-          className="admin-alert d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3"
+          className="border-2 border-alarm p-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
         >
-          <p className="small text-body-secondary mb-0">
+          <p className="text-sm text-dim mb-0">
             {refreshError} Showing the last successful check.
           </p>
           <Button
             type="button"
             variant="outline"
-            className="flex-shrink-0"
+            className="shrink-0"
             onClick={reload}
           >
             Try again
@@ -117,14 +117,14 @@ export function AdminStatusView() {
         empty={empty}
         emptyMessage="No services reported. Refresh the panel; if it stays empty, check that the API is running."
       >
-        <div className="vstack gap-3">
-          <p className="small text-body-secondary mb-0">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-dim mb-0">
             {summaryText(services)}
           </p>
 
           <ul aria-label="Services" className="board mb-0">
             {services.map((service) => (
-              <li key={service.id} className="admin-service">
+              <li key={service.id} className="border-b border-dim py-[0.7rem]">
                 <ServiceStatusCard service={service} />
               </li>
             ))}

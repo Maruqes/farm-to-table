@@ -42,17 +42,17 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
     : 'No sales in the last seven days.'
 
   return (
-    <section aria-labelledby={headingId} className="vstack gap-3">
-      <div className="vstack gap-1">
+    <section aria-labelledby={headingId} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1">
         <h2 id={headingId}>Sales over time</h2>
-        <p className="small text-body-secondary">Revenue for the last 7 days.</p>
+        <p className="text-sm text-dim">Revenue for the last 7 days.</p>
       </div>
 
-      <div className="rule pt-4">
+      <div className="rule pt-6">
         {hasSales ? (
           <>
-            <p className="small text-body-secondary">
-              <data value={total} className="fw-semibold tabular">
+            <p className="text-sm text-dim">
+              <data value={total} className="font-semibold tabular">
                 {formatMoney(total)}
               </data>{' '}
               in total
@@ -61,7 +61,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
                   {' '}
                   · best day{' '}
                   <time dateTime={best.day}>{fullDay(best.day)}</time> with{' '}
-                  <data value={best.total} className="fw-semibold tabular">
+                  <data value={best.total} className="font-semibold tabular">
                     {formatMoney(best.total)}
                   </data>
                 </>
@@ -70,7 +70,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
 
             <svg
               viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-              className="pa-chart-svg mt-4 w-100"
+              className="mt-6 h-28 w-full text-ink"
               preserveAspectRatio="none"
               role="img"
               aria-labelledby={`${chartTitleId} ${chartDescId}`}
@@ -84,7 +84,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
                 y2={CHART_HEIGHT}
                 stroke="currentColor"
                 strokeWidth={1}
-                className="pa-chart-axis"
+                className="text-dim"
               />
               {points.map((point, index) => {
                 const height = max > 0 ? (point.total / max) * CHART_HEIGHT : 0
@@ -103,15 +103,15 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
               })}
             </svg>
 
-            <div aria-hidden="true" className="d-flex gap-2 mt-2">
+            <div aria-hidden="true" className="mt-2 flex gap-2">
               {points.map((point) => (
-                <span key={point.day} className="pa-chart-day tabular">
+                <span key={point.day} className="min-w-0 flex-1 text-center text-xs tabular text-dim">
                   {dayNumber(point.day)}
                 </span>
               ))}
             </div>
 
-            <table className="visually-hidden">
+            <table className="sr-only">
               <caption>Daily sales for the last seven days</caption>
               <thead>
                 <tr>
@@ -130,7 +130,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
             </table>
           </>
         ) : (
-          <p className="py-5 small text-body-secondary">
+          <p className="py-12 text-sm text-dim">
             No sales in the last 7 days yet. Add products to the catalog to get your first
             order.
           </p>

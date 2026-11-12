@@ -45,15 +45,15 @@ export function AdminReviewsView() {
   )
 
   return (
-    <section aria-labelledby="admin-reviews-heading" className="vstack gap-4">
-      <Link to="/admin" className="admin-back">
+    <section aria-labelledby="admin-reviews-heading" className="flex flex-col gap-6">
+      <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink hover:underline">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
       <header>
         <h1 id="admin-reviews-heading">Reported reviews</h1>
-        <p className="measure text-body-secondary mb-0">
+        <p className="measure text-dim mb-0">
           Reviews reported by producers or buyers land here. Keep one to dismiss
           the report, or hide it to remove it from the product and producer
           pages. Hidden reviews stay in the queue so the decision remains
@@ -61,15 +61,15 @@ export function AdminReviewsView() {
         </p>
       </header>
 
-      <p className="visually-hidden" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
 
       {!loading && !error && reviews.length > 0 && (
-        <p className="small text-body-secondary mb-0">
+        <p className="text-sm text-dim mb-0">
           <data
             value={counts.reported}
-            className="fw-semibold tabular"
+            className="font-semibold tabular"
           >
             {counts.reported}
           </data>{' '}
@@ -80,7 +80,7 @@ export function AdminReviewsView() {
               <span aria-hidden="true"> · </span>
               <data
                 value={counts.hidden}
-                className="fw-semibold tabular"
+                className="font-semibold tabular"
               >
                 {counts.hidden}
               </data>{' '}

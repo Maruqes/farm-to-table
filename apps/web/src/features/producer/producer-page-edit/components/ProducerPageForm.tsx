@@ -43,7 +43,7 @@ export function ProducerPageForm({
   const previewPhotoUrl = isWebPhotoUrl(photoUrl) ? photoUrl : ''
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-busy={saving} className="vstack gap-4">
+    <form onSubmit={onSubmit} noValidate aria-busy={saving} className="flex flex-col gap-6">
       {formError && <FormAlert>{formError}</FormAlert>}
 
       <TextareaField
@@ -71,7 +71,7 @@ export function ProducerPageForm({
         required
       />
 
-      <div className="vstack gap-2">
+      <div className="flex flex-col gap-2">
         <TextField
           id="photoUrl"
           label="Photo URL"
@@ -88,18 +88,18 @@ export function ProducerPageForm({
           src={previewPhotoUrl}
           alt="Preview of your farm photo"
           emptyLabel="Photo preview"
-          className="pa-farm-photo-sm frame"
+          className="frame max-w-96"
         />
       </div>
 
-      <fieldset className="vstack gap-3 rule pt-4">
+      <fieldset className="flex flex-col gap-4 rule pt-6">
         <legend className="label-line">Map pin</legend>
-        <p className="small text-body-secondary">
+        <p className="text-sm text-dim">
           Optional. Add both coordinates or click the map to show where buyers
           can find you.
         </p>
-        <div className="row g-3">
-          <div className="col-md-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
             <TextField
               id="lat"
               label="Latitude"
@@ -111,7 +111,7 @@ export function ProducerPageForm({
               autoComplete="off"
             />
           </div>
-          <div className="col-md-6">
+          <div>
             <TextField
               id="lng"
               label="Longitude"
@@ -128,9 +128,9 @@ export function ProducerPageForm({
           fallback={
             <div
               role="status"
-              className="frame w-100 pa-map d-flex align-items-center justify-content-center"
+              className="frame flex h-64 w-full items-center justify-center md:h-72"
             >
-              <span className="visually-hidden">Loading map…</span>
+              <span className="sr-only">Loading map…</span>
             </div>
           }
         >
@@ -142,11 +142,11 @@ export function ProducerPageForm({
         </Suspense>
       </fieldset>
 
-      <div className="d-flex flex-wrap align-items-center gap-3 rule pt-4">
+      <div className="rule flex flex-wrap items-center gap-4 pt-6">
         <Button type="submit" disabled={saving}>
           {saving ? 'Saving…' : 'Save page'}
         </Button>
-        <p className="small text-body-secondary">
+        <p className="text-sm text-dim">
           Your changes appear on the public page right after saving.
         </p>
       </div>

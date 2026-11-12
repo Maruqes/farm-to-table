@@ -39,8 +39,8 @@ export function OrderFilters({
       aria-label="Filter orders by status"
       onSubmit={handleSubmit}
     >
-      <div className="row g-3 align-items-end">
-        <div className="col-12 col-md-6">
+      <div className="grid items-end gap-4 md:grid-cols-2">
+        <div>
           <label htmlFor="admin-orders-status" className="form-label">
             Status
           </label>
@@ -63,7 +63,7 @@ export function OrderFilters({
           </select>
         </div>
 
-        <div className="col-12 col-md-6 admin-filter-actions">
+        <div className="flex gap-2 md:justify-end [&>*]:flex-1 md:[&>*]:flex-none">
           <Button type="submit">Apply</Button>
           <Button
             type="button"

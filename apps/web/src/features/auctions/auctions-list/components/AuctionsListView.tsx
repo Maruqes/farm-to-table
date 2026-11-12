@@ -34,18 +34,18 @@ export function AuctionsListView() {
       : `${auctions.length} ${noun}${auctions.length === 1 ? '' : 's'}`
 
   return (
-    <section aria-labelledby="auctions-heading" className="vstack gap-3">
-      <header className="vstack gap-1">
+    <section aria-labelledby="auctions-heading" className="flex flex-col gap-4">
+      <header className="flex flex-col gap-1">
         <h1 id="auctions-heading">Auctions</h1>
-        <p className="measure text-body-secondary">
+        <p className="measure text-dim">
           Seasonal lots from local producers, sold to the highest bidder before the
           clock runs out. Watch a room first, then bid when you are ready.
         </p>
       </header>
 
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <AuctionListTabs value={status} onChange={setStatus} />
-        <p role="status" aria-atomic="true" className="small text-body-secondary mb-0">
+        <p role="status" aria-atomic="true" className="mb-0 text-sm text-dim">
           {summary}
         </p>
       </div>

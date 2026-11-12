@@ -79,7 +79,7 @@ export function CheckoutForm({
       onSubmit={onSubmit}
       noValidate
       aria-busy={placing}
-      className="vstack gap-4"
+      className="flex flex-col gap-6"
     >
       {stockConflict && (
         <CheckoutAlert
@@ -104,21 +104,21 @@ export function CheckoutForm({
         </CheckoutAlert>
       )}
 
-      <div className="rule pt-4">
-        <fieldset className="vstack gap-3">
-          <legend className="mb-0">Delivery method</legend>
-          <p className="small text-body-secondary mb-0">
+      <div className="rule pt-6">
+        <fieldset className="flex flex-col gap-4">
+          <legend>Delivery method</legend>
+          <p className="text-sm text-dim">
             Choose how you want to receive this order. Payment happens on pickup
             or delivery — there is no online payment.
           </p>
 
-          <div className="checkout-options pt-1">
+          <div className="grid gap-2 pt-1 sm:grid-cols-2">
             {FULFILMENT_OPTIONS.map((option) => (
               <label
                 key={option.value}
                 className={cn(
-                  'checkout-option',
-                  fulfilment === option.value && 'is-active',
+                  'flex cursor-pointer items-start gap-2.5 border-2 border-dim p-3 transition-colors duration-150 ease-out hover:border-ink focus-within:border-ink',
+                  fulfilment === option.value && 'border-ink',
                 )}
               >
                 <input
@@ -128,11 +128,11 @@ export function CheckoutForm({
                   checked={fulfilment === option.value}
                   onChange={() => onFulfilmentChange(option.value)}
                   disabled={placing}
-                  className="form-check-input"
+                  className="form-check-input mt-0.5 flex-none"
                 />
                 <span>
-                  <span className="d-block small fw-medium">{option.label}</span>
-                  <span className="d-block small text-body-secondary">
+                  <span className="block text-sm font-medium">{option.label}</span>
+                  <span className="block text-sm text-dim">
                     {option.description}
                   </span>
                 </span>
@@ -143,13 +143,13 @@ export function CheckoutForm({
       </div>
 
       {fulfilment === 'delivery' && (
-        <div className="rule pt-4">
-          <h2 className="mb-0">Delivery address</h2>
-          <p className="mt-1 small text-body-secondary mb-0">
+        <div className="rule pt-6">
+          <h2>Delivery address</h2>
+          <p className="mt-1 text-sm text-dim">
             Each producer receives this address to deliver their part of the
             order.
           </p>
-          <div className="mt-4">
+          <div className="mt-6">
             <AddressFields
               address={address}
               errors={addressErrors}

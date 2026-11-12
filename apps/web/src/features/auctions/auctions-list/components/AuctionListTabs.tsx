@@ -30,7 +30,7 @@ export function AuctionListTabs({ value, onChange }: AuctionListTabsProps) {
   }
 
   return (
-    <div role="tablist" aria-label="Auction status" className="d-flex flex-wrap gap-2">
+    <div role="tablist" aria-label="Auction status" className="flex flex-wrap gap-2">
       {AUCTION_LIST_STATUSES.map((status, index) => {
         const selected = status === value
         return (

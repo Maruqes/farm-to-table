@@ -14,14 +14,14 @@ function FieldMessage({
 }) {
   if (error) {
     return (
-      <p id={`${id}-error`} className="small text-danger">
+      <p id={`${id}-error`} className="text-sm text-alarm">
         {error}
       </p>
     )
   }
   if (hint) {
     return (
-      <p id={`${id}-hint`} className="small text-body-secondary">
+      <p id={`${id}-hint`} className="text-sm text-dim">
         {hint}
       </p>
     )
@@ -55,7 +55,7 @@ export function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="vstack gap-2">
+    <div className="flex flex-col gap-2">
       <label htmlFor={id} className="form-label">
         {label}
       </label>
@@ -89,13 +89,13 @@ export function TextareaField({
   ...props
 }: TextareaFieldProps) {
   return (
-    <div className="vstack gap-2">
-      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
         <label htmlFor={id} className="form-label">
           {label}
         </label>
         {counter && (
-          <span className="tabular pa-xs text-body-secondary">{counter}</span>
+          <span className="tabular text-xs text-dim">{counter}</span>
         )}
       </div>
       <textarea
@@ -103,7 +103,7 @@ export function TextareaField({
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, error, hint)}
         className={cn(
-          'form-control pa-textarea',
+          'form-control min-h-36 resize-y',
           error && 'is-invalid',
           className,
         )}
@@ -116,7 +116,7 @@ export function TextareaField({
 
 export function FormAlert({ children }: { children: ReactNode }) {
   return (
-    <div role="alert" className="pa-alert-error">
+    <div role="alert" className="flex items-start gap-2 border-2 border-alarm p-2 px-3 text-sm text-alarm [&>p]:m-0 [&>svg]:mt-0.5 [&>svg]:shrink-0">
       <AlertTriangle size={16} aria-hidden="true" />
       <p>{children}</p>
     </div>

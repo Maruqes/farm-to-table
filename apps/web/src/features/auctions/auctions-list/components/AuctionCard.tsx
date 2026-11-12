@@ -42,28 +42,28 @@ export function AuctionCard({
       <CrateChip category={auction.category} />
       <span className="lot tabular">lot {lotNumber(auction.id)}</span>
 
-      <div className="auctions-name min-w-0">
+      <div className="min-w-40 flex-auto">
         <h2>
           <Link
             to={`/auctions/${auction.id}`}
-            className="text-decoration-underline"
+            className="underline"
           >
             {auction.productName}
           </Link>
         </h2>
-        <p className="small text-body-secondary text-truncate tabular mb-0">
+        <p className="truncate text-sm tabular text-dim">
           {watcherCopy(auction.status, auction.viewers)}
         </p>
       </div>
 
-      <div className="d-none d-md-block">
+      <div className="hidden md:block">
         <AuctionListStatusBadge status={auction.status} />
       </div>
 
       <AuctionCountdown auction={auction} now={now} />
 
-      <div className="text-end">
-        <p className="small text-body-secondary mb-0">{PRICE_LABEL[auction.status]}</p>
+      <div className="text-right">
+        <p className="mb-0 text-sm text-dim">{PRICE_LABEL[auction.status]}</p>
         <data
           value={auction.currentPrice}
           className={isLive ? 'price-tag' : 'price'}

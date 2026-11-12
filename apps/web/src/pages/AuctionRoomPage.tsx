@@ -22,12 +22,12 @@ export default function AuctionRoomPage() {
 
   if (notFound) {
     return (
-      <div className="vstack gap-4">
+      <div className="flex flex-col gap-6">
         <PageState
           empty
           emptyMessage="We could not find this auction. It may have ended and been removed."
         />
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           <Button asChild variant="outline">
             <Link to="/">Back to catalog</Link>
           </Button>

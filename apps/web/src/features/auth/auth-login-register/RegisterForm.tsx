@@ -149,7 +149,7 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-busy={submitting} className="vstack gap-3">
+    <form onSubmit={handleSubmit} noValidate aria-busy={submitting} className="flex flex-col gap-4">
       {formError && <FormAlert>{formError}</FormAlert>}
 
       <TextField
@@ -189,28 +189,28 @@ export function RegisterForm() {
       />
 
       <fieldset
-        className="vstack gap-2"
+        className="flex flex-col gap-2"
         aria-invalid={errors.role ? true : undefined}
         aria-describedby={errors.role ? 'role-error' : undefined}
       >
         <legend className="label-line mb-0">Account type</legend>
-        <div className="row g-2">
+        <div className="grid gap-2 sm:grid-cols-2">
           {ROLE_OPTIONS.map((option) => {
             const selected = role === option.value
             return (
-              <div key={option.value} className="col-sm-6">
-                <label className={selected ? 'auth-role-option is-selected' : 'auth-role-option'}>
+              <div key={option.value}>
+                <label className={selected ? 'flex h-full cursor-pointer items-start gap-2.5 border-2 border-ink bg-ink px-3 py-2.5 text-paper focus-within:outline-2 focus-within:outline-solid focus-within:outline-ink focus-within:outline-offset-2' : 'flex h-full cursor-pointer items-start gap-2.5 border-2 border-ink px-3 py-2.5 focus-within:outline-2 focus-within:outline-solid focus-within:outline-ink focus-within:outline-offset-2'}>
                   <input
                     type="radio"
                     name="role"
                     value={option.value}
                     checked={selected}
                     onChange={() => handleRoleChange(option.value)}
-                    className="form-check-input visually-hidden"
+                    className="sr-only"
                   />
                   <span>
-                    <span className="d-block small fw-semibold">{option.label}</span>
-                    <span className={selected ? 'd-block small auth-role-desc' : 'd-block small text-body-secondary'}>
+                    <span className="block text-sm font-semibold">{option.label}</span>
+                    <span className={selected ? 'block text-sm text-paper' : 'block text-sm text-dim'}>
                       {option.description}
                     </span>
                   </span>
@@ -220,14 +220,14 @@ export function RegisterForm() {
           })}
         </div>
         {errors.role && (
-          <p id="role-error" className="small text-danger mb-0">
+          <p id="role-error" className="mb-0 text-sm text-alarm">
             {errors.role}
           </p>
         )}
       </fieldset>
 
       {role === 'producer' && (
-        <div className="vstack gap-3">
+        <div className="flex flex-col gap-4">
           <p className="label-line">Farm details</p>
           <TextField
             id="farmName"
@@ -252,7 +252,7 @@ export function RegisterForm() {
         </div>
       )}
 
-      <Button type="submit" size="lg" className="w-100" disabled={submitting}>
+      <Button type="submit" size="lg" className="w-full" disabled={submitting}>
         {submitting ? 'Creating account…' : 'Create account'}
       </Button>
     </form>

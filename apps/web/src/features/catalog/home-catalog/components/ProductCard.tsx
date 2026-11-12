@@ -16,24 +16,24 @@ export function ProductCard({ product }: { product: Product }) {
     <li className="board-row">
       <CrateChip category={product.category} />
       <span className="lot tabular">{lotNumber(product.id)}</span>
-      <div className="min-w-0 flex-grow-1">
+      <div className="min-w-0 grow">
         <h3>
           <Link to={productHref}>{product.name}</Link>
         </h3>
-        <p className="text-truncate small text-body-secondary">
+        <p className="truncate text-sm text-dim">
           {product.producer.name}
           {product.producer.location ? ` · ${product.producer.location}` : ''}
         </p>
       </div>
-      <div className="flex-shrink-0 text-end">
+      <div className="shrink-0 text-right">
         <data value={product.price} className="price tabular">
           {formatMoney(product.price)}
         </data>
-        <small className="d-block small text-body-secondary">
+        <small className="block text-sm text-dim">
           per {product.unit}
         </small>
       </div>
-      <Button asChild size="sm" className="flex-shrink-0">
+      <Button asChild size="sm" className="shrink-0">
         <Link to={productHref} aria-label={`View ${product.name}`}>
           View
         </Link>

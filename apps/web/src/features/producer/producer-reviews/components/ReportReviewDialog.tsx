@@ -102,10 +102,10 @@ export function ReportReviewDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-panel">
-          <div className="d-flex align-items-start justify-content-between gap-3 mb-4">
-            <div className="vstack gap-1">
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-1">
               <Dialog.Title>Report this review</Dialog.Title>
-              <Dialog.Description className="small text-body-secondary">
+              <Dialog.Description className="text-sm text-dim">
                 Tell us why the review by {review.author} on {subject} should be
                 checked. An admin decides whether to keep or hide it.
               </Dialog.Description>
@@ -117,12 +117,12 @@ export function ReportReviewDialog({
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="vstack gap-4">
-            <fieldset className="vstack gap-2 rule pt-4" aria-describedby={error ? errorId : undefined}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <fieldset className="flex flex-col gap-2 rule pt-6" aria-describedby={error ? errorId : undefined}>
               <legend className="label-line">Reason</legend>
-              <div className="vstack gap-2">
+              <div className="flex flex-col gap-2">
                 {REPORT_REASON_OPTIONS.map((option) => (
-                  <label key={option.value} className="pa-report-option">
+                  <label key={option.value} className="flex min-h-11 cursor-pointer items-center gap-3 border-2 border-ink p-2 px-3 text-sm hover:bg-wash has-checked:bg-wash focus-within:outline-2 focus-within:outline-ink focus-within:outline-offset-2">
                     <input
                       type="radio"
                       name={`report-reason-${review.id}`}
@@ -140,13 +140,13 @@ export function ReportReviewDialog({
               </div>
             </fieldset>
 
-            <div className="vstack gap-2">
-              <div className="d-flex align-items-baseline justify-content-between gap-3">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-baseline justify-between gap-4">
                 <label htmlFor={noteId} className="form-label">
                   Add detail{' '}
-                  <span className="pa-normal text-body-secondary">(optional)</span>
+                  <span className="normal-case text-dim">(optional)</span>
                 </label>
-                <span className="pa-xs text-body-secondary tabular">
+                <span className="text-xs tabular text-dim">
                   {note.length} / {NOTE_MAX_LENGTH}
                 </span>
               </div>
@@ -160,11 +160,11 @@ export function ReportReviewDialog({
                 maxLength={NOTE_MAX_LENGTH}
                 rows={3}
                 placeholder="What should the admin know about this review?"
-                className="form-control pa-note-area"
+                className="form-control min-h-20 resize-y"
               />
             </div>
 
-            <p className="pa-xs text-body-secondary">
+            <p className="text-xs text-dim">
               Reports are private. The buyer is not told who reported the review.
             </p>
 
@@ -172,13 +172,13 @@ export function ReportReviewDialog({
               <p
                 id={errorId}
                 role="alert"
-                className="pa-alert-error"
+                className="border-2 border-alarm p-2 px-3 text-sm text-alarm"
               >
                 {error}
               </p>
             )}
 
-            <div className="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-2">
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Dialog.Close asChild>
                 <Button type="button" variant="outline" disabled={submitting}>
                   Cancel

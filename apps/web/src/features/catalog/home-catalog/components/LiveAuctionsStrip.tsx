@@ -40,28 +40,28 @@ export function LiveAuctionsBar() {
   return (
     <section
       aria-label="Live auctions"
-      className="catalog-live-strip fixed-bottom"
+      className="fixed inset-x-0 bottom-0 z-30 border-t-4 border-ink bg-paper"
     >
-      <div className="container d-flex align-items-center gap-3 py-2">
+      <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-2">
         <Link
           to={`/auctions/${first.id}`}
-          className="d-flex min-w-0 flex-grow-1 align-items-center gap-3"
+          className="flex min-w-0 grow items-center gap-3"
           aria-label={`Live auction: ${first.productName}, current bid ${formatMoney(first.currentPrice)}, ${remainingLabel(first.endsAt, now)}`}
         >
-          <span aria-hidden="true" className="catalog-live-text min-w-0 flex-grow-1 small">
+          <span aria-hidden="true" className="line-clamp-2 min-w-0 grow text-sm sm:line-clamp-1">
             Live · lot {lotNumber(first.id)} · {first.productName} ·{' '}
             <time dateTime={first.endsAt} className="tabular">
               {remainingLabel(first.endsAt, now)}
             </time>
           </span>
-          <data value={first.currentPrice} className="price-tag tabular catalog-live-price" aria-hidden="true">
+          <data value={first.currentPrice} className="price-tag tabular text-[1.5rem] sm:text-[2rem]" aria-hidden="true">
             {formatMoney(first.currentPrice)}
           </data>
         </Link>
         {ordered.length > 1 && (
           <Link
             to="/auctions"
-            className="flex-shrink-0 small fw-semibold"
+            className="shrink-0 text-sm font-semibold"
           >
             All {ordered.length} live
           </Link>

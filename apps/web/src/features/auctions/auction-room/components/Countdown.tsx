@@ -24,12 +24,12 @@ function Ring({
   footnote?: ReactNode
 }) {
   return (
-    <div className="room-ring">
-      <div className="room-ring-box">
+    <div className="flex flex-col items-center gap-2">
+      <div className="relative grid size-28 place-items-center md:size-32">
         <svg
           viewBox="0 0 120 120"
           aria-hidden="true"
-          className="room-ring-svg"
+          className="absolute inset-0 h-full w-full"
         >
           <circle
             cx="60"
@@ -37,7 +37,7 @@ function Ring({
             r="52"
             fill="none"
             strokeWidth="8"
-            className="room-ring-track"
+            className="stroke-amber opacity-25"
           />
           <circle
             cx="60"
@@ -45,14 +45,14 @@ function Ring({
             r="52"
             fill="none"
             strokeWidth="8"
-            className="room-ring-value"
+            className="stroke-amber"
           />
         </svg>
-        <div className="room-ring-inner">
+        <div className="px-6 text-center">
           <p className="label-line mb-1">
             {label}
           </p>
-          <div className="room-ring-text tabular">
+          <div className="font-display text-xl leading-[1.1] normal-case tabular text-amber md:text-2xl">
             {children}
           </div>
         </div>
@@ -64,7 +64,7 @@ function Ring({
 
 function AbsoluteTime({ value }: { value: string }) {
   return (
-    <p className="small opacity-75 mb-0">
+    <p className="mb-0 text-sm opacity-75">
       <time dateTime={value}>{formatDateTime(value)}</time>
     </p>
   )

@@ -107,15 +107,15 @@ function ProducerPageEditor({ page, onSave }: ProducerPageEditorProps) {
   }
 
   return (
-    <div className="row g-4 align-items-start">
-      <section aria-labelledby="page-details-heading" className="col-lg-6 min-w-0 vstack gap-3">
-        <div className="vstack gap-1">
+    <div className="grid items-start gap-6 lg:grid-cols-2">
+      <section aria-labelledby="page-details-heading" className="min-w-0 flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
           <h2 id="page-details-heading">Page details</h2>
-          <p className="small text-body-secondary">
+          <p className="text-sm text-dim">
             The name comes from your account. Everything else is yours to edit.
           </p>
         </div>
-        <div className="rule pt-4">
+        <div className="rule pt-6">
           <ProducerPageForm
             values={values}
             errors={errors}
@@ -130,11 +130,11 @@ function ProducerPageEditor({ page, onSave }: ProducerPageEditorProps) {
 
       <section
         aria-labelledby="page-preview-heading"
-        className="col-lg-6 min-w-0 vstack gap-3 pa-sticky-preview"
+        className="min-w-0 flex flex-col gap-4 lg:sticky lg:top-28"
       >
-        <div className="vstack gap-1">
+        <div className="flex flex-col gap-1">
           <h2 id="page-preview-heading">Preview</h2>
-          <p className="small text-body-secondary">
+          <p className="text-sm text-dim">
             Updates as you type. This is what buyers see.
           </p>
         </div>
@@ -148,15 +148,15 @@ export function ProducerPageEditView() {
   const { page, loading, error, reload, save } = useProducerPageEdit()
 
   return (
-    <section aria-labelledby="producer-page-edit-heading" className="vstack gap-4">
-      <Link to="/producer" className="pa-back-link small text-body-secondary">
+    <section aria-labelledby="producer-page-edit-heading" className="flex flex-col gap-6">
+      <Link to="/producer" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="vstack gap-1">
+      <header className="flex flex-col gap-1">
         <h1 id="producer-page-edit-heading">Public page</h1>
-        <p className="measure text-body-secondary">
+        <p className="measure text-dim">
           The page buyers read before they order. Tell them who you are, where
           to find you and what makes your farm worth a visit.
         </p>

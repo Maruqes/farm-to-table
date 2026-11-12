@@ -41,8 +41,8 @@ export function UserFilters({
       aria-label="Search and filter users"
       onSubmit={handleSubmit}
     >
-      <div className="row g-3 align-items-end">
-        <div className="col-12 col-md-6">
+      <div className="grid items-end gap-4 md:grid-cols-[2fr_1fr_1fr]">
+        <div>
           <label htmlFor="admin-users-q" className="form-label">
             Search users
           </label>
@@ -59,7 +59,7 @@ export function UserFilters({
           />
         </div>
 
-        <div className="col-12 col-md-3">
+        <div>
           <label htmlFor="admin-users-role" className="form-label">
             Role
           </label>
@@ -83,7 +83,7 @@ export function UserFilters({
           </select>
         </div>
 
-        <div className="col-12 col-md-3 admin-filter-actions">
+        <div className="flex gap-2 md:justify-end [&>*]:flex-1 md:[&>*]:flex-none">
           <Button type="submit">Apply</Button>
           <Button
             type="button"

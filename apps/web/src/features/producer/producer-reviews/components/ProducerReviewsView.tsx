@@ -37,25 +37,25 @@ export function ProducerReviewsView() {
   )
 
   return (
-    <section aria-labelledby="producer-reviews-heading" className="vstack gap-4">
-      <Link to="/producer" className="pa-back-link small text-body-secondary">
+    <section aria-labelledby="producer-reviews-heading" className="flex flex-col gap-6">
+      <Link to="/producer" className="inline-flex items-center gap-1 text-sm text-dim no-underline hover:text-ink">
         <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="vstack gap-3">
+      <header className="flex flex-col gap-4">
         <h1 id="producer-reviews-heading">Reviews</h1>
-        <p className="measure text-body-secondary">
+        <p className="measure text-dim">
           Buyers rate your products and your public page after a delivered order. If a
           review breaks the rules, report it with a reason and an admin will decide
           whether to keep or hide it.
         </p>
 
         {!loading && !error && summary.count > 0 && (
-          <p className="d-flex flex-wrap align-items-center gap-2 small text-body-secondary">
-            <span className="d-flex align-items-center gap-2">
+          <p className="flex flex-wrap items-center gap-2 text-sm text-dim">
+            <span className="flex items-center gap-2">
               <RatingStars rating={summary.average} />
-              <data value={summary.average} className="fw-semibold tabular">
+              <data value={summary.average} className="font-semibold tabular">
                 {summary.average.toFixed(1)}
               </data>
               <span>out of 5</span>
@@ -82,7 +82,7 @@ export function ProducerReviewsView() {
         )}
       </header>
 
-      <p className="visually-hidden" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
 

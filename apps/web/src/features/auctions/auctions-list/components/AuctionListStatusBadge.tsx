@@ -5,8 +5,8 @@ import type { AuctionListStatus } from '../auctions-list.types'
 export function AuctionListStatusBadge({ status }: { status: AuctionListStatus }) {
   if (status === 'active') {
     return (
-      <Badge className="bg-live text-live-foreground">
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+      <Badge variant="live">
+        <span aria-hidden="true" className="auctions-live-dot" />
         {AUCTION_LIST_STATUS_LABELS.active}
       </Badge>
     )

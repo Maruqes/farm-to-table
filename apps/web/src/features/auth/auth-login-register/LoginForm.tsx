@@ -94,7 +94,7 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-busy={submitting} className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate aria-busy={submitting} className="vstack gap-3">
       {formError && <FormAlert>{formError}</FormAlert>}
 
       <TextField
@@ -121,7 +121,7 @@ export function LoginForm() {
         required
       />
 
-      <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+      <Button type="submit" size="lg" className="w-100" disabled={submitting}>
         {submitting ? 'Signing in…' : 'Sign in'}
       </Button>
     </form>

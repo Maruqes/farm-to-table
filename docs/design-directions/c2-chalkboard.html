@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C2 · Chalkboard stall</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&family=Patrick+Hand&display=swap">
+<style>
+  /* The board is green in both themes; the wall behind it follows the theme. */
+  :root {
+    color-scheme: light dark;
+    --wall: light-dark(#efe6d2, #14110d);
+    --frame: light-dark(#8a5a2b, #5c3b1a);
+    --board: #1f3d2b; --chalk: #f1efe4; --faint: #a9bfae; --tag: #ffd166; --tag-ink: #3a2a00;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--wall); font: 20px/1.35 'Patrick Hand', cursive; padding: 1rem; }
+  main { max-width: 52rem; margin: 0 auto; background: var(--board); color: var(--chalk); border: 12px solid var(--frame); padding: 1.5rem 1.5rem 2.5rem; }
+  header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .5rem 1.5rem; }
+  h1 { font: 700 clamp(2.2rem, 8vw, 4rem)/1 'Cabin Sketch', sans-serif; margin: 0; }
+  nav a { color: var(--faint); margin-left: 1.2rem; }
+  h2 { font: 700 1.6rem 'Cabin Sketch', sans-serif; margin: 2rem 0 .3rem; border-bottom: 2px dashed var(--faint); padding-bottom: .2rem; text-transform: capitalize; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: flex; align-items: baseline; gap: .5rem; padding: .35rem 0; }
+  li i { flex: 1; border-bottom: 2px dotted var(--faint); transform: translateY(-.3em); }
+  li small { color: var(--faint); font-size: .85em; }
+  li b { font-weight: 400; font-size: 1.3em; color: var(--tag); font-variant-numeric: tabular-nums; }
+  button { font: inherit; background: none; color: var(--chalk); border: 2px solid var(--faint); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; }
+  button:hover { background: var(--chalk); color: var(--board); }
+  .tag { display: inline-block; background: var(--tag); color: var(--tag-ink); padding: .5rem 1rem; margin-top: 1.5rem; transform: rotate(-3deg); text-decoration: none; font-size: 1.2em; }
+  :focus-visible { outline: 2px solid var(--tag); outline-offset: 3px; }
+</style>
+<main>
+  <header><h1>Today at the stall</h1><nav><a href="#">Producers</a><a href="#">Auctions</a><a href="#">Basket (2)</a></nav></header>
+  <a class="tag" href="a3-auction-clock.html">Auction on now: 3 cheese wheels, € 34 and rising</a>
+  <div id="rows"></div>
+</main>
+<script>
+const CATS = {
+  cheese: '#f2c14e', honey: '#e8962e', bakery: '#d9a066',
+  wine: '#a8496c', fruit: '#a8c256', veg: '#5c9e4a',
+};
+const LOTS = [
+  { lot: '014', name: 'Aged reserve cheese', producer: 'Queijaria da Beira', place: 'Seia', unit: 'wheel', price: 16.0, cat: 'cheese' },
+  { lot: '015', name: 'Chestnut honey', producer: 'Apiário da Serra', place: 'Manteigas', unit: 'jar', price: 7.8, cat: 'honey' },
+  { lot: '016', name: 'Corn bread', producer: 'Pão da Aldeia', place: 'Évora', unit: 'loaf', price: 3.2, cat: 'bakery' },
+  { lot: '017', name: 'Douro red 2021', producer: 'Quinta do Vale', place: 'Pinhão', unit: 'bottle', price: 12.5, cat: 'wine' },
+  { lot: '018', name: 'Rocha pears', producer: 'Pomar do Oeste', place: 'Bombarral', unit: 'kg', price: 2.1, cat: 'fruit' },
+  { lot: '019', name: 'Galega cabbage', producer: 'Horta da Ribeira', place: 'Ponte de Lima', unit: 'bunch', price: 1.4, cat: 'veg' },
+  { lot: '020', name: 'Goat cheese, fresh', producer: 'Queijaria da Beira', place: 'Seia', unit: 'piece', price: 4.9, cat: 'cheese' },
+  { lot: '021', name: 'Heather honey', producer: 'Apiário da Serra', place: 'Manteigas', unit: 'jar', price: 8.6, cat: 'honey' },
+];
+const eur = (n) => n.toFixed(2);
+  rows.innerHTML = Object.keys(CATS).map((c) => {
+    const items = LOTS.filter((p) => p.cat === c);
+    return `<h2>${c}</h2><ul>` + items.map((p) => `<li><span>${p.name} <small>${p.producer}, ${p.place}</small></span><i></i><b>${eur(p.price)}</b><small>/${p.unit}</small><button aria-label="Add ${p.name} to basket">+</button></li>`).join('') + '</ul>';
+  }).join('');
+</script>
+</html>

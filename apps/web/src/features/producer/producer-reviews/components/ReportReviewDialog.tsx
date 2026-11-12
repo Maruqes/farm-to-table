@@ -92,41 +92,37 @@ export function ReportReviewDialog({
           type="button"
           variant="outline"
           size="sm"
-          className="h-10 px-3"
           disabled={disabled}
           aria-label={`Report the review by ${review.author}`}
         >
-          <Flag className="size-4" aria-hidden="true" />
+          <Flag size={16} aria-hidden="true" />
           Report
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-foreground/40 dark:bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border bg-card p-5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 md:p-6">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div className="space-y-1">
-              <Dialog.Title className="text-xl">Report this review</Dialog.Title>
-              <Dialog.Description className="text-sm text-muted-foreground">
+        <Dialog.Overlay className="dialog-overlay" />
+        <Dialog.Content className="dialog-panel">
+          <div className="d-flex align-items-start justify-content-between gap-3 mb-4">
+            <div className="vstack gap-1">
+              <Dialog.Title>Report this review</Dialog.Title>
+              <Dialog.Description className="small text-body-secondary">
                 Tell us why the review by {review.author} on {subject} should be
                 checked. An admin decides whether to keep or hide it.
               </Dialog.Description>
             </div>
             <Dialog.Close asChild>
               <Button variant="ghost" size="icon" aria-label="Close report dialog">
-                <X aria-hidden="true" />
+                <X size={16} aria-hidden="true" />
               </Button>
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <fieldset className="space-y-2" aria-describedby={error ? errorId : undefined}>
-              <legend className="text-sm font-medium">Reason</legend>
-              <div className="space-y-2">
+          <form onSubmit={handleSubmit} className="vstack gap-4">
+            <fieldset className="vstack gap-2 rule pt-4" aria-describedby={error ? errorId : undefined}>
+              <legend className="label-line">Reason</legend>
+              <div className="vstack gap-2">
                 {REPORT_REASON_OPTIONS.map((option) => (
-                  <label
-                    key={option.value}
-                    className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-input px-3 py-2 text-sm transition-colors hover:bg-accent focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-card has-[:checked]:border-primary has-[:checked]:bg-accent"
-                  >
+                  <label key={option.value} className="pa-report-option">
                     <input
                       type="radio"
                       name={`report-reason-${review.id}`}
@@ -136,7 +132,7 @@ export function ReportReviewDialog({
                         setReason(option.value)
                         setError(null)
                       }}
-                      className="size-4 shrink-0 accent-primary"
+                      className="form-check-input"
                     />
                     <span>{option.label}</span>
                   </label>
@@ -144,15 +140,13 @@ export function ReportReviewDialog({
               </div>
             </fieldset>
 
-            <div className="space-y-1.5">
-              <div className="flex items-baseline justify-between gap-3">
-                <label htmlFor={noteId} className="text-sm font-medium">
+            <div className="vstack gap-2">
+              <div className="d-flex align-items-baseline justify-content-between gap-3">
+                <label htmlFor={noteId} className="form-label">
                   Add detail{' '}
-                  <span className="font-normal text-muted-foreground">
-                    (optional)
-                  </span>
+                  <span className="pa-normal text-body-secondary">(optional)</span>
                 </label>
-                <span className="text-xs text-muted-foreground tabular">
+                <span className="pa-xs text-body-secondary tabular">
                   {note.length} / {NOTE_MAX_LENGTH}
                 </span>
               </div>
@@ -166,11 +160,11 @@ export function ReportReviewDialog({
                 maxLength={NOTE_MAX_LENGTH}
                 rows={3}
                 placeholder="What should the admin know about this review?"
-                className="flex min-h-20 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                className="form-control pa-note-area"
               />
             </div>
 
-            <p className="text-xs text-muted-foreground">
+            <p className="pa-xs text-body-secondary">
               Reports are private. The buyer is not told who reported the review.
             </p>
 
@@ -178,13 +172,13 @@ export function ReportReviewDialog({
               <p
                 id={errorId}
                 role="alert"
-                className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+                className="pa-alert-error"
               >
                 {error}
               </p>
             )}
 
-            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <div className="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-2">
               <Dialog.Close asChild>
                 <Button type="button" variant="outline" disabled={submitting}>
                   Cancel
@@ -192,7 +186,7 @@ export function ReportReviewDialog({
               </Dialog.Close>
               <Button type="submit" disabled={submitting}>
                 {submitting && (
-                  <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="spin" aria-hidden="true" />
                 )}
                 {submitting ? 'Reporting…' : 'Report review'}
               </Button>

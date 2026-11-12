@@ -14,7 +14,7 @@ export function OrderTimeline({ status, history }: OrderTimelineProps) {
 
   if (status === 'cancelled') {
     return (
-      <div className="rounded-lg border bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+      <div className="border px-3 py-2 small text-body-secondary">
         This order was cancelled by the producer. Any stock has been returned to the
         catalog.
         {cancelledAt && (
@@ -30,7 +30,7 @@ export function OrderTimeline({ status, history }: OrderTimelineProps) {
   const currentIndex = ORDER_STATUS_STEPS.indexOf(status)
 
   return (
-    <ol className="grid grid-cols-4 gap-1" aria-label="Order progress">
+    <ol className="orders-timeline" aria-label="Order progress">
       {ORDER_STATUS_STEPS.map((step, index) => {
         const reached = index <= currentIndex
         const current = index === currentIndex
@@ -38,18 +38,16 @@ export function OrderTimeline({ status, history }: OrderTimelineProps) {
 
         return (
           <li key={step} aria-current={current ? 'step' : undefined} className="min-w-0">
-            <div className="flex items-center">
+            <div className="orders-step-row">
               <span
                 className={cn(
-                  'grid size-7 shrink-0 place-items-center rounded-full border text-xs font-semibold',
-                  reached
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border bg-card text-muted-foreground',
-                  current && 'ring-2 ring-ring ring-offset-2 ring-offset-card',
+                  'orders-step',
+                  reached && 'is-done',
+                  current && 'is-now',
                 )}
               >
                 {reached ? (
-                  <Check className="size-4" aria-hidden="true" />
+                  <Check size={16} aria-hidden="true" />
                 ) : (
                   <span aria-hidden="true">{index + 1}</span>
                 )}
@@ -58,8 +56,8 @@ export function OrderTimeline({ status, history }: OrderTimelineProps) {
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'mx-1 h-0.5 flex-1 rounded-full',
-                    index < currentIndex ? 'bg-primary' : 'bg-border',
+                    'orders-step-line',
+                    index < currentIndex && 'is-done',
                   )}
                 />
               )}
@@ -67,16 +65,16 @@ export function OrderTimeline({ status, history }: OrderTimelineProps) {
 
             <p
               className={cn(
-                'mt-2 text-xs font-medium leading-tight',
-                reached ? 'text-foreground' : 'text-muted-foreground',
+                'orders-step-label',
+                reached && 'is-done',
               )}
             >
               {ORDER_STATUS_LABELS[step]}
-              <span className="sr-only">
+              <span className="visually-hidden">
                 {current ? ' — current status' : reached ? ' — completed' : ' — not yet reached'}
               </span>
             </p>
-            <p className="mt-0.5 hidden text-xs text-muted-foreground md:block">
+            <p className="orders-step-date d-none d-md-block mb-0">
               {date ? (
                 <time dateTime={date}>{formatDate(date)}</time>
               ) : reached ? (

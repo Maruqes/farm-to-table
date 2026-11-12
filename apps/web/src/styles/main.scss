@@ -1,3 +1,16 @@
-@use 'variables';
-@use 'mixins';
+// Bootstrap 5 + SASS entry point. Order matters: variables, Bootstrap, then our layers.
+@import 'variables';
 @import 'bootstrap/scss/bootstrap';
+@import 'mixins';
+@import 'tokens';
+@import 'base';
+@import 'board';
+@import 'components';
+@import 'shell';
+@import 'features/catalog';
+@import 'features/producers';
+@import 'features/auctions';
+@import 'features/buyer';
+@import 'features/auth';
+@import 'features/producer-area';
+@import 'features/admin';

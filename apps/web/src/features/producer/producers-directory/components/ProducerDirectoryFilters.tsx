@@ -3,8 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { ProducersDirectoryFilterDraft } from '../useProducersDirectoryFilters'
 
-const selectClassName =
-  'h-10 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+const selectClassName = 'form-select'
 
 interface ProducerDirectoryFiltersProps {
   initial: ProducersDirectoryFilterDraft
@@ -44,11 +43,10 @@ export function ProducerDirectoryFilters({
       role="search"
       aria-label="Search and filter producers"
       onSubmit={handleSubmit}
-      className="rounded-xl border bg-card p-3"
     >
-      <div className="grid gap-3 md:grid-cols-[minmax(0,2fr)_minmax(12rem,1fr)_auto] md:items-end">
-        <div>
-          <label htmlFor="producers-q" className="mb-1 block text-sm font-medium">
+      <div className="row g-3 align-items-end">
+        <div className="col-12 col-md-6">
+          <label htmlFor="producers-q" className="label-line form-label d-block">
             Search producers
           </label>
           <Input
@@ -61,12 +59,11 @@ export function ProducerDirectoryFilters({
             }
             placeholder="Name"
             autoComplete="off"
-            className="h-10"
           />
         </div>
 
-        <div>
-          <label htmlFor="producers-location" className="mb-1 block text-sm font-medium">
+        <div className="col-12 col-md-3">
+          <label htmlFor="producers-location" className="label-line form-label d-block">
             Locality
           </label>
           <select
@@ -87,14 +84,14 @@ export function ProducerDirectoryFilters({
           </select>
         </div>
 
-        <div className="flex gap-2 md:justify-end">
-          <Button type="submit" className="h-10 flex-1 md:flex-none">
+        <div className="col-12 col-md-3 d-flex gap-2 justify-content-md-end">
+          <Button type="submit" className="flex-grow-1 flex-md-grow-0">
             Apply
           </Button>
           <Button
             type="button"
             variant="outline"
-            className="h-10 flex-1 md:flex-none"
+            className="flex-grow-1 flex-md-grow-0"
             onClick={handleClear}
             disabled={!canClear}
           >

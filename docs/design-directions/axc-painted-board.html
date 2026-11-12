@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A × C · Painted price board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;600&family=Big+Shoulders+Display:wght@800&display=swap">
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper: light-dark(#f6ecd6, #16130e);
+    --ink: light-dark(#14301b, #f3e9d2);
+    --dim: light-dark(#5d6b55, #a39c88);
+    --tag: light-dark(#c8102e, #ff5a6e);
+    --tag-ink: light-dark(#fff, #20040a);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.4 'Azeret Mono', monospace; }
+  main { max-width: 60rem; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  header { display: flex; justify-content: space-between; align-items: end; gap: 1rem; border-bottom: 4px solid var(--ink); padding-bottom: .5rem; }
+  h1 { font: 800 clamp(2.4rem, 8vw, 4.5rem)/.85 'Big Shoulders Display', sans-serif; text-transform: uppercase; margin: 0; }
+  nav a { color: inherit; margin-left: 1.2rem; }
+  .cats { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+  .cats button { font: inherit; text-transform: capitalize; border: 2px solid var(--ink); background: var(--c); color: #14301b; padding: .4rem .8rem; min-height: 40px; cursor: pointer; }
+  .cats button[aria-pressed='false'] { background: none; color: var(--ink); }
+  .live { display: flex; justify-content: space-between; align-items: center; gap: 1rem; border: 4px solid var(--ink); padding: .8rem 1rem; margin: 1rem 0 1.5rem; color: inherit; text-decoration: none; }
+  .tag { background: var(--tag); color: var(--tag-ink); font: 800 2rem/1 'Big Shoulders Display', sans-serif; padding: .25rem .8rem; transform: rotate(-4deg); white-space: nowrap; }
+  ul { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); font-variant-numeric: tabular-nums; }
+  li { display: grid; grid-template-columns: 1.4rem 3rem 1fr auto auto; gap: .9rem; align-items: center; padding: .7rem 0; border-bottom: 1px solid var(--dim); }
+  li[hidden] { display: none; }
+  .chip { width: 1.4rem; height: 1.4rem; background: var(--c); border: 2px solid var(--ink); }
+  small { color: var(--dim); display: block; }
+  .price { font: 800 1.8rem/1 'Big Shoulders Display', sans-serif; }
+  li button { font: inherit; border: 2px solid var(--ink); background: var(--ink); color: var(--paper); min-height: 40px; padding: 0 .9rem; cursor: pointer; }
+  li button:hover { background: none; color: var(--ink); }
+  :focus-visible { outline: 3px solid var(--tag); outline-offset: 2px; }
+</style>
+<main>
+  <header><h1>Farm<br>to table</h1><nav><a href="#">Producers</a><a href="#">Auctions</a><a href="#">Crate (2)</a></nav></header>
+  <div class="cats" id="cats"></div>
+  <a class="live" href="a3-auction-clock.html"><span>Going, going · lot 009 · Aged reserve cheese, 3 wheels · 00:41 left</span><span class="tag">€34</span></a>
+  <ul id="rows"></ul>
+</main>
+<script>
+const CATS = {
+  cheese: '#f2c14e', honey: '#e8962e', bakery: '#d9a066',
+  wine: '#a8496c', fruit: '#a8c256', veg: '#5c9e4a',
+};
+const LOTS = [
+  { lot: '014', name: 'Aged reserve cheese', producer: 'Queijaria da Beira', place: 'Seia', unit: 'wheel', price: 16.0, cat: 'cheese' },
+  { lot: '015', name: 'Chestnut honey', producer: 'Apiário da Serra', place: 'Manteigas', unit: 'jar', price: 7.8, cat: 'honey' },
+  { lot: '016', name: 'Corn bread', producer: 'Pão da Aldeia', place: 'Évora', unit: 'loaf', price: 3.2, cat: 'bakery' },
+  { lot: '017', name: 'Douro red 2021', producer: 'Quinta do Vale', place: 'Pinhão', unit: 'bottle', price: 12.5, cat: 'wine' },
+  { lot: '018', name: 'Rocha pears', producer: 'Pomar do Oeste', place: 'Bombarral', unit: 'kg', price: 2.1, cat: 'fruit' },
+  { lot: '019', name: 'Galega cabbage', producer: 'Horta da Ribeira', place: 'Ponte de Lima', unit: 'bunch', price: 1.4, cat: 'veg' },
+  { lot: '020', name: 'Goat cheese, fresh', producer: 'Queijaria da Beira', place: 'Seia', unit: 'piece', price: 4.9, cat: 'cheese' },
+  { lot: '021', name: 'Heather honey', producer: 'Apiário da Serra', place: 'Manteigas', unit: 'jar', price: 8.6, cat: 'honey' },
+];
+const eur = (n) => n.toFixed(2);
+  cats.innerHTML = Object.entries(CATS).map(([c, col]) => `<button style="--c:${col}" aria-pressed="true" data-c="${c}">${c}</button>`).join('');
+  rows.innerHTML = LOTS.map((p) => `<li data-c="${p.cat}"><span class="chip" style="--c:${CATS[p.cat]}"></span><span>${p.lot}</span><span>${p.name}<small>${p.producer} · ${p.place}</small></span><span class="price">${eur(p.price)}<small>per ${p.unit}</small></span><button>Add</button></li>`).join('');
+  cats.onclick = (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true');
+    const on = [...cats.querySelectorAll('[aria-pressed="true"]')].map((x) => x.dataset.c);
+    rows.querySelectorAll('li').forEach((li) => (li.hidden = !on.includes(li.dataset.c)));
+  };
+</script>
+</html>

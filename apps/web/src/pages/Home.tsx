@@ -5,14 +5,14 @@ export default function Home() {
   const query = searchParams.get('q')?.trim()
 
   return (
-    <section className="space-y-3 py-6 md:py-10">
-      <h1 className="max-w-3xl text-4xl font-semibold md:text-5xl">Local produce and live auctions</h1>
+    <section className="catalog-hero vstack gap-3">
+      <h1>Local produce and live auctions</h1>
       {query ? (
-        <p className="text-muted-foreground">
+        <p className="text-body-secondary">
           Results for <strong>“{query}”</strong>.
         </p>
       ) : (
-        <p className="max-w-[60ch] text-lg text-muted-foreground">
+        <p className="measure fs-5 text-body-secondary">
           Find producers near you, buy directly from them and bid on seasonal lots in live auctions.
         </p>
       )}

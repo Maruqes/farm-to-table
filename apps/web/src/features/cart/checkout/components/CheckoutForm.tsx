@@ -79,7 +79,7 @@ export function CheckoutForm({
       onSubmit={onSubmit}
       noValidate
       aria-busy={placing}
-      className="space-y-4 md:space-y-6"
+      className="vstack gap-4"
     >
       {stockConflict && (
         <CheckoutAlert
@@ -104,23 +104,21 @@ export function CheckoutForm({
         </CheckoutAlert>
       )}
 
-      <div className="rounded-xl border bg-card p-5 md:p-6">
-        <fieldset className="space-y-3">
-          <legend className="text-lg font-semibold">Delivery method</legend>
-          <p className="text-sm text-muted-foreground">
+      <div className="rule pt-4">
+        <fieldset className="vstack gap-3">
+          <legend className="mb-0">Delivery method</legend>
+          <p className="small text-body-secondary mb-0">
             Choose how you want to receive this order. Payment happens on pickup
             or delivery — there is no online payment.
           </p>
 
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="checkout-options pt-1">
             {FULFILMENT_OPTIONS.map((option) => (
               <label
                 key={option.value}
                 className={cn(
-                  'flex cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-3 transition-colors',
-                  fulfilment === option.value
-                    ? 'border-primary bg-accent/60'
-                    : 'border-input bg-background hover:bg-accent/40',
+                  'checkout-option',
+                  fulfilment === option.value && 'is-active',
                 )}
               >
                 <input
@@ -130,11 +128,11 @@ export function CheckoutForm({
                   checked={fulfilment === option.value}
                   onChange={() => onFulfilmentChange(option.value)}
                   disabled={placing}
-                  className="mt-0.5 size-4 shrink-0 accent-primary"
+                  className="form-check-input"
                 />
                 <span>
-                  <span className="block text-sm font-medium">{option.label}</span>
-                  <span className="block text-sm text-muted-foreground">
+                  <span className="d-block small fw-medium">{option.label}</span>
+                  <span className="d-block small text-body-secondary">
                     {option.description}
                   </span>
                 </span>
@@ -142,16 +140,16 @@ export function CheckoutForm({
             ))}
           </div>
         </fieldset>
+      </div>
 
-        {fulfilment === 'delivery' && (
-          <div className="mt-6 space-y-4 border-t pt-5">
-            <div className="space-y-1">
-              <h2 className="text-lg">Delivery address</h2>
-              <p className="text-sm text-muted-foreground">
-                Each producer receives this address to deliver their part of the
-                order.
-              </p>
-            </div>
+      {fulfilment === 'delivery' && (
+        <div className="rule pt-4">
+          <h2 className="mb-0">Delivery address</h2>
+          <p className="mt-1 small text-body-secondary mb-0">
+            Each producer receives this address to deliver their part of the
+            order.
+          </p>
+          <div className="mt-4">
             <AddressFields
               address={address}
               errors={addressErrors}
@@ -160,8 +158,8 @@ export function CheckoutForm({
               onBlur={onAddressBlur}
             />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </form>
   )
 }

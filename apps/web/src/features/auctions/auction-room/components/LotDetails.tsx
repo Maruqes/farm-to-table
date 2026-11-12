@@ -5,24 +5,21 @@ import type { AuctionRoom } from '../auction-room.types'
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex items-baseline justify-between gap-4 py-2.5">
-      <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 text-right text-sm font-medium">{children}</dd>
+    <div className="room-details-row border-bottom">
+      <dt className="label-line">{label}</dt>
+      <dd className="min-w-0 text-end small fw-semibold mb-0">{children}</dd>
     </div>
   )
 }
 
 export function LotDetails({ auction }: { auction: AuctionRoom }) {
   return (
-    <section
-      aria-labelledby="lot-details-heading"
-      className="rounded-xl border bg-card p-4 md:p-5"
-    >
-      <h2 id="lot-details-heading" className="text-xl">
+    <section aria-labelledby="lot-details-heading" className="border-top pt-4">
+      <h2 id="lot-details-heading" className="fs-4">
         Lot details
       </h2>
 
-      <dl className="mt-2 divide-y">
+      <dl className="mt-2 mb-0">
         <Row label="Quantity">
           <span className="tabular">
             {auction.quantity} {auction.unit}
@@ -42,7 +39,7 @@ export function LotDetails({ auction }: { auction: AuctionRoom }) {
           {auction.producer.id ? (
             <Link
               to={`/producers/${auction.producer.id}`}
-              className="underline decoration-border underline-offset-4 hover:text-primary"
+              className="text-decoration-underline"
             >
               {auction.producer.name}
             </Link>

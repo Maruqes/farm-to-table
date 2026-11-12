@@ -7,9 +7,6 @@ import type {
   AdminUsersRoleFilter,
 } from '../admin-users.types'
 
-const selectClassName =
-  'h-10 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-
 interface UserFiltersProps {
   initial: AdminUsersFilters
   hasActiveFilters: boolean
@@ -43,14 +40,10 @@ export function UserFilters({
       role="search"
       aria-label="Search and filter users"
       onSubmit={handleSubmit}
-      className="rounded-xl border bg-card p-3"
     >
-      <div className="grid gap-3 md:grid-cols-[minmax(0,2fr)_minmax(11rem,1fr)_auto] md:items-end">
-        <div>
-          <label
-            htmlFor="admin-users-q"
-            className="mb-1 block text-sm font-medium"
-          >
+      <div className="row g-3 align-items-end">
+        <div className="col-12 col-md-6">
+          <label htmlFor="admin-users-q" className="form-label">
             Search users
           </label>
           <Input
@@ -63,21 +56,17 @@ export function UserFilters({
             }
             placeholder="Name or email"
             autoComplete="off"
-            className="h-10"
           />
         </div>
 
-        <div>
-          <label
-            htmlFor="admin-users-role"
-            className="mb-1 block text-sm font-medium"
-          >
+        <div className="col-12 col-md-3">
+          <label htmlFor="admin-users-role" className="form-label">
             Role
           </label>
           <select
             id="admin-users-role"
             name="role"
-            className={selectClassName}
+            className="form-select"
             value={draft.role}
             onChange={(event) =>
               setDraft((current) => ({
@@ -94,14 +83,11 @@ export function UserFilters({
           </select>
         </div>
 
-        <div className="flex gap-2 md:justify-end">
-          <Button type="submit" className="h-10 flex-1 md:flex-none">
-            Apply
-          </Button>
+        <div className="col-12 col-md-3 admin-filter-actions">
+          <Button type="submit">Apply</Button>
           <Button
             type="button"
             variant="outline"
-            className="h-10 flex-1 md:flex-none"
             onClick={handleClear}
             disabled={!canClear}
           >

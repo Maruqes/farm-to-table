@@ -47,24 +47,21 @@ export function AdminProducersView() {
   )
 
   return (
-    <section aria-labelledby="admin-producers-heading" className="space-y-6">
-      <Link
-        to="/admin"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+    <section aria-labelledby="admin-producers-heading" className="vstack gap-4">
+      <Link to="/admin" className="admin-back">
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
-      <header className="space-y-1">
+      <header>
         <h1 id="admin-producers-heading">Producer approvals</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+        <p className="measure text-body-secondary mb-0">
           Review new producer applications before they can sell. Approve the farms
           that fit the marketplace, or reject an application with an optional reason.
         </p>
       </header>
 
-      <p className="sr-only" aria-live="polite">
+      <p className="visually-hidden" aria-live="polite">
         {announcement}
       </p>
 
@@ -76,11 +73,11 @@ export function AdminProducersView() {
         empty={empty}
         emptyMessage="No producers are waiting for approval. New applications will appear here."
       >
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
+        <div className="vstack gap-3">
+          <p className="small text-body-secondary mb-0">
             <data
               value={producers.length}
-              className="font-medium text-foreground tabular"
+              className="fw-semibold tabular"
             >
               {producers.length}
             </data>{' '}

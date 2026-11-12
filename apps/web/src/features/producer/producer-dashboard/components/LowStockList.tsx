@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { lotNumber } from '@/components/crate'
 import type { DashboardLowStockItem } from '../producer-dashboard.types'
 
 interface LowStockListProps {
@@ -8,30 +9,26 @@ interface LowStockListProps {
 
 export function LowStockList({ items }: LowStockListProps) {
   return (
-    <section aria-labelledby="low-stock-heading" className="space-y-3">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="low-stock-heading" className="text-xl md:text-2xl">
-          Low stock
-        </h2>
-        <p className="text-sm text-muted-foreground">
+    <section aria-labelledby="low-stock-heading" className="vstack gap-3">
+      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
+        <h2 id="low-stock-heading">Low stock</h2>
+        <p className="small text-body-secondary">
           Restock before the next order arrives.
         </p>
       </div>
 
       {items.length === 0 ? (
-        <p className="rounded-xl border bg-card px-4 py-6 text-sm text-muted-foreground">
-          No products need restocking right now.
-        </p>
+        <p className="pa-empty">No products need restocking right now.</p>
       ) : (
-        <ul className="divide-y rounded-xl border bg-card">
+        <ul className="board">
           {items.map((item) => (
-            <li
-              key={item.productId}
-              className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6"
-            >
-              <span className="min-w-0">
-                <span className="block font-medium">{item.name}</span>
-                <span className="block text-sm text-muted-foreground">
+            <li key={item.productId} className="board-row flex-wrap">
+              <span aria-hidden="true" className="lot">
+                {lotNumber(item.productId)}
+              </span>
+              <span className="min-w-0 flex-grow-1">
+                <span className="d-block fw-semibold">{item.name}</span>
+                <span className="d-block small text-body-secondary">
                   <data value={item.stock} className="tabular">
                     {item.stock}
                   </data>{' '}

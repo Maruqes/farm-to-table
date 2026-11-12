@@ -14,14 +14,14 @@ function FieldMessage({
 }) {
   if (error) {
     return (
-      <p id={`${id}-error`} className="text-sm text-destructive">
+      <p id={`${id}-error`} className="small text-danger">
         {error}
       </p>
     )
   }
   if (hint) {
     return (
-      <p id={`${id}-hint`} className="text-sm text-muted-foreground">
+      <p id={`${id}-hint`} className="small text-body-secondary">
         {hint}
       </p>
     )
@@ -55,19 +55,15 @@ export function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-sm font-medium">
+    <div className="vstack gap-2">
+      <label htmlFor={id} className="form-label">
         {label}
       </label>
       <Input
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, error, hint)}
-        className={cn(
-          'h-10',
-          error && 'border-destructive focus-visible:ring-destructive',
-          className,
-        )}
+        className={cn(error && 'is-invalid', className)}
         {...props}
       />
       <FieldMessage id={id} error={error} hint={hint} />
@@ -93,13 +89,13 @@ export function TextareaField({
   ...props
 }: TextareaFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <label htmlFor={id} className="block text-sm font-medium">
+    <div className="vstack gap-2">
+      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
+        <label htmlFor={id} className="form-label">
           {label}
         </label>
         {counter && (
-          <span className="tabular text-xs text-muted-foreground">{counter}</span>
+          <span className="tabular pa-xs text-body-secondary">{counter}</span>
         )}
       </div>
       <textarea
@@ -107,8 +103,8 @@ export function TextareaField({
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, error, hint)}
         className={cn(
-          'flex min-h-36 w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
-          error && 'border-destructive focus-visible:ring-destructive',
+          'form-control pa-textarea',
+          error && 'is-invalid',
           className,
         )}
         {...props}
@@ -120,11 +116,8 @@ export function TextareaField({
 
 export function FormAlert({ children }: { children: ReactNode }) {
   return (
-    <div
-      role="alert"
-      className="flex gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2.5 text-sm text-destructive"
-    >
-      <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+    <div role="alert" className="pa-alert-error">
+      <AlertTriangle size={16} aria-hidden="true" />
       <p>{children}</p>
     </div>
   )

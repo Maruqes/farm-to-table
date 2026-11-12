@@ -9,7 +9,7 @@ export function AuctionGrid({
   now: number
 }) {
   return (
-    <ul role="list" className="grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+    <ul role="list" className="board">
       {auctions.map((auction) => (
         <AuctionCard key={auction.id} auction={auction} now={now} />
       ))}

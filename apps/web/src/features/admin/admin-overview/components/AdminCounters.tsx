@@ -29,18 +29,19 @@ export function AdminCounters({ summary }: AdminCountersProps) {
   ]
 
   return (
-    <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-y py-5 md:grid-cols-4">
+    <dl className="board" aria-label="Marketplace totals">
       {counters.map((counter) => (
-        <div key={counter.label} className="space-y-1">
-          <dt className="text-sm text-muted-foreground">{counter.label}</dt>
-          <dd>
-            <data
-              value={counter.value}
-              className="block font-display text-2xl font-extrabold tabular md:text-3xl"
-            >
+        <div key={counter.label} className="admin-counter">
+          <dt className="min-w-0">
+            <span className="label-line">{counter.label}</span>
+            <span className="d-block small text-body-secondary">
+              {counter.hint}
+            </span>
+          </dt>
+          <dd className="flex-shrink-0 text-end">
+            <data value={counter.value} className="price tabular">
               {counter.value}
             </data>
-            <span className="mt-1 block text-xs text-muted-foreground">{counter.hint}</span>
           </dd>
         </div>
       ))}

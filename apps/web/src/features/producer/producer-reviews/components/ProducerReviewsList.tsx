@@ -13,40 +13,40 @@ interface ReviewRowProps {
 
 function ReviewRow({ review, reporting, reportBusy, onReport }: ReviewRowProps) {
   return (
-    <li className="grid gap-3 p-4 md:grid-cols-[minmax(0,1fr)_8rem_7.5rem_11rem] md:items-start md:gap-4">
-      <div className="min-w-0 space-y-1">
-        <h2 className="break-words text-base font-semibold">{review.author}</h2>
-        <p className="text-sm text-muted-foreground">{reviewSubject(review)}</p>
+    <li className="board-row pa-review-row">
+      <div className="min-w-0 vstack gap-1">
+        <h2 className="text-break">{review.author}</h2>
+        <p className="small text-body-secondary">{reviewSubject(review)}</p>
         {review.text ? (
-          <p className="max-w-[65ch] break-words text-sm">{review.text}</p>
+          <p className="measure text-break small">{review.text}</p>
         ) : (
-          <p className="text-sm text-muted-foreground">No comment left.</p>
+          <p className="small text-body-secondary">No comment left.</p>
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-2 md:block">
-        <span className="text-sm text-muted-foreground md:sr-only">Rating</span>
-        <div className="flex items-center gap-2">
+      <div className="d-flex align-items-center justify-content-between gap-2 pa-md-block">
+        <span className="label-line pa-col-label">Rating</span>
+        <div className="d-flex align-items-center gap-2">
           <RatingStars rating={review.rating} />
           <data
             value={review.rating}
-            className="whitespace-nowrap text-sm font-medium tabular"
+            className="text-nowrap small fw-semibold tabular"
           >
             {review.rating > 0 ? review.rating.toFixed(1) : '—'}
           </data>
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 md:block">
-        <span className="text-sm text-muted-foreground md:sr-only">Status</span>
+      <div className="d-flex align-items-center justify-content-between gap-2 pa-md-block">
+        <span className="label-line pa-col-label">Status</span>
         <Badge variant={review.reported ? 'secondary' : 'outline'}>
           {review.reported ? 'Reported' : 'Published'}
         </Badge>
       </div>
 
-      <div className="flex md:justify-end">
+      <div className="d-flex justify-content-md-end">
         {reporting ? (
-          <p className="text-sm text-muted-foreground md:text-right">
+          <p className="small text-body-secondary text-md-end">
             Waiting for an admin decision.
           </p>
         ) : (
@@ -76,17 +76,17 @@ export function ProducerReviewsList({
     <div>
       <div
         aria-hidden="true"
-        className="hidden rounded-t-xl border border-b-0 bg-muted/40 px-4 py-2.5 text-sm font-medium text-muted-foreground md:grid md:grid-cols-[minmax(0,1fr)_8rem_7.5rem_11rem] md:gap-4"
+        className="label-line d-none d-md-grid pa-review-head py-2"
       >
         <span>Review</span>
         <span>Rating</span>
         <span>Status</span>
-        <span className="text-right">Action</span>
+        <span className="text-end">Action</span>
       </div>
 
       <ul
         aria-label="Reviews on your products and producer page"
-        className="divide-y rounded-xl border bg-card md:rounded-t-none"
+        className="board"
       >
         {reviews.map((review) => (
           <ReviewRow

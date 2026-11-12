@@ -12,9 +12,6 @@ import {
 } from '../producer-orders.labels'
 import type { OrderStatus, ProducerOrder } from '../producer-orders.types'
 
-const selectClassName =
-  'h-10 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-
 function statusBadgeVariant(
   status: OrderStatus,
 ): 'secondary' | 'destructive' | 'outline' {
@@ -43,38 +40,38 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
   }
 
   return (
-    <li className="grid gap-3 p-4 md:grid-cols-[minmax(0,1fr)_8rem_8rem_13rem] md:items-center md:gap-4">
-      <div className="min-w-0 space-y-1">
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-          <h2 id={headingId} className="text-base font-semibold">
+    <li className="board-row pa-order-row">
+      <div className="min-w-0 vstack gap-1">
+        <div className="d-flex flex-wrap align-items-baseline gap-2">
+          <h2 id={headingId}>
             Order{' '}
             <data value={order.id} title={order.id} className="tabular">
               {shortOrderRef(order.id)}
             </data>
           </h2>
           {order.createdAt && (
-            <span className="text-sm text-muted-foreground">
+            <span className="small text-body-secondary">
               Placed <time dateTime={order.createdAt}>{formatDate(order.createdAt)}</time>
             </span>
           )}
         </div>
 
-        <p className="text-sm">
+        <p>
           {order.buyer.name}
-          <span className="text-muted-foreground">
+          <span className="text-body-secondary">
             {' '}
             · {fulfilmentLabel(order.fulfilment.method)}
           </span>
         </p>
 
         {order.fulfilment.method === 'delivery' && order.fulfilment.address && (
-          <p className="break-words text-sm text-muted-foreground">
+          <p className="text-break small text-body-secondary">
             {order.fulfilment.address}
           </p>
         )}
 
         {order.items.length > 0 && (
-          <p className="break-words text-sm text-muted-foreground">
+          <p className="text-break small text-body-secondary">
             {order.items
               .map((item) => `${item.name} × ${item.quantity} ${item.unit}`)
               .join(', ')}
@@ -82,28 +79,25 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
         )}
       </div>
 
-      <div className="flex items-baseline justify-between gap-2 md:block">
-        <span className="text-sm text-muted-foreground md:sr-only">Total</span>
-        <data
-          value={order.total}
-          className="whitespace-nowrap font-display text-base font-extrabold tabular"
-        >
+      <div className="d-flex align-items-baseline justify-content-between gap-2 pa-md-block">
+        <span className="label-line pa-col-label">Total</span>
+        <data value={order.total} className="price tabular">
           {formatMoney(order.total)}
         </data>
       </div>
 
-      <div className="flex items-center justify-between gap-2 md:block">
-        <span className="text-sm text-muted-foreground md:sr-only">Status</span>
+      <div className="d-flex align-items-center justify-content-between gap-2 pa-md-block">
+        <span className="label-line pa-col-label">Status</span>
         <Badge variant={statusBadgeVariant(order.status)}>
           {ORDER_STATUS_LABELS[order.status]}
         </Badge>
       </div>
 
       {(next || cancellable) && (
-        <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1">
+        <div className="pa-order-actions">
           {next && (
-            <div className="space-y-1">
-              <label htmlFor={selectId} className="sr-only">
+            <div className="vstack gap-1">
+              <label htmlFor={selectId} className="visually-hidden">
                 Update status for order {shortOrderRef(order.id)}
               </label>
               <select
@@ -115,7 +109,7 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
                 }}
                 disabled={saving}
                 aria-describedby={headingId}
-                className={selectClassName}
+                className="form-select"
               >
                 <option value={order.status}>
                   {ORDER_STATUS_LABELS[order.status]}
@@ -129,12 +123,11 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
             <Button
               type="button"
               variant="outline"
-              className="h-10 px-3"
               onClick={() => setConfirmingCancel(true)}
               disabled={saving}
               aria-label={`Cancel order ${shortOrderRef(order.id)}`}
             >
-              <X className="size-4" aria-hidden="true" />
+              <X size={16} aria-hidden="true" />
               Cancel order
             </Button>
           )}
@@ -150,24 +143,23 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
           onKeyDown={(event) => {
             if (event.key === 'Escape') setConfirmingCancel(false)
           }}
-          className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 md:col-span-4"
+          className="frame-alarm p-3 pa-confirm-span"
         >
-          <p id={`${confirmId}-title`} className="font-medium">
+          <p id={`${confirmId}-title`} className="fw-semibold">
             Cancel order {shortOrderRef(order.id)}?
           </p>
           <p
             id={`${confirmId}-description`}
-            className="mt-1 text-sm text-muted-foreground"
+            className="mt-1 small text-body-secondary"
           >
             The buyer is told straight away and the stock returns to your catalog.
             Cancelling cannot be undone.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="d-flex flex-wrap gap-2 mt-3">
             <Button
               type="button"
               variant="outline"
               size="sm"
-              className="h-10"
               onClick={() => setConfirmingCancel(false)}
               disabled={saving}
               autoFocus
@@ -178,7 +170,6 @@ function OrderRow({ order, saving, onChangeStatus }: OrderRowProps) {
               type="button"
               variant="destructive"
               size="sm"
-              className="h-10"
               onClick={() => void handleCancel()}
               disabled={saving}
             >
@@ -206,7 +197,7 @@ export function ProducerOrdersTable({
     <div>
       <div
         aria-hidden="true"
-        className="hidden rounded-t-xl border border-b-0 bg-muted/40 px-4 py-2.5 text-sm font-medium text-muted-foreground md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_13rem] md:gap-4"
+        className="label-line d-none d-md-grid pa-order-head py-2"
       >
         <span>Order</span>
         <span>Total</span>
@@ -214,10 +205,7 @@ export function ProducerOrdersTable({
         <span>Actions</span>
       </div>
 
-      <ul
-        aria-label="Orders containing your products"
-        className="divide-y rounded-xl border bg-card md:rounded-t-none"
-      >
+      <ul aria-label="Orders containing your products" className="board">
         {orders.map((order) => (
           <OrderRow
             key={order.id}

@@ -85,18 +85,18 @@ export function MapPicker({
   const editable = interactive && pick !== undefined
 
   return (
-    <div className="space-y-2">
+    <div className="vstack gap-2">
       <div
         className={cn(
-          'relative isolate z-0 w-full overflow-hidden rounded-xl border',
-          className ?? 'h-64 md:h-72',
+          'pa-map-frame position-relative overflow-hidden w-100',
+          className ?? 'pa-map',
         )}
       >
         <MapContainer
           center={position ?? DEFAULT_CENTER}
           zoom={position ? DETAIL_ZOOM : DEFAULT_ZOOM}
           scrollWheelZoom={false}
-          className="size-full"
+          className="h-100 w-100"
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -128,7 +128,7 @@ export function MapPicker({
         </MapContainer>
       </div>
       {editable && (
-        <p className="text-sm text-muted-foreground">
+        <p className="small text-body-secondary">
           Click the map to place the pin, or drag it to adjust. The map uses
           OpenStreetMap.
         </p>

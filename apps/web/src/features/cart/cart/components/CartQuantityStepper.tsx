@@ -25,8 +25,8 @@ export function CartQuantityStepper({
   const upper = Math.max(1, stock)
 
   return (
-    <div className="flex items-center gap-1.5">
-      <label htmlFor={inputId} className="sr-only">
+    <div className="d-flex align-items-center gap-2">
+      <label htmlFor={inputId} className="visually-hidden">
         Quantity for {productName}
       </label>
       <Button
@@ -37,7 +37,7 @@ export function CartQuantityStepper({
         disabled={quantity <= 1}
         aria-label={`Decrease quantity for ${productName}`}
       >
-        <Minus className="size-4" aria-hidden="true" />
+        <Minus size={16} aria-hidden="true" />
       </Button>
       <Input
         id={inputId}
@@ -51,7 +51,7 @@ export function CartQuantityStepper({
           if (Number.isNaN(next)) return
           onChange(clamp(Math.floor(next), stock))
         }}
-        className="h-10 w-16 text-center tabular [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="cart-qty-input tabular"
       />
       <Button
         type="button"
@@ -61,7 +61,7 @@ export function CartQuantityStepper({
         disabled={quantity >= upper}
         aria-label={`Increase quantity for ${productName}`}
       >
-        <Plus className="size-4" aria-hidden="true" />
+        <Plus size={16} aria-hidden="true" />
       </Button>
     </div>
   )

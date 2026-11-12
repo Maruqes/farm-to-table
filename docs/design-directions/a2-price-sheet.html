@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A2 · Daylight price sheet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;600&family=Big+Shoulders+Display:wght@800&display=swap">
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper: light-dark(#fbfaf5, #151412);
+    --ink: light-dark(#1b1a17, #ece9df);
+    --dim: light-dark(#6b675e, #9a958a);
+    --rule: light-dark(#1b1a17, #5a564e);
+    --stamp: light-dark(#b3261e, #ff7466);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.4 'Azeret Mono', monospace; }
+  main { max-width: 60rem; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  header { display: flex; justify-content: space-between; align-items: end; gap: 1rem; border-bottom: 3px solid var(--rule); padding-bottom: .5rem; }
+  h1 { font: 800 clamp(2.2rem, 7vw, 4rem)/.9 'Big Shoulders Display', sans-serif; text-transform: uppercase; margin: 0; }
+  nav a { color: inherit; margin-left: 1.2rem; }
+  .meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; color: var(--dim); padding: .5rem 0; border-bottom: 1px solid var(--rule); }
+  .stamp { display: inline-block; margin: 1.5rem 0; padding: .5rem .9rem; border: 3px solid var(--stamp); color: var(--stamp); font-weight: 600; text-transform: uppercase; transform: rotate(-2deg); text-decoration: none; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th { text-align: left; font-weight: 400; color: var(--dim); border-bottom: 1px solid var(--rule); padding: .4rem .5rem .4rem 0; }
+  td { padding: .7rem .5rem .7rem 0; border-bottom: 1px dashed var(--dim); }
+  .num { text-align: right; }
+  .price { font-weight: 600; font-size: 1.1rem; }
+  button { font: inherit; background: none; color: inherit; border: 1px solid var(--rule); padding: .45rem .8rem; min-height: 40px; cursor: pointer; }
+  button:hover { background: var(--ink); color: var(--paper); }
+  :focus-visible { outline: 2px solid var(--stamp); outline-offset: 2px; }
+  @media (max-width: 640px) { .hide { display: none; } }
+</style>
+<main>
+  <header><h1>Farm to table</h1><nav><a href="#">Producers</a><a href="#">Auctions</a><a href="#">Cart (2)</a></nav></header>
+  <div class="meta"><span>Price sheet no. 46</span><span>Thursday 12 November</span><span>8 lots · 6 producers</span></div>
+  <a class="stamp" href="a3-auction-clock.html">Live now · lot 009 · € 34.00 · 00:41</a>
+  <table>
+    <thead><tr><th>Lot</th><th>Product</th><th class="hide">Producer</th><th class="hide">Origin</th><th class="hide">Per</th><th class="num">EUR</th><th></th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</main>
+<script>
+const CATS = {
+  cheese: '#f2c14e', honey: '#e8962e', bakery: '#d9a066',
+  wine: '#a8496c', fruit: '#a8c256', veg: '#5c9e4a',
+};
+const LOTS = [
+  { lot: '014', name: 'Aged reserve cheese', producer: 'Queijaria da Beira', place: 'Seia', unit: 'wheel', price: 16.0, cat: 'cheese' },
+  { lot: '015', name: 'Chestnut honey', producer: 'Apiário da Serra', place: 'Manteigas', unit: 'jar', price: 7.8, cat: 'honey' },
+  { lot: '016', name: 'Corn bread', producer: 'Pão da Aldeia', place: 'Évora', unit: 'loaf', price: 3.2, cat: 'bakery' },
+  { lot: '017', name: 'Douro red 2021', producer: 'Quinta do Vale', place: 'Pinhão', unit: 'bottle', price: 12.5, cat: 'wine' },
+  { lot: '018', name: 'Rocha pears', producer: 'Pomar do Oeste', place: 'Bombarral', unit: 'kg', price: 2.1, cat: 'fruit' },
+  { lot: '019', name: 'Galega cabbage', producer: 'Horta da Ribeira', place: 'Ponte de Lima', unit: 'bunch', price: 1.4, cat: 'veg' },
+  { lot: '020', name: 'Goat cheese, fresh', producer: 'Queijaria da Beira', place: 'Seia', unit: 'piece', price: 4.9, cat: 'cheese' },
+  { lot: '021', name: 'Heather honey', producer: 'Apiário da Serra', place: 'Manteigas', unit: 'jar', price: 8.6, cat: 'honey' },
+];
+const eur = (n) => n.toFixed(2);
+  rows.innerHTML = LOTS.map((p) => `<tr><td>${p.lot}</td><td>${p.name}</td><td class="hide">${p.producer}</td><td class="hide">${p.place}</td><td class="hide">${p.unit}</td><td class="num price">${eur(p.price)}</td><td class="num"><button>Add</button></td></tr>`).join('');
+</script>
+</html>

@@ -1,0 +1,389 @@
+// Page-specific styles for the producer-area pages. Compose the shared classes first; add here only what Bootstrap and _board.scss cannot express.
+
+// Back-to-dashboard link: small dim text that inks on hover.
+.pa-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--dim);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+}
+
+// Column label shown on phones, visually hidden on md+ where the header row shows it.
+.pa-col-label {
+  @include up(md) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+}
+
+// Extra-small note text (replaces Tailwind text-xs).
+.pa-xs {
+  font-size: 0.75rem;
+}
+
+// Undo uppercase where a label-line contains normal-case text.
+.pa-normal {
+  text-transform: none;
+}
+
+// Board rows with several columns on md+: stack on phones, grid on md+.
+.pa-product-row,
+.pa-auction-row,
+.pa-order-row,
+.pa-review-row {
+  display: grid;
+  gap: 1rem;
+}
+
+.pa-product-head,
+.pa-auction-head,
+.pa-order-head,
+.pa-review-head {
+  display: none;
+}
+
+@include up(md) {
+  .pa-product-row,
+  .pa-product-head {
+    grid-template-columns: minmax(0, 1fr) 7rem 6rem 12rem;
+    gap: 1rem;
+    align-items: center;
+  }
+  .pa-auction-row,
+  .pa-auction-head {
+    grid-template-columns: minmax(0, 1fr) 10rem 6.5rem minmax(14rem, auto);
+    gap: 1rem;
+    align-items: center;
+  }
+  .pa-order-row,
+  .pa-order-head {
+    grid-template-columns: minmax(0, 1fr) 8rem 8rem 13rem;
+    gap: 1rem;
+    align-items: center;
+  }
+  .pa-review-row,
+  .pa-review-head {
+    grid-template-columns: minmax(0, 1fr) 8rem 7.5rem 11rem;
+    gap: 1rem;
+    align-items: start;
+  }
+  .pa-product-head,
+  .pa-auction-head,
+  .pa-order-head,
+  .pa-review-head {
+    display: grid;
+  }
+}
+
+// Delete/cancel confirmation inside a board row: full width on md+.
+.pa-confirm-span {
+  @include up(md) {
+    grid-column: 1 / -1;
+  }
+}
+
+// Cell that is a side-by-side row on phones and plain block on md+.
+.pa-md-block {
+  @include up(md) {
+    display: block;
+  }
+}
+
+// Side-by-side action buttons on phones, wrapped row on md+.
+.pa-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+
+  @include up(md) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+// Order status actions: stack, two columns on sm, one column on md+.
+.pa-order-actions {
+  display: grid;
+  gap: 0.5rem;
+
+  @media (min-width: 576px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include up(md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// "Live" dot inside the live badge.
+.pa-live-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  background: currentColor;
+}
+
+// Error alert on forms and dialogs: square, 2px alarm border, no tint.
+.pa-alert-error {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  border: 2px solid var(--alarm);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--alarm);
+
+  > svg {
+    flex: none;
+    margin-top: 0.125rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+// Empty or informational box: 1px dashed dim rule.
+.pa-empty {
+  border: 1px dashed var(--dim);
+  padding: 1.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--dim);
+
+  p {
+    margin: 0;
+  }
+}
+
+// Info note with an icon: 1px dim border, flat.
+.pa-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border: 1px solid var(--dim);
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--dim);
+
+  > svg {
+    flex: none;
+    margin-top: 0.125rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+// Flat ink chart bars: wash track, ink fill (width is a computed inline style).
+.pa-bar-track {
+  height: 0.5rem;
+  background: var(--wash);
+}
+
+.pa-bar-fill {
+  height: 100%;
+  background: var(--ink);
+}
+
+// Inline SVG sales chart: ink bars, dim baseline.
+.pa-chart-svg {
+  height: 7rem;
+  color: var(--ink);
+}
+
+.pa-chart-axis {
+  color: var(--dim);
+}
+
+.pa-chart-day {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--dim);
+}
+
+// Auction state filter: square 2px ink chip, ink fill when pressed.
+.pa-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  &:hover {
+    background: var(--wash);
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+}
+
+.pa-filter-count {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+// Square product photo frame in the product form.
+.pa-photo-frame {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 6rem;
+  height: 6rem;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Category icon inside the photo frame.
+.pa-category-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+// Farm photo with a 16/9 frame.
+.pa-farm-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.pa-farm-photo-sm {
+  max-width: 24rem;
+}
+
+// Empty or failed farm photo: wash background, dim centered text.
+.pa-photo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--wash);
+  color: var(--dim);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+// Leaflet map frame and heights.
+.pa-map-frame {
+  border: 2px solid var(--ink);
+}
+
+.pa-map {
+  height: 16rem;
+
+  @include up(md) {
+    height: 18rem;
+  }
+}
+
+.pa-map-tall {
+  height: 16rem;
+
+  @include up(md) {
+    height: 20rem;
+  }
+}
+
+// Textareas: flat, 2px ink, Bootstrap handles the rest.
+.pa-textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.pa-note-area {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+// Report reason option: square 2px ink row, wash fill when checked.
+.pa-report-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  border: 2px solid var(--ink);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+
+  &:hover,
+  &:has(:checked) {
+    background: var(--wash);
+  }
+
+  &:focus-within {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .form-check-input {
+    flex: none;
+    margin: 0;
+  }
+}
+
+// Single organic checkbox row.
+.pa-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  width: fit-content;
+  cursor: pointer;
+
+  .form-check-input {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+  }
+}
+
+// Two-column rule under the preview photo.
+.pa-rule-bottom {
+  border-bottom: 2px solid var(--ink);
+}
+
+// Minimum width for the orders-by-state label column.
+.pa-status-label {
+  min-width: 7rem;
+}
+
+// Preview column sticks on desktop.
+.pa-sticky-preview {
+  @include up(lg) {
+    position: sticky;
+    top: 7rem;
+  }
+}

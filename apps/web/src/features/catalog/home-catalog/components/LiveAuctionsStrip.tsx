@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { CategoryIcon } from './CategoryIcon'
+import { lotNumber } from '@/components/crate'
 import { formatMoney } from '@/services/format'
 import type { LiveAuction } from '../catalog.types'
 import { useNow } from '../useNow'
@@ -20,53 +20,52 @@ function remainingLabel(endsAt: string, now: number): string {
   return `${minutes}m ${String(seconds).padStart(2, '0')}s left`
 }
 
-function AuctionChip({ auction, now, hidden }: { auction: LiveAuction; now: number; hidden?: boolean }) {
-  return (
-    <li className="shrink-0" aria-hidden={hidden || undefined}>
-      <Link
-        to={`/auctions/${auction.id}`}
-        tabIndex={hidden ? -1 : undefined}
-        className="flex items-center gap-2 rounded-full border bg-card py-1 pr-3 pl-1 text-sm transition-colors hover:border-live"
-      >
-        <span className="grid size-6 place-items-center rounded-full bg-live text-live-foreground">
-          <CategoryIcon category={auction.category} className="size-3.5 text-current" />
-        </span>
-        <span className="max-w-40 truncate font-medium">{auction.productName}</span>
-        <data value={auction.currentPrice} className="tabular font-semibold">
-          {formatMoney(auction.currentPrice)}
-        </data>
-        <time dateTime={auction.endsAt} className="tabular text-xs text-muted-foreground">
-          {remainingLabel(auction.endsAt, now)}
-        </time>
-      </Link>
-    </li>
-  )
-}
-
-// Fixed ticker at the bottom of every page (mounted by AppShell).
+// The live strip of the painted price board (RULES.md): a 4px ink bar with one
+// line of mono text (lot, item, time left) and the current bid as the single
+// tilted .price-tag. It links to the auction room. A static strip (no marquee)
+// so the strip holds at most one tilted tag; the rest stay one tap away.
 export function LiveAuctionsBar() {
   const auctions = useLiveAuctions(10)
   const now = useNow()
 
   if (auctions.length === 0) return null
 
-  // Repeat short lists so one copy is wider than the screen; the loop scrolls exactly one copy.
-  const copy = Array.from({ length: Math.ceil(8 / auctions.length) }, () => auctions).flat()
+  const ordered = [...auctions].sort(
+    (a: LiveAuction, b: LiveAuction) =>
+      new Date(a.endsAt).getTime() - new Date(b.endsAt).getTime(),
+  )
+  const [first] = ordered
+  if (!first) return null
 
   return (
     <section
       aria-label="Live auctions"
-      className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t bg-background py-1.5"
+      className="catalog-live-strip fixed-bottom"
     >
-      <div className="marquee min-w-0 flex-1 overflow-hidden">
-        <ul className="marquee-track flex w-max list-none gap-2 p-0">
-          {copy.map((auction, i) => (
-            <AuctionChip key={`a${i}`} auction={auction} now={now} hidden={i >= auctions.length} />
-          ))}
-          {copy.map((auction, i) => (
-            <AuctionChip key={`b${i}`} auction={auction} now={now} hidden />
-          ))}
-        </ul>
+      <div className="container d-flex align-items-center gap-3 py-2">
+        <Link
+          to={`/auctions/${first.id}`}
+          className="d-flex min-w-0 flex-grow-1 align-items-center gap-3"
+          aria-label={`Live auction: ${first.productName}, current bid ${formatMoney(first.currentPrice)}, ${remainingLabel(first.endsAt, now)}`}
+        >
+          <span aria-hidden="true" className="catalog-live-text min-w-0 flex-grow-1 small">
+            Live · lot {lotNumber(first.id)} · {first.productName} ·{' '}
+            <time dateTime={first.endsAt} className="tabular">
+              {remainingLabel(first.endsAt, now)}
+            </time>
+          </span>
+          <data value={first.currentPrice} className="price-tag tabular catalog-live-price" aria-hidden="true">
+            {formatMoney(first.currentPrice)}
+          </data>
+        </Link>
+        {ordered.length > 1 && (
+          <Link
+            to="/auctions"
+            className="flex-shrink-0 small fw-semibold"
+          >
+            All {ordered.length} live
+          </Link>
+        )}
       </div>
     </section>
   )

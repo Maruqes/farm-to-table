@@ -80,40 +80,34 @@ export function ProducerProductsView() {
   }
 
   return (
-    <section aria-labelledby="producer-products-heading" className="space-y-6">
-      <Link
-        to="/producer"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+    <section aria-labelledby="producer-products-heading" className="vstack gap-4">
+      <Link to="/producer" className="pa-back-link small text-body-secondary">
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
+      <header className="d-flex flex-wrap align-items-start justify-content-between gap-3">
+        <div className="vstack gap-1">
           <h1 id="producer-products-heading">Products</h1>
-          <p className="max-w-[65ch] text-muted-foreground">
+          <p className="measure text-body-secondary">
             Manage what you sell. Buyers see these prices and stock in the catalog.
           </p>
         </div>
         {!formOpen && (
           <Button onClick={openCreate}>
-            <Plus className="size-4" aria-hidden="true" />
+            <Plus size={16} aria-hidden="true" />
             Add product
           </Button>
         )}
       </header>
 
       {formOpen && (
-        <section
-          aria-labelledby="product-form-heading"
-          className="rounded-xl border bg-card p-4 md:p-6"
-        >
-          <div className="mb-5 space-y-1">
-            <h2 id="product-form-heading" className="text-xl md:text-2xl">
+        <section aria-labelledby="product-form-heading" className="rule pt-4">
+          <div className="vstack gap-1 mb-4">
+            <h2 id="product-form-heading">
               {editing ? 'Edit product' : 'Add product'}
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="small text-body-secondary">
               {editing
                 ? 'Change details, price, stock or photo. Buyers see the update in the catalog.'
                 : 'Add something you grow or make. It appears in the catalog as soon as you save.'}

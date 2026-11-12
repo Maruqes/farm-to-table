@@ -15,14 +15,14 @@ export function ProducerCartGroup({
   onRemove,
 }: ProducerCartGroupProps) {
   return (
-    <article className="overflow-hidden rounded-xl border bg-card">
-      <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b px-4 py-3 md:px-6 md:py-4">
+    <section aria-label={`${group.producer.name} in your cart`}>
+      <header className="d-flex flex-wrap align-items-baseline justify-content-between gap-2 pb-2">
         <div className="min-w-0">
-          <h2 className="text-lg">
+          <h2 className="mb-0">
             {group.producer.id ? (
               <Link
                 to={`/producers/${group.producer.id}`}
-                className="hover:text-primary"
+                className="cart-row-link"
               >
                 {group.producer.name}
               </Link>
@@ -31,21 +31,21 @@ export function ProducerCartGroup({
             )}
           </h2>
           {group.producer.location && (
-            <p className="text-sm text-muted-foreground">{group.producer.location}</p>
+            <p className="small text-body-secondary mb-0">{group.producer.location}</p>
           )}
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="small text-body-secondary mb-0">
           Subtotal{' '}
           <data
             value={group.subtotal}
-            className="ml-1 font-semibold text-foreground tabular"
+            className="ms-1 fw-semibold tabular"
           >
             {formatMoney(group.subtotal)}
           </data>
         </p>
       </header>
 
-      <ul className="divide-y">
+      <ul className="board">
         {group.items.map((item) => (
           <CartLine
             key={item.productId}
@@ -55,6 +55,6 @@ export function ProducerCartGroup({
           />
         ))}
       </ul>
-    </article>
+    </section>
   )
 }

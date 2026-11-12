@@ -19,15 +19,16 @@ export function CheckoutAlert({
       ref={containerRef}
       role="alert"
       tabIndex={-1}
-      className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm"
+      className="frame-alarm d-flex align-items-start gap-2 px-4 py-3 small"
     >
       <AlertCircle
-        className="mt-0.5 size-4 shrink-0 text-destructive"
+        size={16}
+        className="flex-shrink-0 mt-1 text-danger"
         aria-hidden="true"
       />
-      <div className="min-w-0 space-y-1">
-        {title && <p className="font-semibold">{title}</p>}
-        <div className="text-muted-foreground">{children}</div>
+      <div className="min-w-0 vstack gap-1">
+        {title && <p className="fw-semibold mb-0">{title}</p>}
+        <div className="text-body-secondary">{children}</div>
         {action && <div className="pt-1">{action}</div>}
       </div>
     </div>

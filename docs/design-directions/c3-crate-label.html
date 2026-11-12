@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C3 · Product as crate label</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600&family=Bowlby+One&display=swap">
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper: light-dark(#f6ecd6, #16130e);
+    --ink: light-dark(#14301b, #f3e9d2);
+    --label: light-dark(#f2c14e, #c9962a);
+    --label-ink: #2b1d00;
+    --tag: light-dark(#c8102e, #ff5a6e);
+    --tag-ink: light-dark(#fff, #20040a);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 18px/1.45 'Archivo Narrow', sans-serif; }
+  main { max-width: 60rem; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 3px solid var(--ink); padding-bottom: .5rem; }
+  .brand { font: 1.4rem 'Bowlby One', sans-serif; text-transform: uppercase; }
+  nav a { color: inherit; margin-left: 1.2rem; }
+  .cols { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; margin-top: 2rem; align-items: start; }
+  .label { position: relative; background: var(--label); color: var(--label-ink); border: 4px solid var(--ink); padding: 1.5rem; min-height: 24rem; display: flex; flex-direction: column; justify-content: space-between; }
+  .label h1 { font: clamp(2.6rem, 8vw, 4.6rem)/.9 'Bowlby One', sans-serif; text-transform: uppercase; margin: .5rem 0; }
+  .label .rule { border-top: 3px double var(--label-ink); padding-top: .5rem; display: flex; justify-content: space-between; font-weight: 600; text-transform: uppercase; }
+  .stamp { position: absolute; right: 1.2rem; top: 1.2rem; width: 5.5rem; aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--label-ink); display: grid; place-content: center; text-align: center; font-weight: 600; line-height: 1; text-transform: uppercase; transform: rotate(12deg); }
+  .tag { position: absolute; right: -1rem; bottom: 4.5rem; background: var(--tag); color: var(--tag-ink); font: 2.4rem 'Bowlby One', sans-serif; padding: .2rem 1rem; transform: rotate(-5deg); }
+  dl { display: grid; grid-template-columns: auto 1fr; gap: .4rem 1.5rem; margin: 1.5rem 0; }
+  dt { font-weight: 600; text-transform: uppercase; font-size: .85em; }
+  dd { margin: 0; }
+  .buy { display: flex; gap: .75rem; }
+  input { font: inherit; width: 4.5rem; text-align: center; border: 3px solid var(--ink); background: none; color: inherit; min-height: 52px; }
+  button { font: 1.1rem 'Bowlby One', sans-serif; text-transform: uppercase; flex: 1; min-height: 52px; border: 3px solid var(--ink); background: var(--ink); color: var(--paper); cursor: pointer; }
+  button:hover { background: none; color: var(--ink); }
+  :focus-visible { outline: 3px solid var(--tag); outline-offset: 2px; }
+  @media (max-width: 720px) { .cols { grid-template-columns: 1fr; } .tag { right: -.4rem; } }
+</style>
+<main>
+  <header><span class="brand">Farm to table</span><nav><a href="#">Producers</a><a href="#">Auctions</a><a href="#">Crate (2)</a></nav></header>
+  <div class="cols">
+    <div class="label">
+      <div>
+        <div>Queijaria da Beira · est. 1962</div>
+        <h1>Aged reserve cheese</h1>
+      </div>
+      <span class="stamp">100%<br>sheep<br>milk</span>
+      <span class="tag">€16</span>
+      <div class="rule"><span>Seia · Serra da Estrela</span><span>Lot 014</span></div>
+    </div>
+    <div>
+      <p>Cured twelve months in a granite cellar. Firm, a little sharp, made from raw Bordaleira sheep milk and thistle rennet.</p>
+      <dl><dt>Sold by</dt><dd>the wheel, about 1 kg</dd><dt>In stock</dt><dd>12 wheels</dd><dt>Season</dt><dd>all year</dd><dt>Rated</dt><dd>4.6 of 5, from 18 buyers</dd></dl>
+      <form class="buy" onsubmit="return false"><label><span hidden>Quantity</span><input type="number" value="1" min="1" max="12" aria-label="Quantity"></label><button>Add to crate</button></form>
+    </div>
+  </div>
+</main>
+</html>

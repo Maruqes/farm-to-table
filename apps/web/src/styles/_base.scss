@@ -1,0 +1,100 @@
+// Element defaults and the few utilities Bootstrap lacks.
+body {
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+// Page titles are board headlines.
+h1 {
+  font-size: clamp(2.25rem, 6vw, 3rem);
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+// Only h1-h3 use the display face.
+h4,
+h5,
+h6 {
+  font-family: $font-mono;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+:focus-visible,
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+.form-check-input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Utilities
+.font-display {
+  font-family: $font-display;
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+.min-w-0 {
+  min-width: 0;
+}
+.measure {
+  max-width: 65ch;
+}
+// Ink rules and frames: borders, never shadows.
+.rule {
+  border-top: 2px solid var(--ink);
+}
+.rule-thick {
+  border-top: 4px solid var(--ink);
+}
+.rule-dim {
+  border-top: 1px solid var(--dim);
+}
+.frame {
+  border: 2px solid var(--ink);
+}
+.frame-thick {
+  border: 4px solid var(--ink);
+}
+.frame-alarm {
+  border: 2px solid var(--alarm);
+}
+// Ink fill with paper text (selected tabs, counters).
+.ink-fill {
+  background: var(--ink);
+  color: var(--paper);
+}

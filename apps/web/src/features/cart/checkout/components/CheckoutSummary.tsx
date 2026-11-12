@@ -17,49 +17,63 @@ export function CheckoutSummary({
   return (
     <aside
       aria-labelledby="checkout-summary-heading"
-      className="rounded-xl border bg-card p-5 md:p-6 lg:sticky lg:top-32"
+      className="rule pt-4"
     >
-      <h2 id="checkout-summary-heading" className="text-lg">
+      <h2 id="checkout-summary-heading" className="mb-0">
         Order summary
       </h2>
-      <p className="mt-1 text-sm text-muted-foreground">
+      <p className="mt-1 small text-body-secondary mb-0">
         {groups.length === 1
           ? 'This cart becomes one order, sent to the producer.'
           : `This cart becomes ${groups.length} orders, one per producer.`}
       </p>
 
-      <ul className="mt-4 space-y-4">
+      <div className="mt-4 vstack gap-4">
         {groups.map((group) => (
-          <li key={group.producer.id || group.producer.name} className="space-y-1.5">
-            <p className="flex items-baseline justify-between gap-3 text-sm font-medium">
+          <section
+            key={group.producer.id || group.producer.name}
+            aria-label={`Summary for ${group.producer.name}`}
+          >
+            <p className="d-flex align-items-baseline justify-content-between gap-3 small fw-medium mb-0">
               <span className="min-w-0">{group.producer.name}</span>
-              <data value={group.subtotal} className="shrink-0 tabular font-semibold">
+              <data value={group.subtotal} className="flex-shrink-0 tabular fw-semibold">
                 {formatMoney(group.subtotal)}
               </data>
             </p>
-            <ul className="space-y-1 text-sm text-muted-foreground">
+            <ul className="board mt-1">
               {group.items.map((item) => (
-                <li key={item.productId}>
-                  {item.name}{' '}
-                  <span className="whitespace-nowrap tabular">
-                    × {item.quantity} {item.unit}
-                    {item.quantity === 1 ? '' : 's'}
+                <li
+                  key={item.productId}
+                  className="board-row justify-content-between gap-3 small checkout-compact"
+                >
+                  <span className="min-w-0">
+                    {item.name}{' '}
+                    <span className="text-nowrap text-body-secondary tabular">
+                      × {item.quantity} {item.unit}
+                      {item.quantity === 1 ? '' : 's'}
+                    </span>
                   </span>
+                  <data
+                    value={item.price * item.quantity}
+                    className="flex-shrink-0 text-body-secondary tabular"
+                  >
+                    {formatMoney(item.price * item.quantity)}
+                  </data>
                 </li>
               ))}
             </ul>
-          </li>
+          </section>
         ))}
-      </ul>
+      </div>
 
-      <div className="mt-4 flex items-baseline justify-between gap-4 border-t pt-4">
-        <span className="text-base font-semibold">Total</span>
-        <data value={total} className="font-display text-2xl font-extrabold tabular">
+      <div className="mt-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <span className="fw-semibold">Total</span>
+        <data value={total} className="price-tag tabular">
           {formatMoney(total)}
         </data>
       </div>
 
-      <p className="mt-2 text-xs text-muted-foreground">
+      <p className="mt-3 checkout-note mb-0">
         You pay each producer directly when you collect or receive the order.
       </p>
 
@@ -67,13 +81,13 @@ export function CheckoutSummary({
         type="submit"
         form={CHECKOUT_FORM_ID}
         size="lg"
-        className="mt-5 w-full"
+        className="mt-4 w-100"
         disabled={placing}
       >
         {placing ? 'Placing order…' : 'Place order'}
       </Button>
 
-      <p className="mt-2 text-xs text-muted-foreground">
+      <p className="mt-2 checkout-note mb-0">
         {groups.length === 1
           ? 'One order will be created.'
           : `${groups.length} separate orders will be created.`}

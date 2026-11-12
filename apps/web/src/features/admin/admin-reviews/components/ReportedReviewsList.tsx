@@ -14,9 +14,6 @@ import type {
 } from '../admin-reviews.types'
 import { ReviewDecisionDialog } from './ReviewDecisionDialog'
 
-const LIST_COLUMNS =
-  'lg:grid-cols-[minmax(0,1fr)_minmax(0,14rem)_7rem_auto]'
-
 interface ReviewRowProps {
   review: AdminReview
   pending: AdminReviewDecision | null
@@ -31,40 +28,36 @@ function ReviewRow({ review, pending, onDecision }: ReviewRowProps) {
   const busy = pending !== null
 
   return (
-    <li
-      className={`grid gap-4 p-4 lg:items-start lg:gap-5 ${LIST_COLUMNS} ${
-        hidden ? 'bg-muted/30' : ''
-      }`}
-    >
-      <div className="min-w-0 space-y-1.5">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <h2 className="text-base font-semibold break-words">
+    <li className="admin-review-row">
+      <div className="min-w-0 vstack gap-2">
+        <div className="d-flex flex-wrap align-items-center column-gap-2 row-gap-1">
+          <h2 className="text-break">
             {review.author}
           </h2>
-          <span className="text-muted-foreground" aria-hidden="true">
+          <span className="text-body-secondary" aria-hidden="true">
             ·
           </span>
-          <span className="flex items-center gap-2">
+          <span className="d-flex align-items-center gap-2">
             <RatingStars rating={review.rating} />
             <data
               value={review.rating}
-              className="text-sm font-medium tabular"
+              className="small fw-semibold tabular"
             >
               {review.rating > 0 ? review.rating.toFixed(1) : '—'}
             </data>
-            <span className="sr-only">out of 5</span>
+            <span className="visually-hidden">out of 5</span>
           </span>
         </div>
 
-        <p className="text-sm text-muted-foreground">{reviewSubject(review)}</p>
+        <p className="small text-body-secondary mb-0">{reviewSubject(review)}</p>
 
         {review.text ? (
-          <p className="max-w-[65ch] break-words text-sm">{review.text}</p>
+          <p className="measure small text-break mb-0">{review.text}</p>
         ) : (
-          <p className="text-sm text-muted-foreground">No comment left.</p>
+          <p className="small text-body-secondary mb-0">No comment left.</p>
         )}
 
-        <p className="text-xs text-muted-foreground">
+        <p className="small text-body-secondary mb-0">
           Reviewed{' '}
           {review.createdAt ? (
             <time dateTime={review.createdAt}>
@@ -76,16 +69,16 @@ function ReviewRow({ review, pending, onDecision }: ReviewRowProps) {
         </p>
       </div>
 
-      <div className="space-y-1">
-        <span className="text-sm text-muted-foreground lg:sr-only">
+      <div>
+        <span className="label-line d-lg-none">
           Report reason
         </span>
-        <p className="text-sm font-medium">{review.reportReason}</p>
+        <p className="small fw-semibold mb-0">{review.reportReason}</p>
         {review.reportNote && (
-          <p className="text-sm text-muted-foreground">{review.reportNote}</p>
+          <p className="small text-body-secondary text-break mb-0">{review.reportNote}</p>
         )}
         {review.reportedAt && (
-          <p className="text-xs text-muted-foreground">
+          <p className="small text-body-secondary mb-0">
             Reported{' '}
             <time dateTime={review.reportedAt}>
               {formatDate(review.reportedAt)}
@@ -94,17 +87,17 @@ function ReviewRow({ review, pending, onDecision }: ReviewRowProps) {
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-3 lg:block">
-        <span className="text-sm text-muted-foreground lg:sr-only">Status</span>
+      <div className="d-flex align-items-center justify-content-between gap-3 d-lg-block">
+        <span className="label-line d-lg-none">Status</span>
         <Badge variant={hidden ? 'secondary' : 'outline'}>
-          {hidden && <EyeOff aria-hidden="true" />}
+          {hidden && <EyeOff size={16} aria-hidden="true" />}
           {REVIEW_STATUS_LABELS[review.status]}
         </Badge>
       </div>
 
-      <div className="flex flex-wrap gap-2 lg:flex-nowrap lg:justify-end">
+      <div className="admin-decision-actions">
         {hidden ? (
-          <p className="text-sm text-muted-foreground lg:max-w-28 lg:text-right">
+          <p className="small text-body-secondary text-lg-end mb-0">
             Hidden from buyers
           </p>
         ) : (
@@ -146,17 +139,17 @@ export function ReportedReviewsList({
     <div>
       <div
         aria-hidden="true"
-        className={`hidden rounded-t-xl border border-b-0 bg-muted/40 px-4 py-2.5 text-sm font-medium text-muted-foreground lg:grid lg:gap-5 ${LIST_COLUMNS}`}
+        className="admin-cols admin-review-cols label-line"
       >
         <span>Review</span>
         <span>Report</span>
         <span>Status</span>
-        <span className="text-right">Decision</span>
+        <span className="text-end">Decision</span>
       </div>
 
       <ul
         aria-label="Reported reviews"
-        className="divide-y rounded-xl border bg-card lg:rounded-t-none"
+        className="board"
       >
         {reviews.map((review) => (
           <ReviewRow

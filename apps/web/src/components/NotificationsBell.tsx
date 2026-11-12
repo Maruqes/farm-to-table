@@ -17,9 +17,7 @@ import {
   Trophy,
 } from 'lucide-react'
 import { PageState } from '@/components/PageState'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/components/ui/utils'
 import { formatDateTime } from '@/services/format'
 import { NOTIFICATION_TYPE_LABELS } from '@/features/orders/notifications/notifications.labels'
 import type {
@@ -29,6 +27,7 @@ import type {
 } from '@/features/orders/notifications/notifications.types'
 
 type NotificationIcon = ComponentType<{
+  size?: number | string
   className?: string
   'aria-hidden'?: boolean | 'true' | 'false'
 }>
@@ -137,7 +136,7 @@ export function NotificationsBell({
   const showEmpty = !loading && !error && notifications.length === 0
 
   return (
-    <div ref={wrapperRef} className="relative">
+    <div ref={wrapperRef} className="notifications-wrap">
       <Button
         type="button"
         variant="ghost"
@@ -148,16 +147,15 @@ export function NotificationsBell({
         aria-expanded={open}
         aria-controls={PANEL_ID}
         onClick={() => setOpen((value) => !value)}
-        className="relative"
       >
-        <Bell className="size-5" aria-hidden="true" />
+        <Bell size={20} aria-hidden="true" />
         {unreadCount > 0 && (
-          <Badge
+          <span
             aria-hidden="true"
-            className="absolute -right-0.5 -top-0.5 min-w-5 justify-center px-1 leading-5 tabular"
+            className="notifications-count"
           >
             {unreadCount > 9 ? '9+' : unreadCount}
-          </Badge>
+          </span>
         )}
       </Button>
 
@@ -168,15 +166,15 @@ export function NotificationsBell({
           role="dialog"
           aria-label="Notifications"
           tabIndex={-1}
-          className="fixed inset-x-4 bottom-4 z-50 flex max-h-[70dvh] flex-col overflow-hidden rounded-xl border bg-card text-card-foreground md:absolute md:inset-x-auto md:bottom-auto md:right-0 md:top-full md:mt-2 md:max-h-[28rem] md:w-96"
+          className="notifications-panel"
         >
-          <div className="flex shrink-0 items-start justify-between gap-3 border-b px-4 py-3">
+          <div className="notifications-panel-head d-flex align-items-start justify-content-between gap-3 flex-shrink-0 px-3 py-3">
             <div className="min-w-0">
-              <h2 className="font-display text-base font-extrabold tracking-tight">
+              <h2 className="fs-6 mb-0">
                 Notifications
               </h2>
               {!loading && !error && (
-                <p aria-live="polite" className="text-xs text-muted-foreground tabular">
+                <p aria-live="polite" className="small text-body-secondary tabular mb-0">
                   {unreadCount === 0 ? 'No unread notifications' : `${unreadCount} unread`}
                 </p>
               )}
@@ -187,14 +185,13 @@ export function NotificationsBell({
                 variant="ghost"
                 size="sm"
                 onClick={handleMarkAllRead}
-                className="h-10 px-3"
               >
                 Mark all as read
               </Button>
             )}
           </div>
 
-          <div className="min-h-0 overflow-y-auto [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent [&>div]:px-6 [&>div]:py-10">
+          <div className="notifications-list">
             <PageState
               loading={loading}
               error={error}
@@ -203,49 +200,46 @@ export function NotificationsBell({
               empty={showEmpty}
               emptyMessage="No notifications yet. Order updates, auction results and approval news will appear here."
             >
-              <ul className="divide-y divide-border">
+              <ul className="board">
                 {notifications.map((notification) => {
                   const Icon = NOTIFICATION_ICONS[notification.type]
                   const textId = `notification-${notification.id}-text`
 
                   return (
-                    <li key={notification.id} className="flex items-start gap-3 px-4 py-3">
+                    <li key={notification.id} className="board-row notifications-row px-3">
                       <Icon
-                        className={cn(
-                          'mt-0.5 size-4 shrink-0',
-                          notification.read ? 'text-muted-foreground' : 'text-foreground',
-                        )}
+                        size={16}
+                        className={notification.read ? 'text-body-secondary flex-shrink-0 mt-1' : 'flex-shrink-0 mt-1'}
                         aria-hidden="true"
                       />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-grow-1">
+                        <div className="d-flex align-items-start justify-content-between gap-2">
                           <p
                             id={textId}
-                            className={cn(
-                              'text-sm',
+                            className={
                               notification.read
-                                ? 'text-muted-foreground'
-                                : 'font-medium text-foreground',
-                            )}
+                                ? 'small text-body-secondary mb-0'
+                                : 'small fw-semibold mb-0'
+                            }
                           >
                             {notification.text}
                           </p>
                           {!notification.read && (
-                            <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary">
-                              <span className="sr-only">Unread</span>
+                            <span className="notifications-dot">
+                              <span className="visually-hidden">Unread</span>
                             </span>
                           )}
                         </div>
-                        <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <div className="d-flex flex-wrap align-items-center gap-2 mt-2">
                           <time
                             dateTime={notification.date ?? undefined}
-                            className="text-xs text-muted-foreground tabular"
+                            className="small text-body-secondary tabular"
                           >
                             {notification.date
                               ? formatDateTime(notification.date)
                               : 'Just now'}
                           </time>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="small text-body-secondary">
                             {NOTIFICATION_TYPE_LABELS[notification.type]}
                           </span>
                           {!notification.read && (
@@ -253,7 +247,7 @@ export function NotificationsBell({
                               type="button"
                               variant="ghost"
                               size="sm"
-                              className="ml-auto h-10 px-3 text-xs"
+                              className="ms-auto"
                               onClick={() => handleMarkRead(notification.id)}
                               aria-describedby={textId}
                               data-mark-read={notification.id}

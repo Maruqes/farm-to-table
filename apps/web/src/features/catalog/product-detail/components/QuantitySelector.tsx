@@ -13,11 +13,11 @@ export function QuantitySelector({ value, max, onChange }: QuantitySelectorProps
   const clamp = (next: number) => Math.min(Math.max(1, next), upperBound)
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor="product-quantity" className="text-sm font-medium">
+    <div className="vstack gap-2">
+      <label htmlFor="product-quantity" className="form-label">
         Quantity
       </label>
-      <div className="flex items-center gap-2">
+      <div className="d-flex align-items-center gap-2">
         <Button
           type="button"
           variant="outline"
@@ -26,7 +26,7 @@ export function QuantitySelector({ value, max, onChange }: QuantitySelectorProps
           disabled={value <= 1}
           aria-label="Decrease quantity"
         >
-          <Minus className="size-4" aria-hidden="true" />
+          <Minus size={16} aria-hidden="true" />
         </Button>
         <Input
           id="product-quantity"
@@ -37,7 +37,7 @@ export function QuantitySelector({ value, max, onChange }: QuantitySelectorProps
           value={value}
           onChange={(event) => onChange(clamp(Number(event.target.value) || 1))}
           aria-describedby="product-quantity-hint"
-          className="h-10 w-16 text-center tabular"
+          className="product-qty-input tabular"
         />
         <Button
           type="button"
@@ -47,10 +47,10 @@ export function QuantitySelector({ value, max, onChange }: QuantitySelectorProps
           disabled={value >= upperBound}
           aria-label="Increase quantity"
         >
-          <Plus className="size-4" aria-hidden="true" />
+          <Plus size={16} aria-hidden="true" />
         </Button>
       </div>
-      <p id="product-quantity-hint" className="text-xs text-muted-foreground">
+      <p id="product-quantity-hint" className="form-text">
         Up to {upperBound} {upperBound === 1 ? 'unit' : 'units'} available.
       </p>
     </div>

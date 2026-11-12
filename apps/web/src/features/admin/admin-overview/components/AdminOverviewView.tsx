@@ -10,10 +10,10 @@ export function AdminOverviewView() {
   const showEmpty = !loading && !error && empty
 
   return (
-    <section aria-labelledby="admin-overview-heading" className="space-y-8">
-      <header className="space-y-1">
+    <section aria-labelledby="admin-overview-heading" className="vstack gap-4">
+      <header>
         <h1 id="admin-overview-heading">Admin overview</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+        <p className="measure text-body-secondary mb-0">
           The whole marketplace at a glance: people, orders and auctions, plus the queues
           that need a decision.
         </p>
@@ -28,7 +28,7 @@ export function AdminOverviewView() {
         emptyMessage="No activity yet. Users, orders and auctions will appear here as the marketplace starts moving."
       >
         {summary && (
-          <div className="space-y-8">
+          <div className="vstack gap-4">
             <AdminCounters summary={summary} />
 
             <AdminShortcuts
@@ -36,9 +36,13 @@ export function AdminOverviewView() {
               activeAuctions={summary.activeAuctions}
             />
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <SalesOverTimeChart points={summary.salesPerDay} />
-              <OrdersByStateChart byStatus={summary.byStatus} />
+            <div className="row g-4">
+              <div className="col-lg-6">
+                <SalesOverTimeChart points={summary.salesPerDay} />
+              </div>
+              <div className="col-lg-6">
+                <OrdersByStateChart byStatus={summary.byStatus} />
+              </div>
             </div>
           </div>
         )}

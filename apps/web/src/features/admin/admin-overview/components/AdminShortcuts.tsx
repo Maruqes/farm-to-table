@@ -47,39 +47,34 @@ export function AdminShortcuts({ pendingProducers, activeAuctions }: AdminShortc
   ]
 
   return (
-    <section aria-labelledby="admin-shortcuts-heading" className="space-y-3">
-      <div className="space-y-1">
-        <h2 id="admin-shortcuts-heading" className="text-xl md:text-2xl">
-          Admin tasks
-        </h2>
-        <p className="text-sm text-muted-foreground">
+    <section aria-labelledby="admin-shortcuts-heading" className="vstack gap-3">
+      <div>
+        <h2 id="admin-shortcuts-heading">Admin tasks</h2>
+        <p className="small text-body-secondary mb-0">
           Jump to the queues and panels that need an admin.
         </p>
       </div>
 
-      <ul className="divide-y rounded-xl border bg-card">
+      <ul aria-label="Admin tasks" className="board">
         {shortcuts.map((shortcut) => (
-          <li key={shortcut.to}>
-            <Link
-              to={shortcut.to}
-              className="flex min-h-14 flex-wrap items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-accent md:px-6"
-            >
-              <span className="min-w-0 flex-1">
-                <span className="block font-medium">{shortcut.title}</span>
-                <span className="block text-sm text-muted-foreground">
+          <li key={shortcut.to} className="board-row">
+            <Link to={shortcut.to} className="admin-shortcut-link">
+              <span className="min-w-0 flex-grow-1">
+                <span className="d-block fw-semibold admin-shortcut-title">{shortcut.title}</span>
+                <span className="d-block small text-body-secondary">
                   {shortcut.description}
                 </span>
               </span>
-              <span className="flex items-center gap-3">
+              <span className="d-flex flex-shrink-0 align-items-center gap-3">
                 {shortcut.countLabel && (
-                  <span className="text-sm text-muted-foreground">
-                    <data value={shortcut.count} className="font-medium text-foreground tabular">
+                  <span className="small text-body-secondary">
+                    <data value={shortcut.count} className="fw-semibold tabular">
                       {shortcut.count}
                     </data>{' '}
                     {shortcut.countLabel}
                   </span>
                 )}
-                <ArrowRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <ArrowRight size={16} className="flex-shrink-0 text-body-secondary" aria-hidden="true" />
               </span>
             </Link>
           </li>

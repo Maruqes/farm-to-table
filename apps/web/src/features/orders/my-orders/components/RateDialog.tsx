@@ -63,12 +63,12 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-foreground/40 dark:bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border bg-card p-5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 md:p-6">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div className="space-y-1">
-              <Dialog.Title className="text-xl">Rate {order.producer.name}</Dialog.Title>
-              <Dialog.Description className="text-sm text-muted-foreground">
+        <Dialog.Overlay className="dialog-overlay" />
+        <Dialog.Content className="dialog-panel">
+          <div className="mb-4 d-flex align-items-start justify-content-between gap-3">
+            <div className="vstack gap-1">
+              <Dialog.Title className="mb-0">Rate {order.producer.name}</Dialog.Title>
+              <Dialog.Description className="small text-body-secondary">
                 Your rating is public on the producer’s page. You can rate this order once.
               </Dialog.Description>
             </div>
@@ -79,14 +79,17 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <fieldset className="space-y-2">
-              <legend className="text-sm font-medium">Your rating</legend>
-              <div className="flex flex-wrap gap-1">
+          <form onSubmit={handleSubmit} className="vstack gap-4">
+            <fieldset className="vstack gap-2">
+              <legend className="label-line mb-0">Your rating</legend>
+              <div className="d-flex flex-wrap gap-1">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <label
                     key={value}
-                    className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-card hover:bg-accent"
+                    className={cn(
+                      'orders-star',
+                      rating === value && 'is-active',
+                    )}
                   >
                     <input
                       type="radio"
@@ -97,35 +100,32 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
                         setRating(value)
                         setError(null)
                       }}
-                      className="sr-only"
+                      className="visually-hidden"
                       autoFocus={value === 1}
                     />
                     <Star
+                      size={24}
+                      fill={value <= rating ? 'currentColor' : 'none'}
                       aria-hidden="true"
-                      className={cn(
-                        'size-6',
-                        value <= rating
-                          ? 'fill-current text-primary'
-                          : 'text-muted-foreground',
-                      )}
+                      className={cn(value <= rating && 'text-primary')}
                     />
-                    <span className="sr-only">
+                    <span className="visually-hidden">
                       {value} star{value === 1 ? '' : 's'}
                     </span>
                   </label>
                 ))}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="orders-note mb-0">
                 {rating > 0 ? `${rating} out of 5 stars` : 'Choose a star rating.'}
               </p>
             </fieldset>
 
-            <div className="space-y-1.5">
-              <div className="flex items-baseline justify-between gap-3">
-                <label htmlFor={textId} className="text-sm font-medium">
-                  Review <span className="font-normal text-muted-foreground">(optional)</span>
+            <div className="vstack gap-2">
+              <div className="d-flex align-items-baseline justify-content-between gap-3">
+                <label htmlFor={textId} className="label-line mb-0">
+                  Review <span className="fw-normal">(optional)</span>
                 </label>
-                <span className="text-xs text-muted-foreground tabular">
+                <span className="small text-body-secondary tabular">
                   {text.length} / {MAX_TEXT_LENGTH}
                 </span>
               </div>
@@ -136,9 +136,9 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
                 maxLength={MAX_TEXT_LENGTH}
                 rows={4}
                 placeholder="What did you think of the produce and the producer?"
-                className="flex min-h-24 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                className="form-control orders-review-text"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="orders-note mb-0">
                 Keep it specific: freshness, packaging and pickup are useful to other buyers.
               </p>
             </div>
@@ -146,20 +146,20 @@ export function RateDialog({ order, onSubmit }: RateDialogProps) {
             {error && (
               <p
                 role="alert"
-                className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+                className="frame-alarm px-3 py-2 small text-danger mb-0"
               >
                 {error}
               </p>
             )}
 
-            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <div className="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-2">
               <Dialog.Close asChild>
                 <Button type="button" variant="outline" disabled={submitting}>
                   Cancel
                 </Button>
               </Dialog.Close>
               <Button type="submit" disabled={submitting}>
-                {submitting && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
+                {submitting && <Loader2 size={16} className="spin" aria-hidden="true" />}
                 {submitting ? 'Saving rating…' : 'Submit rating'}
               </Button>
             </div>

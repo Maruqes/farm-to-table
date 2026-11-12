@@ -20,15 +20,15 @@ function ModerationRow({ item, pending, onToggle }: ModerationRowProps) {
   const nextHidden = !item.hidden
 
   return (
-    <li className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-      <div className="min-w-0 space-y-1">
-        <h2 className="text-base font-semibold break-words">{item.name}</h2>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+    <li className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3 py-3 border-bottom">
+      <div className="min-w-0 vstack gap-1">
+        <h2 className="text-break">{item.name}</h2>
+        <div className="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 small text-body-secondary">
           <Badge variant={item.hidden ? 'secondary' : 'outline'}>
             {item.hidden ? (
-              <EyeOff aria-hidden="true" />
+              <EyeOff size={16} aria-hidden="true" />
             ) : (
-              <Eye aria-hidden="true" />
+              <Eye size={16} aria-hidden="true" />
             )}
             {itemStatusLabel(item.hidden)}
           </Badge>
@@ -39,17 +39,16 @@ function ModerationRow({ item, pending, onToggle }: ModerationRowProps) {
       <Button
         type="button"
         variant="outline"
-        className="h-11 w-full sm:w-auto"
         disabled={pending}
         onClick={() => onToggle(item, nextHidden)}
         aria-label={`${nextHidden ? 'Hide' : 'Unhide'} ${item.name}`}
       >
         {pending ? (
-          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+          <Loader2 size={16} className="spin" aria-hidden="true" />
         ) : nextHidden ? (
-          <EyeOff className="size-4" aria-hidden="true" />
+          <EyeOff size={16} aria-hidden="true" />
         ) : (
-          <Eye className="size-4" aria-hidden="true" />
+          <Eye size={16} aria-hidden="true" />
         )}
         {pending ? 'Saving…' : nextHidden ? 'Hide' : 'Unhide'}
       </Button>
@@ -76,7 +75,7 @@ export function ModerationList({
   return (
     <ul
       aria-label={listLabel}
-      className="divide-y rounded-xl border bg-card"
+      className="board"
     >
       {items.map((item) => (
         <ModerationRow

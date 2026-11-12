@@ -1,0 +1,75 @@
+// Page-specific styles for the producers pages. Compose the shared classes first; add here only what Bootstrap and _board.scss cannot express.
+
+// Board-row links: plain text, underlined on hover.
+.producers-row-link,
+.producer-public-product-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Rating stars are solid, not outlines.
+.producers-star,
+.producer-public-star {
+  fill: currentColor;
+}
+
+// Crate label header of a producer's public page.
+.producer-public-kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.producer-public-title {
+  font-size: 3rem;
+
+  @include up(md) {
+    font-size: 3.75rem;
+  }
+}
+
+.producer-public-bio {
+  line-height: 1.625;
+}
+
+.producer-public-section-title {
+  font-size: 1.25rem;
+
+  @include up(md) {
+    font-size: 1.5rem;
+  }
+}
+
+// "Back to catalog" link: dim, ink on hover.
+.producer-public-back {
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+// Square 4px ink frame around the map, fixed height; the leaflet map fills it.
+.producer-public-map {
+  height: 16rem;
+
+  @include up(md) {
+    height: 20rem;
+  }
+
+  .leaflet-container {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Loading stand-in for the map: a shimmer block the size of the map.
+.producer-public-map-placeholder {
+  width: 100%;
+  height: 100%;
+}

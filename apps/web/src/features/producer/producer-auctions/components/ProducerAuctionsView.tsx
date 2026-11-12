@@ -96,45 +96,39 @@ export function ProducerAuctionsView() {
   }
 
   return (
-    <section aria-labelledby="producer-auctions-heading" className="space-y-6">
-      <Link
-        to="/producer"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+    <section aria-labelledby="producer-auctions-heading" className="vstack gap-4">
+      <Link to="/producer" className="pa-back-link small text-body-secondary">
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
+      <header className="d-flex flex-wrap align-items-start justify-content-between gap-3">
+        <div className="vstack gap-1">
           <h1 id="producer-auctions-heading">Auctions</h1>
-          <p className="max-w-[65ch] text-muted-foreground">
+          <p className="measure text-body-secondary">
             Turn your produce into a live lot. Create a draft, publish it, and follow bids
             in the auction room.
           </p>
         </div>
         {!formOpen && (
           <Button ref={newAuctionButtonRef} onClick={openCreate}>
-            <Plus className="size-4" aria-hidden="true" />
+            <Plus size={16} aria-hidden="true" />
             New auction
           </Button>
         )}
       </header>
 
-      <p className="sr-only" aria-live="polite">
+      <p className="visually-hidden" aria-live="polite">
         {announcement}
       </p>
 
       {formOpen && (
-        <section
-          aria-labelledby="auction-form-heading"
-          className="rounded-xl border bg-card p-4 md:p-6"
-        >
-          <div className="mb-5 space-y-1">
-            <h2 id="auction-form-heading" className="text-xl md:text-2xl">
+        <section aria-labelledby="auction-form-heading" className="rule pt-4">
+          <div className="vstack gap-1 mb-4">
+            <h2 id="auction-form-heading">
               {editing ? 'Edit draft auction' : 'New auction'}
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="small text-body-secondary">
               {editing
                 ? 'Drafts can be changed until you publish them. Publishing schedules the lot.'
                 : 'Pick one of your products, set the lot and the starting price, then save a draft or publish.'}

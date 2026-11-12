@@ -31,18 +31,15 @@ export function AdminUsersView() {
     : ''
 
   return (
-    <section aria-labelledby="admin-users-heading" className="space-y-6">
-      <Link
-        to="/admin"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+    <section aria-labelledby="admin-users-heading" className="vstack gap-4">
+      <Link to="/admin" className="admin-back">
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
-      <header className="space-y-1">
+      <header>
         <h1 id="admin-users-heading">Users</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+        <p className="measure text-body-secondary mb-0">
           Everyone registered on Farm to Table. Search by name or email, filter
           by role and check each account&apos;s state. This list is read-only.
         </p>
@@ -55,7 +52,7 @@ export function AdminUsersView() {
         onClear={clearFilters}
       />
 
-      <p className="sr-only" aria-live="polite">
+      <p className="visually-hidden" aria-live="polite">
         {announcement}
       </p>
 
@@ -71,11 +68,11 @@ export function AdminUsersView() {
             : 'No users yet. Buyers, producers and admins appear here once they register.'
         }
       >
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
+        <div className="vstack gap-3">
+          <p className="small text-body-secondary mb-0">
             <data
               value={total}
-              className="font-medium text-foreground tabular"
+              className="fw-semibold tabular"
             >
               {total}
             </data>{' '}

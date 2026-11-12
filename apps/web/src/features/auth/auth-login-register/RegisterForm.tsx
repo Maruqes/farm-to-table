@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/components/ui/utils'
 import { useSession } from '@/context/session'
 import { ApiError, authService } from '@/features/auth/auth-login-register'
 import { FormAlert, TextField } from './form-fields'
@@ -150,7 +149,7 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-busy={submitting} className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate aria-busy={submitting} className="vstack gap-3">
       {formError && <FormAlert>{formError}</FormAlert>}
 
       <TextField
@@ -190,47 +189,46 @@ export function RegisterForm() {
       />
 
       <fieldset
-        className="space-y-2"
+        className="vstack gap-2"
         aria-invalid={errors.role ? true : undefined}
         aria-describedby={errors.role ? 'role-error' : undefined}
       >
-        <legend className="text-sm font-medium">Account type</legend>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {ROLE_OPTIONS.map((option) => (
-            <label
-              key={option.value}
-              className={cn(
-                'flex cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-2.5 transition-colors',
-                role === option.value
-                  ? 'border-primary bg-accent/60'
-                  : 'border-input bg-background hover:bg-accent/40',
-              )}
-            >
-              <input
-                type="radio"
-                name="role"
-                value={option.value}
-                checked={role === option.value}
-                onChange={() => handleRoleChange(option.value)}
-                className="mt-0.5 size-4 shrink-0 accent-primary"
-              />
-              <span>
-                <span className="block text-sm font-medium">{option.label}</span>
-                <span className="block text-sm text-muted-foreground">{option.description}</span>
-              </span>
-            </label>
-          ))}
+        <legend className="label-line mb-0">Account type</legend>
+        <div className="row g-2">
+          {ROLE_OPTIONS.map((option) => {
+            const selected = role === option.value
+            return (
+              <div key={option.value} className="col-sm-6">
+                <label className={selected ? 'auth-role-option is-selected' : 'auth-role-option'}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value={option.value}
+                    checked={selected}
+                    onChange={() => handleRoleChange(option.value)}
+                    className="form-check-input visually-hidden"
+                  />
+                  <span>
+                    <span className="d-block small fw-semibold">{option.label}</span>
+                    <span className={selected ? 'd-block small auth-role-desc' : 'd-block small text-body-secondary'}>
+                      {option.description}
+                    </span>
+                  </span>
+                </label>
+              </div>
+            )
+          })}
         </div>
         {errors.role && (
-          <p id="role-error" className="text-sm text-destructive">
+          <p id="role-error" className="small text-danger mb-0">
             {errors.role}
           </p>
         )}
       </fieldset>
 
       {role === 'producer' && (
-        <div className="space-y-4">
-          <p className="text-sm font-medium">Farm details</p>
+        <div className="vstack gap-3">
+          <p className="label-line">Farm details</p>
           <TextField
             id="farmName"
             label="Farm name"
@@ -254,7 +252,7 @@ export function RegisterForm() {
         </div>
       )}
 
-      <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+      <Button type="submit" size="lg" className="w-100" disabled={submitting}>
         {submitting ? 'Creating account…' : 'Create account'}
       </Button>
     </form>

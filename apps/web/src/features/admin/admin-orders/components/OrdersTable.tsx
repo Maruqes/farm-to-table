@@ -36,128 +36,70 @@ interface OrdersTableProps {
 
 export function OrdersTable({ orders }: OrdersTableProps) {
   return (
-    <>
-      <ul
-        aria-label="All orders"
-        className="space-y-3 md:hidden"
-      >
+    <table className="table admin-table">
+      <caption className="visually-hidden">
+        All orders with buyer, producer, item count, total, state and date
+        placed
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Order</th>
+          <th scope="col" className="d-none d-md-table-cell">
+            Buyer
+          </th>
+          <th scope="col" className="d-none d-md-table-cell">
+            Producer
+          </th>
+          <th scope="col" className="d-none d-md-table-cell text-end">
+            Items
+          </th>
+          <th scope="col" className="text-end">
+            Total
+          </th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
         {orders.map((order) => (
-          <li key={order.id} className="rounded-xl border bg-card p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="font-medium">
-                  Order{' '}
-                  <data
-                    value={order.id}
-                    title={order.id}
-                    className="tabular"
-                  >
-                    {shortOrderRef(order.id)}
-                  </data>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Placed{' '}
-                  <PlacedDate createdAt={order.createdAt} />
-                </p>
-              </div>
+          <tr key={order.id}>
+            <th scope="row">
+              <span className="d-block fw-semibold">
+                Order{' '}
+                <data
+                  value={order.id}
+                  title={order.id}
+                  className="tabular"
+                >
+                  {shortOrderRef(order.id)}
+                </data>
+              </span>
+              <span className="d-block small text-body-secondary">
+                Placed{' '}
+                <PlacedDate createdAt={order.createdAt} />
+              </span>
+              <span className="d-block small d-md-none mt-1">
+                {order.buyerName} · {order.producerName}
+              </span>
+              <span className="d-block small text-body-secondary d-md-none">
+                {order.itemCount} {order.itemCount === 1 ? 'item' : 'items'}
+              </span>
+            </th>
+            <td className="d-none d-md-table-cell text-break">{order.buyerName}</td>
+            <td className="d-none d-md-table-cell text-break">
+              {order.producerName}
+            </td>
+            <td className="d-none d-md-table-cell text-end tabular">
+              {order.itemCount}
+            </td>
+            <td className="text-end font-display text-nowrap tabular">
+              {formatMoney(order.total)}
+            </td>
+            <td>
               <OrderStatusBadge status={order.status} />
-            </div>
-
-            <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
-              <div className="min-w-0">
-                <dt className="text-muted-foreground">Buyer</dt>
-                <dd className="break-words font-medium">{order.buyerName}</dd>
-              </div>
-              <div className="min-w-0">
-                <dt className="text-muted-foreground">Producer</dt>
-                <dd className="break-words font-medium">
-                  {order.producerName}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground">Items</dt>
-                <dd className="tabular">{order.itemCount}</dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground">Total</dt>
-                <dd className="font-display font-extrabold tabular">
-                  {formatMoney(order.total)}
-                </dd>
-              </div>
-            </dl>
-          </li>
+            </td>
+          </tr>
         ))}
-      </ul>
-
-      <div className="hidden overflow-hidden rounded-xl border bg-card md:block">
-        <table className="w-full table-fixed border-collapse text-left">
-          <caption className="sr-only">
-            All orders with buyer, producer, item count, total, state and date
-            placed
-          </caption>
-          <thead className="bg-muted/40 text-sm text-muted-foreground">
-            <tr>
-              <th scope="col" className="w-[22%] px-4 py-3 font-medium">
-                Order
-              </th>
-              <th scope="col" className="w-[22%] px-3 py-3 font-medium">
-                Buyer
-              </th>
-              <th scope="col" className="w-[22%] px-3 py-3 font-medium">
-                Producer
-              </th>
-              <th
-                scope="col"
-                className="w-[10%] px-3 py-3 text-right font-medium"
-              >
-                Items
-              </th>
-              <th
-                scope="col"
-                className="w-[12%] px-3 py-3 text-right font-medium"
-              >
-                Total
-              </th>
-              <th scope="col" className="w-[12%] px-3 py-3 font-medium">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {orders.map((order) => (
-              <tr key={order.id} className="align-top hover:bg-accent/40">
-                <th scope="row" className="px-4 py-3 font-normal">
-                  <span className="block font-medium">
-                    <data
-                      value={order.id}
-                      title={order.id}
-                      className="tabular"
-                    >
-                      {shortOrderRef(order.id)}
-                    </data>
-                  </span>
-                  <span className="block text-sm text-muted-foreground">
-                    <PlacedDate createdAt={order.createdAt} />
-                  </span>
-                </th>
-                <td className="px-3 py-3 break-words">{order.buyerName}</td>
-                <td className="px-3 py-3 break-words">
-                  {order.producerName}
-                </td>
-                <td className="px-3 py-3 text-right tabular">
-                  {order.itemCount}
-                </td>
-                <td className="px-3 py-3 text-right font-display font-extrabold whitespace-nowrap tabular">
-                  {formatMoney(order.total)}
-                </td>
-                <td className="px-3 py-3">
-                  <OrderStatusBadge status={order.status} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+      </tbody>
+    </table>
   )
 }

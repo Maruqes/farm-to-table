@@ -1,19 +1,11 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Users } from 'lucide-react'
-import { CategoryIcon } from '@/features/catalog/home-catalog/components/CategoryIcon'
+import { Button } from '@/components/ui/button'
+import { CrateChip } from '@/components/board'
+import { lotNumber } from '@/components/crate'
 import { formatMoney } from '@/services/format'
 import type { AuctionListItem, AuctionListStatus } from '../auctions-list.types'
 import { AuctionCountdown } from './AuctionCountdown'
 import { AuctionListStatusBadge } from './AuctionListStatusBadge'
-
-const TILE: Record<string, string> = {
-  vegetables: 'bg-tile-veg',
-  fruit: 'bg-tile-fruit',
-  honey: 'bg-tile-honey',
-  wine: 'bg-tile-wine',
-  cheese: 'bg-tile-cheese',
-  bakery: 'bg-tile-bakery',
-}
 
 const PRICE_LABEL: Record<AuctionListStatus, string> = {
   active: 'Current bid',
@@ -21,10 +13,8 @@ const PRICE_LABEL: Record<AuctionListStatus, string> = {
   ended: 'Final price',
 }
 
-const ROOM_LABEL: Record<AuctionListStatus, string> = {
-  active: 'Open room',
-  scheduled: 'See the lot',
-  ended: 'View results',
+function roomLabel(status: AuctionListStatus): string {
+  return status === 'active' ? 'Enter' : 'View'
 }
 
 function watcherCopy(status: AuctionListStatus, viewers: number): string {
@@ -44,57 +34,52 @@ export function AuctionCard({
   auction: AuctionListItem
   now: number
 }) {
+  const action = roomLabel(auction.status)
+  const isLive = auction.status === 'active'
+
   return (
-    <li className="h-full">
-      <Link
-        to={`/auctions/${auction.id}`}
-        className="group flex h-full flex-col rounded-xl border bg-card p-4 transition-colors hover:border-foreground/30 sm:p-5"
-      >
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
-            <div
-              aria-hidden="true"
-              className={`grid size-12 shrink-0 place-items-center rounded-xl border ${
-                TILE[auction.category] ?? 'bg-tile-veg'
-              }`}
-            >
-              <CategoryIcon category={auction.category} className="size-6" />
-            </div>
-            <h2 className="min-w-0 break-words text-lg leading-snug group-hover:text-primary">
-              {auction.productName}
-            </h2>
-          </div>
-          <AuctionListStatusBadge status={auction.status} />
-        </div>
+    <li className="board-row flex-wrap">
+      <CrateChip category={auction.category} />
+      <span className="lot tabular">lot {lotNumber(auction.id)}</span>
 
-        <div className="mt-4 flex items-end justify-between gap-3">
-          <div>
-            <p className="text-xs text-muted-foreground">{PRICE_LABEL[auction.status]}</p>
-            <data
-              value={auction.currentPrice}
-              className="font-display text-2xl font-extrabold tabular"
-            >
-              {formatMoney(auction.currentPrice)}
-            </data>
-          </div>
-          <AuctionCountdown auction={auction} now={now} />
-        </div>
+      <div className="auctions-name min-w-0">
+        <h2>
+          <Link
+            to={`/auctions/${auction.id}`}
+            className="text-decoration-underline"
+          >
+            {auction.productName}
+          </Link>
+        </h2>
+        <p className="small text-body-secondary text-truncate tabular mb-0">
+          {watcherCopy(auction.status, auction.viewers)}
+        </p>
+      </div>
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-5 text-sm">
-          <span className="flex items-center gap-1.5 text-muted-foreground">
-            <Users className="size-4" aria-hidden="true" />
-            <span className="tabular">{watcherCopy(auction.status, auction.viewers)}</span>
-          </span>
+      <div className="d-none d-md-block">
+        <AuctionListStatusBadge status={auction.status} />
+      </div>
 
-          <span className="inline-flex items-center gap-1 font-medium text-primary">
-            {ROOM_LABEL[auction.status]}
-            <ArrowRight
-              className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5"
-              aria-hidden="true"
-            />
-          </span>
-        </div>
-      </Link>
+      <AuctionCountdown auction={auction} now={now} />
+
+      <div className="text-end">
+        <p className="small text-body-secondary mb-0">{PRICE_LABEL[auction.status]}</p>
+        <data
+          value={auction.currentPrice}
+          className={isLive ? 'price-tag' : 'price'}
+        >
+          {formatMoney(auction.currentPrice)}
+        </data>
+      </div>
+
+      <Button asChild>
+        <Link
+          to={`/auctions/${auction.id}`}
+          aria-label={`${action} auction for ${auction.productName}`}
+        >
+          {action}
+        </Link>
+      </Button>
     </li>
   )
 }

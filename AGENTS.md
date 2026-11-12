@@ -49,6 +49,8 @@ Work orders live in `.tickets/` (format and status flow: `.tickets/README.md`). 
 4. Finish with a short report: files changed, what you skipped or could not verify, open questions. Never edit other tickets silently.
 
 ## UI style and delegation (IMPORTANT)
+**For frontend rules see [apps/web/RULES.md](apps/web/RULES.md)** (the painted price board direction); it wins over DESIGN.md wherever they disagree, and delegated briefs must cite it too.
+
 **Every frontend change, by any agent, must look like it was made by the same designer.** The visual source of truth is [apps/web/DESIGN.md](apps/web/DESIGN.md) (direction, tokens, type, layout rules, banned patterns) and the tokens in `apps/web/src/styles/globals.css`; do not invent new colours, fonts, radii or one-off styles per page. Any agent building or changing UI must use these three skills: **`/ui-ux-pro-max`** for UX rules (accessibility, touch targets, forms, navigation), **`/impeccable`** for craft and its quality floor (states, focus, contrast, no eyebrows/gradient text/card soup), and **`/ui-unslop`** as a final pass to remove generic AI styling before the ticket goes to `review`. When you delegate UI work to another agent (opencode, subagents or other sessions), the brief must say so explicitly: tell it to read `apps/web/DESIGN.md` first, to load and apply those three skills (or, if it cannot load skills, to follow DESIGN.md's rules and its "Banned" list to the letter), to reuse existing shadcn components and `PageState`, and to report any place it had to deviate. The delegating agent reviews the rendered result against DESIGN.md, desktop and 375px, and sends it back until it matches; a ticket whose UI drifts from the system is not done, even if lint and build pass.
 
 ## Rules

@@ -23,8 +23,8 @@ export function PageState({
 }: PageStateProps) {
   if (loading) {
     return (
-      <div role="status" className="flex items-center justify-center gap-2 py-16 text-muted-foreground">
-        <Loader2 className="size-5 animate-spin" aria-hidden="true" />
+      <div role="status" className="page-state">
+        <Loader2 size={20} className="spin" aria-hidden="true" />
         <span>Loading…</span>
       </div>
     )
@@ -32,12 +32,9 @@ export function PageState({
 
   if (error) {
     return (
-      <div
-        role="alert"
-        className="flex flex-col items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-16 text-center"
-      >
-        <AlertTriangle className="size-6 text-destructive" aria-hidden="true" />
-        <p className="text-sm text-muted-foreground">{errorMessage}</p>
+      <div role="alert" className="page-state is-error">
+        <AlertTriangle size={24} className="text-danger" aria-hidden="true" />
+        <p className="small mb-0">{errorMessage}</p>
         {onRetry && (
           <Button variant="outline" onClick={onRetry}>
             Try again
@@ -49,9 +46,9 @@ export function PageState({
 
   if (empty) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed px-6 py-16 text-center">
-        <Inbox className="size-6 text-muted-foreground" aria-hidden="true" />
-        <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+      <div className="page-state">
+        <Inbox size={24} aria-hidden="true" />
+        <p className="small mb-0">{emptyMessage}</p>
       </div>
     )
   }

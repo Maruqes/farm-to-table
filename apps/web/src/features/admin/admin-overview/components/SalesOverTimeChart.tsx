@@ -2,10 +2,6 @@ import { useId } from 'react'
 import { formatDate, formatMoney } from '@/services/format'
 import type { AdminSalesPoint } from '../admin-overview.types'
 
-interface SalesOverTimeChartProps {
-  points: AdminSalesPoint[]
-}
-
 const CHART_WIDTH = 320
 const CHART_HEIGHT = 96
 const BAR_GAP = 6
@@ -17,6 +13,10 @@ function fullDay(date: string): string {
 function dayNumber(date: string): string {
   const match = /^\d{4}-\d{2}-\d{2}$/.exec(date)
   return match ? date.slice(8, 10) : date
+}
+
+interface SalesOverTimeChartProps {
+  points: AdminSalesPoint[]
 }
 
 export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
@@ -42,18 +42,16 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
     : 'No sales in the last seven days.'
 
   return (
-    <section aria-labelledby={headingId} className="rounded-xl border bg-card p-4 md:p-6">
-      <div className="space-y-1">
-        <h2 id={headingId} className="text-xl md:text-2xl">
-          Sales over time
-        </h2>
-        <p className="text-sm text-muted-foreground">Revenue per day for the last 7 days.</p>
+    <section aria-labelledby={headingId} className="admin-chart">
+      <div>
+        <h2 id={headingId}>Sales over time</h2>
+        <p className="small text-body-secondary mb-0">Revenue per day for the last 7 days.</p>
       </div>
 
       {hasSales ? (
         <>
-          <p className="mt-4 text-sm text-muted-foreground">
-            <data value={total} className="font-medium text-foreground tabular">
+          <p className="small text-body-secondary mt-4 mb-0">
+            <data value={total} className="fw-semibold tabular">
               {formatMoney(total)}
             </data>{' '}
             in total
@@ -61,11 +59,11 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
               <>
                 {' '}
                 · best day{' '}
-                <time dateTime={best.date} className="text-foreground">
+                <time dateTime={best.date}>
                   {fullDay(best.date)}
                 </time>{' '}
                 with{' '}
-                <data value={best.total} className="font-medium text-foreground tabular">
+                <data value={best.total} className="fw-semibold tabular">
                   {formatMoney(best.total)}
                 </data>
               </>
@@ -74,7 +72,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
 
           <svg
             viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-            className="mt-4 h-28 w-full"
+            className="admin-chart-svg mt-4"
             preserveAspectRatio="none"
             role="img"
             aria-labelledby={`${chartTitleId} ${chartDescId}`}
@@ -86,9 +84,8 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
               y1={CHART_HEIGHT}
               x2={CHART_WIDTH}
               y2={CHART_HEIGHT}
-              stroke="currentColor"
               strokeWidth={1}
-              className="text-border"
+              className="admin-chart-axis"
             />
             {points.map((point, index) => {
               const height = max > 0 ? (point.total / max) * CHART_HEIGHT : 0
@@ -99,8 +96,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
                   y={CHART_HEIGHT - height}
                   width={barWidth}
                   height={height}
-                  fill="currentColor"
-                  className="text-primary"
+                  className="admin-chart-bar"
                 >
                   <title>{`${fullDay(point.date)}: ${formatMoney(point.total)}`}</title>
                 </rect>
@@ -108,18 +104,18 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
             })}
           </svg>
 
-          <div aria-hidden="true" className="mt-2 flex gap-1.5">
+          <div aria-hidden="true" className="d-flex gap-2 mt-2">
             {points.map((point) => (
               <span
                 key={point.date}
-                className="flex-1 text-center text-xs text-muted-foreground tabular"
+                className="flex-fill text-center small text-body-secondary tabular"
               >
                 {dayNumber(point.date)}
               </span>
             ))}
           </div>
 
-          <table className="sr-only">
+          <table className="visually-hidden">
             <caption>Daily sales for the last seven days</caption>
             <thead>
               <tr>
@@ -138,7 +134,7 @@ export function SalesOverTimeChart({ points }: SalesOverTimeChartProps) {
           </table>
         </>
       ) : (
-        <p className="py-10 text-sm text-muted-foreground">
+        <p className="small text-body-secondary py-5 mb-0">
           No sales in the last 7 days yet. Sales appear here after buyers check out.
         </p>
       )}

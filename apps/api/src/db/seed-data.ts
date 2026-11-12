@@ -138,3 +138,5 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   { producerEmail: 'pao-aldeia@farmtotable.test', name: 'Olive bread', description: 'Studded with black olives and olive oil.', ingredients: 'wheat flour, olives, olive oil, salt', category: 'bakery', price: 4.5, unit: 'loaf', stock: 9, season: 'all-year', organic: false },
   { producerEmail: 'pao-aldeia@farmtotable.test', name: 'Honey cake', description: 'Spiced honey cake with walnuts, a winter treat.', ingredients: 'honey, walnuts, cinnamon, flour', category: 'bakery', price: 5.0, unit: 'loaf', stock: 7, season: 'winter', organic: false },
 ]
+
+//admin@farmtotable.test

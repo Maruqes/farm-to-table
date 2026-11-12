@@ -1,13 +1,13 @@
 import type { Product } from '../catalog.types'
 import { ProductCard } from './ProductCard'
 
+// The catalog is a board: one .board-row per product under a thick top rule.
+// ProductCard renders the <li>, so this stays a plain list wrapper.
 export function ProductGrid({ products }: { products: Product[] }) {
   return (
-    <ul className="grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="board">
       {products.map((product) => (
-        <li key={product.id}>
-          <ProductCard product={product} />
-        </li>
+        <ProductCard key={product.id} product={product} />
       ))}
     </ul>
   )

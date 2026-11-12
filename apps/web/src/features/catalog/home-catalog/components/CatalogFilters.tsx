@@ -1,12 +1,38 @@
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/components/ui/utils'
+import { crateClass } from '@/components/crate'
 import { CATEGORY_OPTIONS, SEASON_OPTIONS, SORT_OPTIONS } from '../catalog-options'
 import type { CatalogSort } from '../catalog.types'
 import type { CatalogFilterDraft } from '../useCatalogFilters'
 
-const selectClassName =
-  'h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+// Square category chip: filled with the crate colour when on, outlined when off.
+function CategoryChip({
+  pressed,
+  onClick,
+  children,
+  crate,
+}: {
+  pressed: boolean
+  onClick: () => void
+  children: string
+  crate?: string
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={pressed}
+      onClick={onClick}
+      className={cn(
+        'catalog-chip',
+        pressed && (crate ? crateClass(crate) : 'ink-fill'),
+      )}
+    >
+      {children}
+    </button>
+  )
+}
 
 interface CatalogFiltersProps {
   initial: CatalogFilterDraft
@@ -37,14 +63,31 @@ export function CatalogFilters({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      aria-label="Catalog filters"
-      className="rounded-xl border bg-card p-3"
-    >
-      <div className="grid grid-cols-2 items-end gap-x-2 gap-y-2 md:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))_auto_auto]">
-        <div className="col-span-2 md:col-span-1">
-          <label htmlFor="catalog-q" className="mb-1 block text-xs font-medium text-muted-foreground">
+    <form onSubmit={handleSubmit} aria-label="Catalog filters" className="vstack gap-3">
+      <fieldset>
+        <legend className="label-line">Category</legend>
+        <div className="d-flex flex-wrap gap-2">
+          <CategoryChip pressed={draft.category === ''} onClick={() => update('category', '')}>
+            All
+          </CategoryChip>
+          {CATEGORY_OPTIONS.map((option) => (
+            <CategoryChip
+              key={option.value}
+              crate={option.value}
+              pressed={draft.category === option.value}
+              onClick={() =>
+                update('category', draft.category === option.value ? '' : option.value)
+              }
+            >
+              {option.label}
+            </CategoryChip>
+          ))}
+        </div>
+      </fieldset>
+
+      <div className="catalog-filter-grid">
+        <div className="catalog-field-wide">
+          <label htmlFor="catalog-q" className="form-label">
             Search
           </label>
           <Input
@@ -55,12 +98,11 @@ export function CatalogFilters({
             onChange={(event) => update('q', event.target.value)}
             placeholder="Name, ingredient or producer"
             autoComplete="off"
-            className="h-9"
           />
         </div>
 
         <div>
-          <label htmlFor="catalog-location" className="mb-1 block text-xs font-medium text-muted-foreground">
+          <label htmlFor="catalog-location" className="form-label">
             Locality
           </label>
           <Input
@@ -71,38 +113,17 @@ export function CatalogFilters({
             onChange={(event) => update('location', event.target.value)}
             placeholder="e.g. Minho"
             autoComplete="off"
-            className="h-9"
           />
         </div>
 
         <div>
-          <label htmlFor="catalog-category" className="mb-1 block text-xs font-medium text-muted-foreground">
-            Category
-          </label>
-          <select
-            id="catalog-category"
-            name="category"
-            className={selectClassName}
-            value={draft.category}
-            onChange={(event) => update('category', event.target.value)}
-          >
-            <option value="">All categories</option>
-            {CATEGORY_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="catalog-season" className="mb-1 block text-xs font-medium text-muted-foreground">
+          <label htmlFor="catalog-season" className="form-label">
             Season
           </label>
           <select
             id="catalog-season"
             name="season"
-            className={selectClassName}
+            className="form-select"
             value={draft.season}
             onChange={(event) => update('season', event.target.value)}
           >
@@ -116,13 +137,13 @@ export function CatalogFilters({
         </div>
 
         <div>
-          <label htmlFor="catalog-sort" className="mb-1 block text-xs font-medium text-muted-foreground">
+          <label htmlFor="catalog-sort" className="form-label">
             Sort by
           </label>
           <select
             id="catalog-sort"
             name="sort"
-            className={selectClassName}
+            className="form-select"
             value={draft.sort}
             onChange={(event) => update('sort', event.target.value as CatalogSort | '')}
           >
@@ -135,20 +156,22 @@ export function CatalogFilters({
           </select>
         </div>
 
-        <div className="flex items-end">
-          <label htmlFor="catalog-organic" className="flex h-9 whitespace-nowrap cursor-pointer items-center gap-2 text-sm font-medium">
+        <div className="d-flex align-items-end">
+          <div className="form-check catalog-check">
             <input
               id="catalog-organic"
               name="organic"
               type="checkbox"
               checked={draft.organic}
               onChange={(event) => update('organic', event.target.checked)}
-              className="size-4 rounded border-input accent-primary"
+              className="form-check-input"
             />
-            Organic only
-          </label>
+            <label htmlFor="catalog-organic" className="form-check-label">
+              Organic only
+            </label>
+          </div>
         </div>
-        <div className="flex items-end gap-1">
+        <div className="d-flex align-items-end gap-1">
           <Button type="submit" size="sm">
             Apply
           </Button>
@@ -159,18 +182,14 @@ export function CatalogFilters({
       </div>
 
       {producer && (
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <p className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <p className="d-flex align-items-center gap-2 small text-body-secondary">
             <span>
-              Producer filter: <strong className="font-medium text-foreground">{producer}</strong>
+              Producer filter: <strong className="fw-semibold">{producer}</strong>
             </span>
-            <button
-              type="button"
-              onClick={onClearProducer}
-              className="rounded-md px-1 font-medium text-primary underline underline-offset-4 hover:text-primary/80"
-            >
+            <Button type="button" variant="link" size="sm" onClick={onClearProducer}>
               Remove
-            </button>
+            </Button>
           </p>
         </div>
       )}

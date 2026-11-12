@@ -13,15 +13,15 @@ export function ProducerDashboardView() {
   const showEmpty = !loading && !error && empty
 
   return (
-    <section aria-labelledby="producer-dashboard-heading" className="space-y-8">
-      <header className="space-y-1">
+    <section aria-labelledby="producer-dashboard-heading" className="vstack gap-4">
+      <header className="vstack gap-1">
         <h1 id="producer-dashboard-heading">Dashboard</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+        <p className="measure text-body-secondary">
           Your farm at a glance: sales, orders to prepare and what needs restocking.
         </p>
       </header>
 
-      <p className="sr-only" aria-live="polite">
+      <p className="visually-hidden" aria-live="polite">
         {announcement}
       </p>
 
@@ -34,14 +34,18 @@ export function ProducerDashboardView() {
         emptyMessage="No sales or orders yet. Add your first product to the catalog and your numbers will appear here."
       >
         {stats && (
-          <div className="space-y-8">
+          <div className="vstack gap-4">
             {stats.activeAuction && <LiveAuctionCard auction={stats.activeAuction} />}
 
             <DashboardCounters stats={stats} />
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <SalesOverTimeChart points={stats.salesPerDay} />
-              <OrdersByStateChart byStatus={stats.byStatus} />
+            <div className="row g-4">
+              <div className="col-lg-6 min-w-0">
+                <SalesOverTimeChart points={stats.salesPerDay} />
+              </div>
+              <div className="col-lg-6 min-w-0">
+                <OrdersByStateChart byStatus={stats.byStatus} />
+              </div>
             </div>
 
             <LowStockList items={stats.lowStock} />
@@ -50,7 +54,7 @@ export function ProducerDashboardView() {
       </PageState>
 
       {showEmpty && (
-        <div className="flex justify-center">
+        <div className="d-flex justify-content-center">
           <Button asChild>
             <Link to="/producer/products">Add your first product</Link>
           </Button>

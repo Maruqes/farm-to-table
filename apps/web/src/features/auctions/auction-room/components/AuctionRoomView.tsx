@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { useSession } from '@/context/session'
+import { lotNumber } from '@/components/crate'
 import type { AuctionRoom, PlaceBidResult } from '../auction-room.types'
 import { AuctionPanel } from './AuctionPanel'
 import { AuctionStatusBadge } from './AuctionStatusBadge'
@@ -28,58 +29,62 @@ export function AuctionRoomView({
   const { user } = useSession()
 
   return (
-    <article className="space-y-6 md:space-y-8">
-      <p className="sr-only" aria-live="polite" aria-atomic="true">
+    <article className="room p-3 p-md-4">
+      <p className="visually-hidden" aria-live="polite" aria-atomic="true">
         {announcement}
       </p>
 
-      <Link
-        to="/"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
-        Back to catalog
-      </Link>
+      <div className="room-topbar">
+        <Link
+          to="/"
+          className="d-inline-flex align-items-center gap-1"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          Back to catalog
+        </Link>
+        <p className="tabular small opacity-75 mb-0">
+          lot {lotNumber(auction.id)} · {auction.viewerCount}{' '}
+          {auction.viewerCount === 1 ? 'watcher' : 'watchers'}
+        </p>
+      </div>
 
-      <header className="flex flex-wrap items-start gap-4">
-        <LotTile category={auction.product.category} className="size-16 md:size-20" />
-        <div className="min-w-0 space-y-1">
-          <div className="flex flex-wrap items-center gap-2">
+      <header className="room-header">
+        <LotTile category={auction.product.category} />
+        <div className="flex-grow-1 min-w-0 vstack gap-1">
+          <div className="d-flex flex-wrap align-items-center gap-2">
             <AuctionStatusBadge status={auction.status} />
-            <span className="text-sm text-muted-foreground tabular">
+            <span className="small tabular opacity-75">
               {auction.quantity} {auction.unit} lot
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl">{auction.product.name}</h1>
-          <p className="text-muted-foreground">
+          <p className="small tabular opacity-75 mb-0">lot {lotNumber(auction.id)}</p>
+          <h1>{auction.product.name}</h1>
+          <p className="opacity-75 mb-0">
             from{' '}
             {auction.producer.id ? (
               <Link
                 to={`/producers/${auction.producer.id}`}
-                className="font-medium text-foreground underline decoration-border underline-offset-4 hover:text-primary"
+                className="fw-semibold text-decoration-underline"
               >
                 {auction.producer.name}
               </Link>
             ) : (
-              <span className="font-medium text-foreground">{auction.producer.name}</span>
+              <span className="fw-semibold">{auction.producer.name}</span>
             )}
           </p>
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8">
-        <div className="space-y-8">
-          <AuctionPanel
-            auction={auction}
-            user={user}
-            bidding={bidding}
-            bidError={bidError}
-            onPlaceBid={onPlaceBid}
-            onDismissBidError={onDismissBidError}
-          />
-          <BidHistory auction={auction} currentUserId={user?.id ?? ''} />
-        </div>
-
+      <div className="mt-4 vstack gap-4">
+        <AuctionPanel
+          auction={auction}
+          user={user}
+          bidding={bidding}
+          bidError={bidError}
+          onPlaceBid={onPlaceBid}
+          onDismissBidError={onDismissBidError}
+        />
+        <BidHistory auction={auction} currentUserId={user?.id ?? ''} />
         <LotDetails auction={auction} />
       </div>
     </article>

@@ -43,7 +43,7 @@ export function ProducerPageForm({
   const previewPhotoUrl = isWebPhotoUrl(photoUrl) ? photoUrl : ''
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-busy={saving} className="space-y-6">
+    <form onSubmit={onSubmit} noValidate aria-busy={saving} className="vstack gap-4">
       {formError && <FormAlert>{formError}</FormAlert>}
 
       <TextareaField
@@ -71,7 +71,7 @@ export function ProducerPageForm({
         required
       />
 
-      <div className="space-y-2">
+      <div className="vstack gap-2">
         <TextField
           id="photoUrl"
           label="Photo URL"
@@ -88,45 +88,49 @@ export function ProducerPageForm({
           src={previewPhotoUrl}
           alt="Preview of your farm photo"
           emptyLabel="Photo preview"
-          className="aspect-[16/9] w-full max-w-sm rounded-lg"
+          className="pa-farm-photo-sm frame"
         />
       </div>
 
-      <fieldset className="space-y-3">
-        <legend className="text-sm font-medium">Map pin</legend>
-        <p className="text-sm text-muted-foreground">
+      <fieldset className="vstack gap-3 rule pt-4">
+        <legend className="label-line">Map pin</legend>
+        <p className="small text-body-secondary">
           Optional. Add both coordinates or click the map to show where buyers
           can find you.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <TextField
-            id="lat"
-            label="Latitude"
-            inputMode="decimal"
-            value={values.lat}
-            onChange={(event) => onChange('lat', event.target.value)}
-            error={errors.lat}
-            placeholder="41.1632"
-            autoComplete="off"
-          />
-          <TextField
-            id="lng"
-            label="Longitude"
-            inputMode="decimal"
-            value={values.lng}
-            onChange={(event) => onChange('lng', event.target.value)}
-            error={errors.lng}
-            placeholder="-7.5435"
-            autoComplete="off"
-          />
+        <div className="row g-3">
+          <div className="col-md-6">
+            <TextField
+              id="lat"
+              label="Latitude"
+              inputMode="decimal"
+              value={values.lat}
+              onChange={(event) => onChange('lat', event.target.value)}
+              error={errors.lat}
+              placeholder="41.1632"
+              autoComplete="off"
+            />
+          </div>
+          <div className="col-md-6">
+            <TextField
+              id="lng"
+              label="Longitude"
+              inputMode="decimal"
+              value={values.lng}
+              onChange={(event) => onChange('lng', event.target.value)}
+              error={errors.lng}
+              placeholder="-7.5435"
+              autoComplete="off"
+            />
+          </div>
         </div>
         <Suspense
           fallback={
             <div
               role="status"
-              className="h-64 w-full animate-pulse rounded-xl border bg-muted md:h-72"
+              className="frame w-100 pa-map d-flex align-items-center justify-content-center"
             >
-              <span className="sr-only">Loading map…</span>
+              <span className="visually-hidden">Loading map…</span>
             </div>
           }
         >
@@ -138,11 +142,11 @@ export function ProducerPageForm({
         </Suspense>
       </fieldset>
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t pt-5">
+      <div className="d-flex flex-wrap align-items-center gap-3 rule pt-4">
         <Button type="submit" disabled={saving}>
           {saving ? 'Saving…' : 'Save page'}
         </Button>
-        <p className="text-sm text-muted-foreground">
+        <p className="small text-body-secondary">
           Your changes appear on the public page right after saving.
         </p>
       </div>

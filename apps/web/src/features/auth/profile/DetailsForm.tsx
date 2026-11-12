@@ -63,7 +63,7 @@ export function DetailsForm({ profile, seed, onSaved }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="vstack gap-3">
       {formError && <FormAlert>{formError}</FormAlert>}
       <TextField
         id="name"

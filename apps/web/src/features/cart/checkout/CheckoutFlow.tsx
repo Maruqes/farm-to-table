@@ -126,12 +126,12 @@ export function CheckoutFlow() {
   }
 
   return (
-    <section aria-labelledby="checkout-heading" className="space-y-8">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div className="space-y-1">
-          <h1 id="checkout-heading">Checkout</h1>
+    <section aria-labelledby="checkout-heading" className="vstack gap-4">
+      <header className="d-flex flex-wrap align-items-end justify-content-between gap-3">
+        <div className="vstack gap-1">
+          <h1 id="checkout-heading" className="mb-0">Checkout</h1>
           {showForm && (
-            <p className="text-muted-foreground">
+            <p className="text-body-secondary mb-0">
               Review your order and choose how to receive it. You pay each producer
               directly — there is no online payment.
             </p>
@@ -140,7 +140,7 @@ export function CheckoutFlow() {
         {showForm && (
           <Link
             to="/cart"
-            className="text-sm font-medium text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+            className="small text-body-secondary"
           >
             Back to cart
           </Link>
@@ -155,7 +155,7 @@ export function CheckoutFlow() {
         empty={showEmpty}
         emptyMessage="Your cart is empty. Add fresh produce before checking out."
       >
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start xl:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="vstack gap-5">
           <CheckoutForm
             fulfilment={fulfilment}
             onFulfilmentChange={handleFulfilmentChange}
@@ -175,7 +175,7 @@ export function CheckoutFlow() {
       </PageState>
 
       {showEmpty && (
-        <div className="flex justify-center">
+        <div className="d-flex justify-content-center">
           <Button asChild>
             <Link to="/">Browse the catalog</Link>
           </Button>

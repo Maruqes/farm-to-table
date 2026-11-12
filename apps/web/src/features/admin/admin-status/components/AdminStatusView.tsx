@@ -46,40 +46,37 @@ export function AdminStatusView() {
   const seconds = ADMIN_STATUS_REFRESH_MS / 1000
 
   return (
-    <section aria-labelledby="admin-status-heading" className="space-y-6">
-      <Link
-        to="/admin"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+    <section aria-labelledby="admin-status-heading" className="vstack gap-4">
+      <Link to="/admin" className="admin-back">
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-1">
+      <header className="d-flex flex-column flex-md-row align-items-md-end justify-content-md-between gap-3">
+        <div>
           <h1 id="admin-status-heading">Service status</h1>
-          <p className="max-w-[65ch] text-muted-foreground">
+          <p className="measure text-body-secondary mb-0">
             Live health of the platform behind Farm to Table. The panel refreshes
             every {seconds} seconds, and you can check again at any time.
           </p>
         </div>
 
-        <div className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
+        <div className="d-flex flex-column flex-shrink-0 align-items-start align-items-md-end gap-2">
           <Button
             type="button"
             variant="outline"
-            className="h-10"
             onClick={reload}
             disabled={refreshing}
           >
             <RefreshCw
-              className={refreshing ? 'animate-spin' : undefined}
+              size={16}
+              className={refreshing ? 'spin' : undefined}
               aria-hidden="true"
             />
             Refresh now
           </Button>
 
-          <p className="text-xs text-muted-foreground">
+          <p className="small text-body-secondary mb-0">
             {refreshing && <span>Refreshing… </span>}
             {checkedAt ? (
               <>
@@ -96,15 +93,15 @@ export function AdminStatusView() {
       {refreshError && (
         <div
           role="alert"
-          className="flex flex-col gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-4 sm:flex-row sm:items-center sm:justify-between"
+          className="admin-alert d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3"
         >
-          <p className="text-sm text-muted-foreground">
+          <p className="small text-body-secondary mb-0">
             {refreshError} Showing the last successful check.
           </p>
           <Button
             type="button"
             variant="outline"
-            className="h-10 shrink-0"
+            className="flex-shrink-0"
             onClick={reload}
           >
             Try again
@@ -120,14 +117,14 @@ export function AdminStatusView() {
         empty={empty}
         emptyMessage="No services reported. Refresh the panel; if it stays empty, check that the API is running."
       >
-        <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="vstack gap-3">
+          <p className="small text-body-secondary mb-0">
             {summaryText(services)}
           </p>
 
-          <ul aria-label="Services" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <ul aria-label="Services" className="board mb-0">
             {services.map((service) => (
-              <li key={service.id}>
+              <li key={service.id} className="admin-service">
                 <ServiceStatusCard service={service} />
               </li>
             ))}

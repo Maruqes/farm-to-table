@@ -4,8 +4,20 @@
     {
       "name": "web-mocks",
       "runtimeExecutable": "sh",
-      "runtimeArgs": ["-c", "cd apps/web && VITE_USE_MOCKS=true npx vite --port 5173"],
+      "runtimeArgs": [
+        "-c",
+        "cd apps/web && VITE_USE_MOCKS=true npx vite --port 5173"
+      ],
       "port": 5173
+    },
+    {
+      "name": "web-mocks-5174",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd apps/web && VITE_USE_MOCKS=true npx vite --port 5174 --strictPort"
+      ],
+      "port": 5174
     }
   ]
 }

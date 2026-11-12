@@ -19,12 +19,12 @@ export default function ProductDetailPage() {
 
   if (notFound) {
     return (
-      <div className="space-y-6">
+      <div className="vstack gap-4">
         <PageState
           empty
           emptyMessage="We could not find this product. It may have been removed."
         />
-        <div className="flex justify-center">
+        <div className="d-flex justify-content-center">
           <Button asChild variant="outline">
             <Link to="/">Back to catalog</Link>
           </Button>

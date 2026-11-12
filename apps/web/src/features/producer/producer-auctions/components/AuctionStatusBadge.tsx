@@ -5,8 +5,8 @@ import type { AuctionStatus } from '../producer-auctions.types'
 export function AuctionStatusBadge({ status }: { status: AuctionStatus }) {
   if (status === 'active') {
     return (
-      <Badge className="bg-live text-live-foreground">
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+      <Badge variant="live">
+        <span aria-hidden="true" className="pa-live-dot" />
         {AUCTION_STATUS_LABELS.active}
       </Badge>
     )

@@ -30,8 +30,14 @@ import type {
   ProducerAuction,
 } from '../producer-auctions.types'
 
-const selectClassName =
-  'h-10 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+function FormAlert({ children }: { children: ReactNode }) {
+  return (
+    <div role="alert" className="pa-alert-error">
+      <AlertTriangle size={16} aria-hidden="true" />
+      <p>{children}</p>
+    </div>
+  )
+}
 
 const STANDARD_DURATIONS = [15, 30, 60]
 
@@ -70,18 +76,6 @@ function withoutField(
   return next
 }
 
-function FormAlert({ children }: { children: ReactNode }) {
-  return (
-    <div
-      role="alert"
-      className="flex gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2.5 text-sm text-destructive"
-    >
-      <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-      <p>{children}</p>
-    </div>
-  )
-}
-
 interface FieldMessageProps {
   id: string
   error?: string
@@ -91,14 +85,14 @@ interface FieldMessageProps {
 function FieldMessage({ id, error, hint }: FieldMessageProps) {
   if (error) {
     return (
-      <p id={`${id}-error`} className="text-sm text-destructive">
+      <p id={`${id}-error`} className="small text-danger">
         {error}
       </p>
     )
   }
   if (hint) {
     return (
-      <p id={`${id}-hint`} className="text-sm text-muted-foreground">
+      <p id={`${id}-hint`} className="small text-body-secondary">
         {hint}
       </p>
     )
@@ -128,19 +122,15 @@ function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-sm font-medium">
+    <div className="vstack gap-2">
+      <label htmlFor={id} className="form-label">
         {label}
       </label>
       <Input
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, error, hint)}
-        className={cn(
-          'h-10',
-          error && 'border-destructive focus-visible:ring-destructive',
-          className,
-        )}
+        className={cn(error && 'is-invalid', className)}
         {...props}
       />
       <FieldMessage id={id} error={error} hint={hint} />
@@ -216,16 +206,13 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="space-y-5">
+    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="vstack gap-4">
       {formError && <FormAlert>{formError}</FormAlert>}
 
       {productsError && (
-        <div
-          role="alert"
-          className="flex flex-wrap items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2.5 text-sm text-destructive"
-        >
-          <AlertTriangle className="size-4 shrink-0" aria-hidden="true" />
-          <p className="min-w-0 flex-1">{productsError}</p>
+        <div role="alert" className="pa-alert-error">
+          <AlertTriangle size={16} aria-hidden="true" />
+          <p className="min-w-0 flex-grow-1">{productsError}</p>
           <Button type="button" variant="outline" size="sm" onClick={reload}>
             Try again
           </Button>
@@ -233,9 +220,9 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
       )}
 
       {!productsLoading && !productsError && products.length === 0 && (
-        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-dashed px-3 py-3 text-sm">
-          <Package className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-          <p className="min-w-0 flex-1 text-muted-foreground">
+        <div className="pa-empty d-flex flex-wrap align-items-center gap-3">
+          <Package size={16} className="flex-shrink-0 text-body-secondary" aria-hidden="true" />
+          <p className="min-w-0 flex-grow-1">
             You have no products yet. Add one before creating an auction.
           </p>
           <Button asChild variant="outline" size="sm">
@@ -244,8 +231,8 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
         </div>
       )}
 
-      <div className="space-y-1.5">
-        <label htmlFor="productId" className="block text-sm font-medium">
+      <div className="vstack gap-2">
+        <label htmlFor="productId" className="form-label">
           Product
         </label>
         <select
@@ -259,10 +246,7 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
             'Choose one of your own products for this lot.',
           )}
           disabled={productsLoading || Boolean(productsError) || products.length === 0}
-          className={cn(
-            selectClassName,
-            errors.productId && 'border-destructive focus-visible:ring-destructive',
-          )}
+          className={cn('form-select', errors.productId && 'is-invalid')}
           required
         >
           <option value="">
@@ -281,134 +265,134 @@ export function AuctionForm({ auction, onSave, onCancel }: AuctionFormProps) {
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <TextField
-          id="quantity"
-          label="Lot quantity"
-          type="number"
-          inputMode="numeric"
-          min="1"
-          step="1"
-          value={values.quantity}
-          onChange={(event) => update('quantity', event.target.value)}
-          error={errors.quantity}
-          hint={`How many ${unit} are in this lot.`}
-          required
-        />
-
-        <TextField
-          id="basePrice"
-          label="Base price (€)"
-          type="number"
-          inputMode="decimal"
-          min="0"
-          step="0.01"
-          value={values.basePrice}
-          onChange={(event) => update('basePrice', event.target.value)}
-          error={errors.basePrice}
-          hint="Where bidding starts."
-          required
-        />
-
-        <TextField
-          id="increment"
-          label="Minimum increment (€)"
-          type="number"
-          inputMode="decimal"
-          min="0"
-          step="0.01"
-          value={values.increment}
-          onChange={(event) => update('increment', event.target.value)}
-          error={errors.increment}
-          hint="The smallest raise between bids."
-          required
-        />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-1.5">
-          <label htmlFor="duration" className="block text-sm font-medium">
-            Duration
-          </label>
-          <select
-            id="duration"
-            value={values.duration}
-            onChange={(event) => update('duration', event.target.value)}
-            aria-invalid={errors.duration ? true : undefined}
-            aria-describedby={describedBy('duration', errors.duration)}
-            className={cn(
-              selectClassName,
-              errors.duration && 'border-destructive focus-visible:ring-destructive',
-            )}
-          >
-            {DURATION_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-
-          {values.duration === 'custom' && (
-            <div className="space-y-1.5 pt-1">
-              <label htmlFor="customMinutes" className="block text-sm font-medium">
-                Custom length (minutes)
-              </label>
-              <Input
-                id="customMinutes"
-                type="number"
-                inputMode="numeric"
-                min="1"
-                step="1"
-                value={values.customMinutes}
-                onChange={(event) => update('customMinutes', event.target.value)}
-                aria-invalid={errors.duration ? true : undefined}
-                aria-describedby={errors.duration ? 'duration-error' : undefined}
-                className={cn(
-                  'h-10',
-                  errors.duration &&
-                    'border-destructive focus-visible:ring-destructive',
-                )}
-              />
-            </div>
-          )}
-
-          <FieldMessage id="duration" error={errors.duration} />
-        </div>
-
-        <div className="space-y-1.5">
-          <label htmlFor="startAt" className="block text-sm font-medium">
-            Start time
-          </label>
-          <Input
-            id="startAt"
-            type="datetime-local"
-            value={values.startAt}
-            onChange={(event) => update('startAt', event.target.value)}
-            aria-invalid={errors.startAt ? true : undefined}
-            aria-describedby={describedBy('startAt', errors.startAt)}
-            className={cn(
-              'h-10',
-              errors.startAt && 'border-destructive focus-visible:ring-destructive',
-            )}
+      <div className="row g-3 rule pt-4">
+        <div className="col-md-4">
+          <TextField
+            id="quantity"
+            label="Lot quantity"
+            type="number"
+            inputMode="numeric"
+            min="1"
+            step="1"
+            value={values.quantity}
+            onChange={(event) => update('quantity', event.target.value)}
+            error={errors.quantity}
+            hint={`How many ${unit} are in this lot.`}
             required
           />
-          <FieldMessage
-            id="startAt"
-            error={errors.startAt}
-            hint="Bidding opens at this time and runs for the duration."
+        </div>
+
+        <div className="col-md-4">
+          <TextField
+            id="basePrice"
+            label="Base price (€)"
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={values.basePrice}
+            onChange={(event) => update('basePrice', event.target.value)}
+            error={errors.basePrice}
+            hint="Where bidding starts."
+            required
+          />
+        </div>
+
+        <div className="col-md-4">
+          <TextField
+            id="increment"
+            label="Minimum increment (€)"
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={values.increment}
+            onChange={(event) => update('increment', event.target.value)}
+            error={errors.increment}
+            hint="The smallest raise between bids."
+            required
           />
         </div>
       </div>
 
-      <div className="flex items-start gap-2 rounded-lg border bg-muted/40 px-3 py-2.5 text-sm text-muted-foreground">
-        <CalendarClock className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+      <div className="row g-3 rule pt-4">
+        <div className="col-md-6">
+          <div className="vstack gap-2">
+            <label htmlFor="duration" className="form-label">
+              Duration
+            </label>
+            <select
+              id="duration"
+              value={values.duration}
+              onChange={(event) => update('duration', event.target.value)}
+              aria-invalid={errors.duration ? true : undefined}
+              aria-describedby={describedBy('duration', errors.duration)}
+              className={cn('form-select', errors.duration && 'is-invalid')}
+            >
+              {DURATION_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            {values.duration === 'custom' && (
+              <div className="vstack gap-2 pt-1">
+                <label htmlFor="customMinutes" className="form-label">
+                  Custom length (minutes)
+                </label>
+                <Input
+                  id="customMinutes"
+                  type="number"
+                  inputMode="numeric"
+                  min="1"
+                  step="1"
+                  value={values.customMinutes}
+                  onChange={(event) => update('customMinutes', event.target.value)}
+                  aria-invalid={errors.duration ? true : undefined}
+                  aria-describedby={errors.duration ? 'duration-error' : undefined}
+                  className={cn(errors.duration && 'is-invalid')}
+                />
+              </div>
+            )}
+
+            <FieldMessage id="duration" error={errors.duration} />
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <div className="vstack gap-2">
+            <label htmlFor="startAt" className="form-label">
+              Start time
+            </label>
+            <Input
+              id="startAt"
+              type="datetime-local"
+              value={values.startAt}
+              onChange={(event) => update('startAt', event.target.value)}
+              aria-invalid={errors.startAt ? true : undefined}
+              aria-describedby={describedBy('startAt', errors.startAt)}
+              className={cn(errors.startAt && 'is-invalid')}
+              required
+            />
+            <FieldMessage
+              id="startAt"
+              error={errors.startAt}
+              hint="Bidding opens at this time and runs for the duration."
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="pa-info">
+        <CalendarClock size={16} aria-hidden="true" />
         <p>
           Publish to schedule the lot. You can still edit or cancel it until the first
           bid arrives.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2 pt-1">
+      <div className="d-flex flex-wrap gap-2 pt-1">
         <Button
           type="submit"
           variant="outline"

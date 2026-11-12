@@ -31,18 +31,15 @@ export function AdminAuctionsView() {
     : ''
 
   return (
-    <section aria-labelledby="admin-auctions-heading" className="space-y-6">
-      <Link
-        to="/admin"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+    <section aria-labelledby="admin-auctions-heading" className="vstack gap-4">
+      <Link to="/admin" className="admin-back">
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to admin overview
       </Link>
 
-      <header className="space-y-1">
+      <header>
         <h1 id="admin-auctions-heading">Auctions</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+        <p className="measure text-body-secondary mb-0">
           Live and recent auctions across Farm to Table. Filter by state to
           follow a sale from scheduled to ended. This list is read-only; open a
           room to watch bidding.
@@ -56,7 +53,7 @@ export function AdminAuctionsView() {
         onClear={clearFilters}
       />
 
-      <p className="sr-only" aria-live="polite">
+      <p className="visually-hidden" aria-live="polite">
         {announcement}
       </p>
 
@@ -72,11 +69,11 @@ export function AdminAuctionsView() {
             : 'No auctions yet. Auctions appear here once a producer publishes one.'
         }
       >
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
+        <div className="vstack gap-3">
+          <p className="small text-body-secondary mb-0">
             <data
               value={total}
-              className="font-medium text-foreground tabular"
+              className="fw-semibold tabular"
             >
               {total}
             </data>{' '}

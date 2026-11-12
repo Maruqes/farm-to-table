@@ -17,45 +17,43 @@ export function UsersPagination({
   return (
     <nav
       aria-label="Users pagination"
-      className="flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between"
+      className="d-flex flex-column-reverse flex-md-row align-items-md-center justify-content-md-between gap-3"
     >
-      <p className="text-center text-sm text-muted-foreground sm:text-left">
+      <p className="small text-body-secondary text-center text-md-start mb-0">
         Page{' '}
         <data
           value={page}
-          className="font-medium text-foreground tabular"
+          className="fw-semibold tabular"
         >
           {page}
         </data>{' '}
         of{' '}
         <data
           value={pageCount}
-          className="font-medium text-foreground tabular"
+          className="fw-semibold tabular"
         >
           {pageCount}
         </data>
       </p>
 
-      <div className="flex gap-2">
+      <div className="admin-pagination-actions">
         <Button
           type="button"
           variant="outline"
-          className="h-10 flex-1 sm:flex-none"
           disabled={page <= 1}
           onClick={() => onChange(page - 1)}
         >
-          <ChevronLeft className="size-4" aria-hidden="true" />
+          <ChevronLeft size={16} aria-hidden="true" />
           Previous
         </Button>
         <Button
           type="button"
           variant="outline"
-          className="h-10 flex-1 sm:flex-none"
           disabled={page >= pageCount}
           onClick={() => onChange(page + 1)}
         >
           Next
-          <ChevronRight className="size-4" aria-hidden="true" />
+          <ChevronRight size={16} aria-hidden="true" />
         </Button>
       </div>
     </nav>

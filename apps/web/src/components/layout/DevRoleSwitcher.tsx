@@ -13,9 +13,9 @@ export function DevRoleSwitcher() {
   const isApprovedProducer = role === 'producer' && status === 'approved'
 
   return (
-    <div className="border-t border-dashed bg-muted">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-1.5 px-4 py-1.5 text-xs">
-        <span className="mr-1 font-medium text-muted-foreground">View as (dev)</span>
+    <div className="dev-roles">
+      <div className="container d-flex flex-wrap align-items-center gap-1 py-1 small">
+        <span className="me-1 text-body-secondary">View as (dev)</span>
         {ROLES.map((item) => {
           const active = item === 'producer' ? isApprovedProducer : role === item
           return (

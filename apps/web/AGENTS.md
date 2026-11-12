@@ -22,6 +22,7 @@ The API does not exist yet and, once it does, **its responses are a draft and wi
 - The server is the source of truth for auctions and order states: the client may show optimistic UI but must accept the server state when it differs.
 
 ## Conventions
+- **For frontend rules see [RULES.md](RULES.md)**; it wins over DESIGN.md wherever they disagree.
 - **Visual style: follow [DESIGN.md](DESIGN.md) and use the `/ui-ux-pro-max`, `/impeccable` and `/ui-unslop` skills for every UI change** (see "UI style and delegation" in the root AGENTS.md). Same rule for anything you delegate.
 - Mobile first with Tailwind (`md` 768 / `lg` 1024 / `xl` 1280 to match SCOPE.md). shadcn/ui components first; add new ones with the shadcn CLI. Leave `styles/_*.scss` untouched for the Bootstrap phase.
 - Semantic HTML (`header`, `nav`, `main`, `article`), labelled form controls, visible focus, keyboard-operable.

@@ -10,6 +10,7 @@ import { AlertTriangle, ImagePlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/components/ui/utils'
+import { crateClass } from '@/components/crate'
 import { CategoryIcon } from '@/features/catalog/home-catalog/components/CategoryIcon'
 import { ApiError } from '@/services/api'
 import {
@@ -30,16 +31,14 @@ import type {
   ProducerProduct,
 } from '../producer-products.types'
 
-const TILE: Record<string, string> = {
-  fruit: 'bg-tile-fruit',
-  honey: 'bg-tile-honey',
-  wine: 'bg-tile-wine',
-  cheese: 'bg-tile-cheese',
-  bakery: 'bg-tile-bakery',
+function FormAlert({ children }: { children: ReactNode }) {
+  return (
+    <div role="alert" className="pa-alert-error">
+      <AlertTriangle size={16} aria-hidden="true" />
+      <p>{children}</p>
+    </div>
+  )
 }
-
-const selectClassName =
-  'h-10 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
 
 interface ProductFormProps {
   product: ProducerProduct | null
@@ -81,18 +80,6 @@ function withoutField(
   return next
 }
 
-function FormAlert({ children }: { children: ReactNode }) {
-  return (
-    <div
-      role="alert"
-      className="flex gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2.5 text-sm text-destructive"
-    >
-      <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-      <p>{children}</p>
-    </div>
-  )
-}
-
 interface FieldMessageProps {
   id: string
   error?: string
@@ -102,14 +89,14 @@ interface FieldMessageProps {
 function FieldMessage({ id, error, hint }: FieldMessageProps) {
   if (error) {
     return (
-      <p id={`${id}-error`} className="text-sm text-destructive">
+      <p id={`${id}-error`} className="small text-danger">
         {error}
       </p>
     )
   }
   if (hint) {
     return (
-      <p id={`${id}-hint`} className="text-sm text-muted-foreground">
+      <p id={`${id}-hint`} className="small text-body-secondary">
         {hint}
       </p>
     )
@@ -139,19 +126,15 @@ function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-sm font-medium">
+    <div className="vstack gap-2">
+      <label htmlFor={id} className="form-label">
         {label}
       </label>
       <Input
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, error, hint)}
-        className={cn(
-          'h-10',
-          error && 'border-destructive focus-visible:ring-destructive',
-          className,
-        )}
+        className={cn(error && 'is-invalid', className)}
         {...props}
       />
       <FieldMessage id={id} error={error} hint={hint} />
@@ -176,19 +159,15 @@ function SelectField({
   ...props
 }: SelectFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-sm font-medium">
+    <div className="vstack gap-2">
+      <label htmlFor={id} className="form-label">
         {label}
       </label>
       <select
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, error, hint)}
-        className={cn(
-          selectClassName,
-          error && 'border-destructive focus-visible:ring-destructive',
-          className,
-        )}
+        className={cn('form-select', error && 'is-invalid', className)}
         {...props}
       >
         {children}
@@ -299,7 +278,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
       onSubmit={handleSubmit}
       noValidate
       aria-busy={saving}
-      className="space-y-5"
+      className="vstack gap-4"
     >
       {formError && <FormAlert>{formError}</FormAlert>}
 
@@ -314,124 +293,130 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
         required
       />
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <SelectField
-          id="category"
-          label="Category"
-          value={values.category}
-          onChange={(event) => update('category', event.target.value)}
-          error={errors.category}
-          required
-        >
-          {CATEGORY_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </SelectField>
+      <div className="row g-3 rule pt-4">
+        <div className="col-md-4">
+          <SelectField
+            id="category"
+            label="Category"
+            value={values.category}
+            onChange={(event) => update('category', event.target.value)}
+            error={errors.category}
+            required
+          >
+            {CATEGORY_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </SelectField>
+        </div>
 
-        <SelectField
-          id="unit"
-          label="Unit"
-          value={values.unit}
-          onChange={(event) => update('unit', event.target.value)}
-          error={errors.unit}
-          required
-        >
-          {UNIT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </SelectField>
+        <div className="col-md-4">
+          <SelectField
+            id="unit"
+            label="Unit"
+            value={values.unit}
+            onChange={(event) => update('unit', event.target.value)}
+            error={errors.unit}
+            required
+          >
+            {UNIT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </SelectField>
+        </div>
 
-        <SelectField
-          id="season"
-          label="Season"
-          value={values.season}
-          onChange={(event) => update('season', event.target.value)}
-          error={errors.season}
-          required
-        >
-          {SEASON_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </SelectField>
+        <div className="col-md-4">
+          <SelectField
+            id="season"
+            label="Season"
+            value={values.season}
+            onChange={(event) => update('season', event.target.value)}
+            error={errors.season}
+            required
+          >
+            {SEASON_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </SelectField>
+        </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <TextField
-          id="price"
-          label="Price per unit"
-          type="number"
-          inputMode="decimal"
-          min="0"
-          step="0.01"
-          value={values.price}
-          onChange={(event) => update('price', event.target.value)}
-          error={errors.price}
-          hint="In euros, for example 3.20."
-          required
-        />
+      <div className="row g-3 rule pt-4">
+        <div className="col-md-6">
+          <TextField
+            id="price"
+            label="Price per unit"
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={values.price}
+            onChange={(event) => update('price', event.target.value)}
+            error={errors.price}
+            hint="In euros, for example 3.20."
+            required
+          />
+        </div>
 
-        <TextField
-          id="stock"
-          label="Stock"
-          type="number"
-          inputMode="numeric"
-          min="0"
-          step="1"
-          value={values.stock}
-          onChange={(event) => update('stock', event.target.value)}
-          error={errors.stock}
-          hint="How many units you have available."
-          required
-        />
+        <div className="col-md-6">
+          <TextField
+            id="stock"
+            label="Stock"
+            type="number"
+            inputMode="numeric"
+            min="0"
+            step="1"
+            value={values.stock}
+            onChange={(event) => update('stock', event.target.value)}
+            error={errors.stock}
+            hint="How many units you have available."
+            required
+          />
+        </div>
       </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="organic" className="flex min-h-10 w-fit cursor-pointer items-center gap-2 text-sm font-medium">
+      <div className="vstack gap-2">
+        <label htmlFor="organic" className="label-line pa-check">
           <input
             id="organic"
             type="checkbox"
             checked={values.organic}
             onChange={(event) => update('organic', event.target.checked)}
             aria-describedby="organic-hint"
-            className="size-4 rounded border-input accent-primary"
+            className="form-check-input"
           />
           Organic
         </label>
-        <p id="organic-hint" className="text-sm text-muted-foreground">
+        <p id="organic-hint" className="small text-body-secondary">
           Adds an organic badge to the product in the catalog.
         </p>
       </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="image" className="block text-sm font-medium">
+      <div className="vstack gap-2">
+        <label htmlFor="image" className="form-label">
           Photo
         </label>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-          <div
-            className={`size-24 shrink-0 overflow-hidden rounded-lg border ${
-              TILE[values.category] ?? 'bg-tile-veg'
-            }`}
-          >
+        <div className="d-flex flex-column flex-sm-row align-items-sm-start gap-3">
+          <div className={cn('pa-photo-frame frame', crateClass(values.category))}>
             {previewUrl ? (
               <img
                 src={previewUrl}
                 alt={`Photo preview for ${values.name.trim() || 'this product'}`}
-                className="size-full object-cover"
+                className="h-100 w-100 object-fit-cover"
               />
             ) : (
-              <div className="flex size-full items-center justify-center">
-                <CategoryIcon category={values.category} className="size-10" />
+              <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                <CategoryIcon category={values.category} className="pa-category-icon" />
               </div>
             )}
           </div>
 
-          <div className="min-w-0 space-y-1.5">
+          <div className="min-w-0 vstack gap-2">
             <input
               id="image"
               type="file"
@@ -439,18 +424,18 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
               onChange={handleImageChange}
               aria-invalid={errors.image ? true : undefined}
               aria-describedby={describedBy('image', errors.image, imageHint)}
-              className="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-full file:border-0 file:bg-secondary file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-secondary-foreground hover:file:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className={cn('form-control', errors.image && 'is-invalid')}
             />
             <FieldMessage id="image" error={errors.image} hint={imageHint} />
-            <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <ImagePlus className="size-3.5" aria-hidden="true" />
-              The photo is cropped to fill the card.
+            <p className="d-flex align-items-center gap-2 pa-xs text-body-secondary">
+              <ImagePlus size={14} aria-hidden="true" />
+              The photo is cropped to fill the frame.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 pt-1">
+      <div className="d-flex flex-wrap gap-2 pt-1">
         <Button type="submit" disabled={saving}>
           {saving ? 'Saving…' : product ? 'Save changes' : 'Add product'}
         </Button>

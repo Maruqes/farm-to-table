@@ -40,7 +40,7 @@ export function ModerationTabs({ value, onChange }: ModerationTabsProps) {
     <div
       role="tablist"
       aria-label="Content type"
-      className="flex flex-wrap gap-2"
+      className="d-flex flex-wrap gap-2"
     >
       {TABS.map((tab, index) => {
         const selected = tab.value === value
@@ -58,11 +58,7 @@ export function ModerationTabs({ value, onChange }: ModerationTabsProps) {
             tabIndex={selected ? 0 : -1}
             onClick={() => onChange(tab.value)}
             onKeyDown={(event) => handleKeyDown(event, index)}
-            className={`inline-flex min-h-11 items-center justify-center rounded-full border px-5 text-sm font-semibold transition-colors ${
-              selected
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'bg-background hover:bg-accent hover:text-accent-foreground'
-            }`}
+            className="admin-tab"
           >
             {CONTENT_TYPE_LABELS[tab.value]}
           </button>

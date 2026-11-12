@@ -15,18 +15,18 @@ interface BidHistoryProps {
 
 export function BidHistory({ auction, currentUserId }: BidHistoryProps) {
   return (
-    <section aria-labelledby="bid-history-heading" className="space-y-3">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h2 id="bid-history-heading" className="text-xl md:text-2xl">
+    <section aria-labelledby="bid-history-heading" className="vstack gap-3">
+      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
+        <h2 id="bid-history-heading" className="fs-4">
           Bid history
         </h2>
-        <p className="text-sm text-muted-foreground tabular">
+        <p className="small tabular opacity-75 mb-0">
           {auction.bids.length} {auction.bids.length === 1 ? 'bid' : 'bids'}
         </p>
       </div>
 
       {auction.bids.length === 0 ? (
-        <p className="rounded-lg border border-dashed px-4 py-6 text-center text-sm text-muted-foreground">
+        <p className="room-empty">
           {emptyMessage(auction)}
         </p>
       ) : (
@@ -34,9 +34,9 @@ export function BidHistory({ auction, currentUserId }: BidHistoryProps) {
           tabIndex={0}
           role="region"
           aria-label="Bid history, newest first"
-          className="max-h-96 overflow-y-auto border-y"
+          className="room-history"
         >
-          <ol className="divide-y">
+          <ol className="room-history-list">
             {auction.bids.map((bid, index) => {
               const leading = index === 0 && auction.status === 'active'
               const winning =
@@ -48,27 +48,35 @@ export function BidHistory({ auction, currentUserId }: BidHistoryProps) {
               return (
                 <li
                   key={bid.id}
-                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3"
+                  className="room-history-row"
                 >
-                  <div className="flex min-w-0 flex-wrap items-baseline gap-2">
+                  <div className="d-flex flex-wrap align-items-baseline gap-2 min-w-0">
                     <data
                       value={bid.amount}
-                      className="font-display text-lg font-extrabold tabular"
+                      className="room-bid-amount tabular"
                     >
                       {formatMoney(bid.amount)}
                     </data>
-                    {leading && <Badge variant="outline">Leading</Badge>}
-                    {winning && <Badge variant="secondary">Winning bid</Badge>}
+                    {leading && (
+                      <Badge variant="outline">
+                        Leading
+                      </Badge>
+                    )}
+                    {winning && (
+                      <Badge variant="outline">
+                        Winning bid
+                      </Badge>
+                    )}
                   </div>
-                  <div className="flex flex-wrap items-baseline gap-x-3 text-sm">
-                    <span className="font-medium">
+                  <div className="d-flex flex-wrap align-items-baseline gap-2 small">
+                    <span className="fw-semibold">
                       {bid.bidderName}
                       {bid.bidderId === currentUserId && (
-                        <span className="font-normal text-muted-foreground"> (you)</span>
+                        <span className="opacity-75"> (you)</span>
                       )}
                     </span>
                     {bid.date && (
-                      <time dateTime={bid.date} className="text-muted-foreground">
+                      <time dateTime={bid.date} className="opacity-75">
                         {formatDateTime(bid.date)}
                       </time>
                     )}

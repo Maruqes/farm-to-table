@@ -43,47 +43,46 @@ export function ProducerPagePreview({
   }
 
   return (
-    <article
-      aria-label="Public page preview"
-      className="overflow-hidden rounded-xl border bg-card"
-    >
+    <article aria-label="Public page preview" className="frame">
       {hasPhoto && (
         <FarmPhoto
           src={preview.photoUrl}
           alt={`Photo of ${page.name}`}
-          className="aspect-[16/9] w-full"
+          className="pa-rule-bottom"
         />
       )}
 
-      <div className="space-y-5 p-5 md:p-6">
-        <header className="space-y-2">
-          <h3 className="text-2xl font-extrabold break-words">{page.name}</h3>
+      <div className="vstack gap-4 p-4 p-md-5">
+        <header className="vstack gap-2">
+          <p className="label-line">Public page</p>
+          <h3 className="fs-4 text-break">{page.name}</h3>
           {preview.location && (
-            <p className="flex items-start gap-1.5 text-sm text-muted-foreground">
-              <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-              <span className="min-w-0 break-words">{preview.location}</span>
+            <p className="d-flex align-items-start gap-2 small text-body-secondary">
+              <MapPin size={16} className="flex-shrink-0" aria-hidden="true" />
+              <span className="min-w-0 text-break">{preview.location}</span>
             </p>
           )}
+          <div aria-hidden="true" className="double-rule pt-1" />
         </header>
 
         {preview.bio && (
-          <p className="max-w-[65ch] break-words leading-relaxed text-muted-foreground">
+          <p className="measure text-break text-body-secondary">
             {preview.bio}
           </p>
         )}
 
         {hasCoordinates && preview.lat !== null && preview.lng !== null && (
-          <section aria-labelledby="preview-map-heading" className="space-y-2">
-            <h4 id="preview-map-heading" className="text-lg">
+          <section aria-labelledby="preview-map-heading" className="vstack gap-2 rule pt-4">
+            <h4 id="preview-map-heading" className="label-line">
               Where to find them
             </h4>
             <Suspense
               fallback={
                 <div
                   role="status"
-                  className="h-64 w-full animate-pulse rounded-xl border bg-muted md:h-72"
+                  className="frame w-100 pa-map d-flex align-items-center justify-content-center"
                 >
-                  <span className="sr-only">Loading map…</span>
+                  <span className="visually-hidden">Loading map…</span>
                 </div>
               }
             >
@@ -91,7 +90,7 @@ export function ProducerPagePreview({
                 lat={preview.lat}
                 lng={preview.lng}
                 interactive={false}
-                className="h-64 md:h-80"
+                className="pa-map-tall"
               />
             </Suspense>
           </section>

@@ -30,7 +30,7 @@ export function AuctionListTabs({ value, onChange }: AuctionListTabsProps) {
   }
 
   return (
-    <div role="tablist" aria-label="Auction status" className="flex flex-wrap gap-2">
+    <div role="tablist" aria-label="Auction status" className="d-flex flex-wrap gap-2">
       {AUCTION_LIST_STATUSES.map((status, index) => {
         const selected = status === value
         return (
@@ -47,11 +47,7 @@ export function AuctionListTabs({ value, onChange }: AuctionListTabsProps) {
             tabIndex={selected ? 0 : -1}
             onClick={() => onChange(status)}
             onKeyDown={(event) => handleKeyDown(event, index)}
-            className={`inline-flex min-h-11 items-center justify-center rounded-full border px-5 text-sm font-semibold transition-colors ${
-              selected
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'bg-background hover:bg-accent hover:text-accent-foreground'
-            }`}
+            className={selected ? 'btn ink-fill' : 'btn btn-outline-primary'}
           >
             {AUCTION_LIST_STATUS_LABELS[status]}
           </button>

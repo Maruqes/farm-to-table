@@ -18,7 +18,7 @@ export function AddressFields({
   onBlur,
 }: AddressFieldsProps) {
   return (
-    <div className="space-y-4">
+    <div className="vstack gap-3">
       <CheckoutField
         id="line1"
         name="line1"
@@ -31,7 +31,7 @@ export function AddressFields({
         onBlur={() => onBlur('line1')}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="checkout-address-grid">
         <CheckoutField
           id="city"
           name="city"

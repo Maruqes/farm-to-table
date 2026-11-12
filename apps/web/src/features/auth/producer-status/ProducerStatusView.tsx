@@ -1,8 +1,8 @@
 import { CircleAlert, Clock, LogOut } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { PageState } from '@/components/PageState'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/components/ui/utils'
 import { useSession } from '@/context/session'
 import type { ProducerStatus } from '@/types/auth'
 
@@ -41,14 +41,14 @@ export function ProducerStatusView() {
 
   if (!status) {
     return (
-      <div className="mx-auto max-w-xl py-8 md:py-12">
+      <div className="auth-column-wide py-4 py-md-5">
         <PageState
           error="missing-producer-status"
           errorMessage="We couldn’t find your producer status for this account. Log out and sign in again, or contact the site administrator."
         />
-        <div className="mt-6 flex justify-center">
+        <div className="mt-4 d-flex justify-content-center">
           <Button variant="outline" size="lg" onClick={handleLogout}>
-            <LogOut className="size-4" aria-hidden="true" />
+            <LogOut size={16} aria-hidden="true" />
             Log out
           </Button>
         </div>
@@ -58,20 +58,25 @@ export function ProducerStatusView() {
 
   const content = STATUS_CONTENT[status]
   const StatusIcon = status === 'pending' ? Clock : CircleAlert
-  const iconClassName = status === 'pending' ? 'text-muted-foreground' : 'text-destructive'
+  const iconClassName = status === 'pending' ? 'text-body-secondary' : 'text-danger'
 
   return (
-    <section aria-labelledby="producer-status-title" className="mx-auto max-w-xl py-8 md:py-16">
-      <StatusIcon className={cn('size-6', iconClassName)} aria-hidden="true" />
-      <h1 id="producer-status-title" className="mt-4 text-3xl font-semibold md:text-4xl">
+    <section aria-labelledby="producer-status-title" className="auth-column-wide py-4 py-md-5">
+      <p className="d-flex align-items-center gap-2 mb-0">
+        <StatusIcon size={20} className={iconClassName} aria-hidden="true" />
+        <Badge variant="outline">
+          {status === 'pending' ? 'Pending' : 'Rejected'}
+        </Badge>
+      </p>
+      <h1 id="producer-status-title" className="mt-4">
         {content.title}
       </h1>
-      <div className="mt-4 space-y-3 text-muted-foreground">
-        <p>{content.body}</p>
-        <p>{content.help}</p>
+      <div className="rule mt-4 pt-4 vstack gap-2 text-body-secondary">
+        <p className="mb-0">{content.body}</p>
+        <p className="mb-0">{content.help}</p>
       </div>
-      <Button variant="outline" size="lg" className="mt-8" onClick={handleLogout}>
-        <LogOut className="size-4" aria-hidden="true" />
+      <Button variant="outline" size="lg" className="mt-4" onClick={handleLogout}>
+        <LogOut size={16} aria-hidden="true" />
         Log out
       </Button>
     </section>

@@ -26,16 +26,16 @@ export function MyOrdersView() {
   const showEmpty = !loading && !error && orders.length === 0
 
   return (
-    <section aria-labelledby="my-orders-heading" className="space-y-6">
-      <header className="space-y-1">
-        <h1 id="my-orders-heading">My orders</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+    <section aria-labelledby="my-orders-heading" className="vstack gap-4">
+      <header className="vstack gap-1">
+        <h1 id="my-orders-heading" className="mb-0">My orders</h1>
+        <p className="measure text-body-secondary mb-0">
           Follow each order from the farm to your table. The producer moves it through
           the steps and you see the change here as it happens.
         </p>
       </header>
 
-      <p className="sr-only" aria-live="polite">
+      <p className="visually-hidden" aria-live="polite">
         {announcement}
       </p>
 
@@ -47,7 +47,7 @@ export function MyOrdersView() {
         empty={showEmpty}
         emptyMessage="You have no orders yet. Browse the catalog to buy fresh produce directly from local producers."
       >
-        <ul className="space-y-4">
+        <ul className="list-unstyled vstack gap-5 mb-0">
           {orders.map((order) => (
             <li key={order.id}>
               <OrderCard order={order} onRate={handleRate} />
@@ -57,7 +57,7 @@ export function MyOrdersView() {
       </PageState>
 
       {showEmpty && (
-        <div className="flex justify-center">
+        <div className="d-flex justify-content-center">
           <Button asChild>
             <Link to="/">Browse the catalog</Link>
           </Button>

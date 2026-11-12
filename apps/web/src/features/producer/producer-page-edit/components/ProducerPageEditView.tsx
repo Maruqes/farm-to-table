@@ -107,17 +107,15 @@ function ProducerPageEditor({ page, onSave }: ProducerPageEditorProps) {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
-      <section aria-labelledby="page-details-heading" className="min-w-0 space-y-4">
-        <div className="space-y-1">
-          <h2 id="page-details-heading" className="text-xl md:text-2xl">
-            Page details
-          </h2>
-          <p className="text-sm text-muted-foreground">
+    <div className="row g-4 align-items-start">
+      <section aria-labelledby="page-details-heading" className="col-lg-6 min-w-0 vstack gap-3">
+        <div className="vstack gap-1">
+          <h2 id="page-details-heading">Page details</h2>
+          <p className="small text-body-secondary">
             The name comes from your account. Everything else is yours to edit.
           </p>
         </div>
-        <div className="rounded-xl border bg-card p-4 md:p-6">
+        <div className="rule pt-4">
           <ProducerPageForm
             values={values}
             errors={errors}
@@ -132,13 +130,11 @@ function ProducerPageEditor({ page, onSave }: ProducerPageEditorProps) {
 
       <section
         aria-labelledby="page-preview-heading"
-        className="min-w-0 space-y-4 lg:sticky lg:top-28"
+        className="col-lg-6 min-w-0 vstack gap-3 pa-sticky-preview"
       >
-        <div className="space-y-1">
-          <h2 id="page-preview-heading" className="text-xl md:text-2xl">
-            Preview
-          </h2>
-          <p className="text-sm text-muted-foreground">
+        <div className="vstack gap-1">
+          <h2 id="page-preview-heading">Preview</h2>
+          <p className="small text-body-secondary">
             Updates as you type. This is what buyers see.
           </p>
         </div>
@@ -152,18 +148,15 @@ export function ProducerPageEditView() {
   const { page, loading, error, reload, save } = useProducerPageEdit()
 
   return (
-    <section aria-labelledby="producer-page-edit-heading" className="space-y-6">
-      <Link
-        to="/producer"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+    <section aria-labelledby="producer-page-edit-heading" className="vstack gap-4">
+      <Link to="/producer" className="pa-back-link small text-body-secondary">
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to dashboard
       </Link>
 
-      <header className="space-y-1">
+      <header className="vstack gap-1">
         <h1 id="producer-page-edit-heading">Public page</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+        <p className="measure text-body-secondary">
           The page buyers read before they order. Tell them who you are, where
           to find you and what makes your farm worth a visit.
         </p>

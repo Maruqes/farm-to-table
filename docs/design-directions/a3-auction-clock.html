@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A3 · Auction room clock</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;600&family=Big+Shoulders+Display:wght@800&display=swap">
+<style>
+  /* The auction room is a dark hall in both themes; only the surrounding wall changes. */
+  :root {
+    color-scheme: light dark;
+    --wall: light-dark(#e9e6dc, #0c0b0a);
+    --board: #1c1b18; --ink: #ece9df; --dim: #8f8a7e; --amber: #f5a623; --amber-ink: #2a1a00;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--wall); font: 15px/1.4 'Azeret Mono', monospace; padding: 1rem; }
+  main { max-width: 56rem; margin: 0 auto; background: var(--board); color: var(--ink); padding: 1.5rem; }
+  .top { display: flex; justify-content: space-between; color: var(--dim); border-bottom: 2px solid var(--amber); padding-bottom: .5rem; }
+  .top a { color: inherit; }
+  h1 { font: 800 clamp(2rem, 6vw, 3.5rem)/.95 'Big Shoulders Display', sans-serif; text-transform: uppercase; margin: 1rem 0 .2rem; }
+  .sub { color: var(--dim); }
+  .grid { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: center; margin: 2rem 0; }
+  .clock { --p: 68%; width: min(15rem, 60vw); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--amber) var(--p), #3a372f 0); }
+  .clock div { width: 86%; aspect-ratio: 1; border-radius: 50%; background: var(--board); display: grid; place-content: center; text-align: center; }
+  .clock b { font-size: 3rem; font-weight: 600; color: var(--amber); font-variant-numeric: tabular-nums; }
+  .bid { font-size: clamp(2.5rem, 9vw, 4.5rem); font-weight: 600; color: var(--amber); font-variant-numeric: tabular-nums; line-height: 1; }
+  button { font: inherit; font-weight: 600; font-size: 1.2rem; width: 100%; min-height: 56px; margin-top: 1rem; border: 0; background: var(--amber); color: var(--amber-ink); cursor: pointer; }
+  button:active { transform: translateY(1px); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid #4a463d; font-variant-numeric: tabular-nums; }
+  li { display: flex; justify-content: space-between; padding: .6rem 0; border-bottom: 1px dashed #4a463d; color: var(--dim); }
+  li:first-child { color: var(--ink); }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+</style>
+<main>
+  <div class="top"><a href="a2-price-sheet.html">← Price sheet</a><span>Lot 009 · 14 bidders</span></div>
+  <h1>Aged reserve cheese, 3 wheels</h1>
+  <div class="sub">Queijaria da Beira · Seia, Serra da Estrela</div>
+  <div class="grid">
+    <div class="clock" id="clock"><div><b id="left">00:41</b><span class="sub">remaining</span></div></div>
+    <div>
+      <div class="sub">Current bid</div>
+      <div class="bid">€ <span id="bid">34.00</span></div>
+      <button id="btn">Bid € 35.00</button>
+    </div>
+  </div>
+  <ol id="ladder"><li><span>Ana M.</span><span>34.00</span></li><li><span>Rui P.</span><span>33.00</span></li><li><span>Ana M.</span><span>31.50</span></li><li><span>Teresa L.</span><span>30.00</span></li></ol>
+</main>
+<script>
+  let s = 41, v = 34;
+  setInterval(() => {
+    s = s > 0 ? s - 1 : 60;
+    left.textContent = '00:' + String(s).padStart(2, '0');
+    clock.style.setProperty('--p', (s / 60) * 100 + '%');
+  }, 1000);
+  btn.onclick = () => {
+    v += 1; s = Math.max(s, 15); // a late bid extends the clock
+    bid.textContent = v.toFixed(2);
+    btn.textContent = 'Bid € ' + (v + 1).toFixed(2);
+    ladder.insertAdjacentHTML('afterbegin', `<li><span>You</span><span>${v.toFixed(2)}</span></li>`);
+  };
+</script>
+</html>

@@ -16,8 +16,8 @@ export function SearchBox() {
   }
 
   return (
-    <form role="search" onSubmit={handleSubmit} className="flex w-full items-center gap-2">
-      <label htmlFor="site-search" className="sr-only">
+    <form role="search" onSubmit={handleSubmit} className="d-flex w-100 align-items-center gap-2">
+      <label htmlFor="site-search" className="visually-hidden">
         Search products
       </label>
       <Input
@@ -29,7 +29,7 @@ export function SearchBox() {
         onChange={(event) => setValue(event.target.value)}
       />
       <Button type="submit" size="icon" variant="outline" aria-label="Search">
-        <Search className="size-4" aria-hidden="true" />
+        <Search size={16} aria-hidden="true" />
       </Button>
     </form>
   )

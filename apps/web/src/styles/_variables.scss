@@ -1,2 +1,73 @@
-// Bootstrap overrides and design tokens. Import before bootstrap.
-$primary: #3a7d44;
+// Painted price board tokens (RULES.md) and Bootstrap overrides. Imported before Bootstrap.
+
+// Palette: light / dark
+$paper: #f6ecd6;
+$ink: #14301b;
+$dim: #5d6b55;
+$tag: #c8102e;
+$tag-ink: #ffffff;
+$wash: #ebe0c6;
+$alarm: #9a2a12;
+
+$paper-dark: #16130e;
+$ink-dark: #f3e9d2;
+$dim-dark: #a39c88;
+$tag-dark: #ff5a6e;
+$tag-ink-dark: #20040a;
+$wash-dark: #242018;
+$alarm-dark: #ff8f73;
+
+// Crate colours: category chips and label backgrounds only. Text on them is always $crate-ink.
+$crate-ink: #14301b;
+$tiles: (cheese: #f2c14e, honey: #e8962e, bakery: #d9a066, wine: #a8496c, fruit: #a8c256, veg: #5c9e4a);
+$tiles-dark: (cheese: #d4a63a, honey: #cc7f22, bakery: #bf8a56, wine: #a8496c, fruit: #93ad45, veg: #4f8a40);
+
+// Auction room only: the one dark surface in both themes.
+$board: #1c1b18;
+$board-ink: #f3e9d2;
+$amber: #f5a623;
+
+$font-mono: 'Azeret Mono', ui-monospace, monospace;
+$font-display: 'Big Shoulders Display', 'Azeret Mono', sans-serif;
+
+// Mobile first: 576 / 768 / 1024 / 1280 via min-width (SCOPE.md §1).
+$breakpoints: (sm: 576px, md: 768px, lg: 1024px, xl: 1280px);
+$grid-breakpoints: (xs: 0, sm: 576px, md: 768px, lg: 1024px, xl: 1280px);
+$container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1152px);
+
+// Bootstrap
+$primary: $ink;
+$danger: $alarm;
+$body-bg: $paper;
+$body-color: $ink;
+$border-color: $dim;
+$link-color: $ink;
+$link-hover-color: $ink;
+
+$enable-rounded: false;
+$enable-shadows: false;
+$enable-gradients: false;
+$enable-negative-margins: false;
+$enable-validation-icons: false;
+
+$font-family-sans-serif: $font-mono;
+$font-family-monospace: $font-mono;
+$font-size-base: 0.9375rem;
+$headings-font-family: $font-display;
+$headings-font-weight: 800;
+$headings-line-height: 0.9;
+
+$input-btn-focus-width: 0;
+$btn-border-width: 2px;
+$btn-font-weight: 600;
+$btn-font-size: 0.875rem;
+$btn-padding-x: 1rem;
+$input-border-width: 2px;
+$input-border-color: $ink;
+$input-bg: transparent;
+$input-color: $ink;
+$input-focus-border-color: $ink;
+$form-label-font-size: 0.75rem;
+$form-label-margin-bottom: 0.25rem;
+$form-feedback-invalid-color: $alarm;
+$badge-font-weight: 600;

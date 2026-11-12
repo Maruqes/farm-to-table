@@ -10,35 +10,43 @@ export function DashboardCounters({ stats }: DashboardCountersProps) {
     {
       label: 'Sales',
       value: formatMoney(stats.sales),
+      raw: stats.sales,
       hint: 'Revenue from your products',
     },
     {
       label: 'Orders to handle',
       value: String(stats.toHandle),
+      raw: stats.toHandle,
       hint: 'Customers waiting on you',
     },
     {
       label: 'Active products',
       value: String(stats.activeProducts),
+      raw: stats.activeProducts,
       hint: 'Listed in the catalog',
     },
     {
       label: 'Average rating',
       value: stats.averageRating > 0 ? `${stats.averageRating.toFixed(1)} / 5` : '—',
+      raw: stats.averageRating,
       hint: stats.averageRating > 0 ? 'From delivered orders' : 'No ratings yet',
     },
   ]
 
   return (
-    <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-y py-5 md:grid-cols-4">
+    <dl className="board">
       {counters.map((counter) => (
-        <div key={counter.label} className="space-y-1">
-          <dt className="text-sm text-muted-foreground">{counter.label}</dt>
-          <dd>
-            <span className="block font-display text-2xl font-extrabold tabular md:text-3xl">
-              {counter.value}
+        <div key={counter.label} className="board-row flex-wrap">
+          <dt className="min-w-0 flex-grow-1">
+            <span className="label-line">{counter.label}</span>
+            <span className="d-block mt-1 small text-body-secondary">
+              {counter.hint}
             </span>
-            <span className="mt-1 block text-xs text-muted-foreground">{counter.hint}</span>
+          </dt>
+          <dd className="price">
+            <data value={counter.raw} className="tabular">
+              {counter.value}
+            </data>
           </dd>
         </div>
       ))}

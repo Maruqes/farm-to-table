@@ -28,60 +28,60 @@ function PendingProducerRow({
     : ''
 
   return (
-    <li className="grid gap-3 p-4 md:grid-cols-[minmax(0,1fr)_9rem_8rem_auto] md:items-center md:gap-4">
-      <div className="min-w-0 space-y-1">
-        <h2 className="text-base font-semibold">{producer.name}</h2>
+    <li className="admin-producer-row">
+      <div className="min-w-0 vstack gap-1">
+        <h2 className="text-break">{producer.name}</h2>
 
         {producer.bio && (
-          <p className="line-clamp-2 text-sm text-muted-foreground">
+          <p className="admin-clamp-2 small text-body-secondary mb-0">
             {producer.bio}
           </p>
         )}
 
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm text-muted-foreground">
+        <div className="d-flex flex-wrap align-items-baseline column-gap-3 row-gap-1 small text-body-secondary">
           {producer.categories.length > 0 && (
             <span>{producer.categories.join(' · ')}</span>
           )}
           {producer.email && (
             <a
               href={`mailto:${producer.email}`}
-              className="break-words hover:text-foreground hover:underline"
+              className="text-break"
             >
               {producer.email}
             </a>
           )}
           {producer.phone && (
-            <a href={phoneHref} className="hover:text-foreground hover:underline">
+            <a href={phoneHref}>
               {producer.phone}
             </a>
           )}
         </div>
       </div>
 
-      <div className="flex items-baseline justify-between gap-3 md:block">
-        <span className="text-sm text-muted-foreground md:sr-only">
+      <div className="d-flex align-items-baseline justify-content-between gap-3 d-md-block">
+        <span className="label-line d-md-none">
           Location
         </span>
-        <span className="text-right md:text-left">{producer.location}</span>
+        <span className="text-md-end">{producer.location}</span>
       </div>
 
-      <div className="flex items-baseline justify-between gap-3 md:block">
-        <span className="text-sm text-muted-foreground md:sr-only">
+      <div className="d-flex align-items-baseline justify-content-between gap-3 d-md-block">
+        <span className="label-line d-md-none">
           Applied
         </span>
         {producer.appliedAt ? (
           <time
             dateTime={producer.appliedAt}
-            className="text-right tabular md:text-left"
+            className="text-md-end tabular"
           >
             {formatDate(producer.appliedAt)}
           </time>
         ) : (
-          <span className="text-right text-muted-foreground md:text-left">—</span>
+          <span className="text-body-secondary text-md-end">—</span>
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2 md:flex-nowrap md:justify-end">
+      <div className="admin-decision-actions">
         <ProducerDecisionDialog
           producer={producer}
           action="approve"
@@ -118,17 +118,17 @@ export function PendingProducersList({
     <div>
       <div
         aria-hidden="true"
-        className="hidden rounded-t-xl border border-b-0 bg-muted/40 px-4 py-2.5 text-sm font-medium text-muted-foreground md:grid md:grid-cols-[minmax(0,1fr)_9rem_8rem_auto] md:gap-4"
+        className="admin-cols admin-producer-cols label-line"
       >
         <span>Producer</span>
         <span>Location</span>
         <span>Applied</span>
-        <span className="text-right">Actions</span>
+        <span className="text-end">Actions</span>
       </div>
 
       <ul
         aria-label="Producers waiting for approval"
-        className="divide-y rounded-xl border bg-card md:rounded-t-none"
+        className="board"
       >
         {producers.map((producer) => (
           <PendingProducerRow

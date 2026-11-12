@@ -81,7 +81,7 @@ export function CardForm({ profile, seed, onSaved }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate aria-busy={saving} className="vstack gap-3">
       {formError && <FormAlert>{formError}</FormAlert>}
       <TextField
         id="number"
@@ -119,20 +119,20 @@ export function CardForm({ profile, seed, onSaved }: Props) {
         onChange={(event) => update('expiry', event.target.value)}
         onBlur={() => values.expiry && check('expiry')}
         error={errors.expiry}
-        className="tabular max-w-32"
+        className="tabular auth-expiry"
         required
       />
-      <div className="flex items-start gap-3">
+      <div className="d-flex align-items-start gap-2">
         <input
           id="simulateInvalid"
           type="checkbox"
           checked={values.simulateInvalid}
           onChange={(event) => update('simulateInvalid', event.target.checked)}
-          className="mt-1 size-5 accent-primary"
+          className="form-check-input mt-1"
         />
-        <label htmlFor="simulateInvalid" className="text-sm">
-          <span className="font-medium">Simulate invalid card</span>
-          <span className="block text-muted-foreground">
+        <label htmlFor="simulateInvalid" className="small">
+          <span className="fw-semibold">Simulate invalid card</span>
+          <span className="d-block text-body-secondary">
             The card will be declined if you win an auction. Use it to test the fallback.
           </span>
         </label>

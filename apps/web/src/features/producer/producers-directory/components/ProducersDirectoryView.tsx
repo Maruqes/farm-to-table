@@ -22,10 +22,10 @@ export function ProducersDirectoryView() {
   const noResults = !loading && !error && producers.length === 0
 
   return (
-    <section aria-labelledby="producers-heading" className="space-y-6">
-      <header className="space-y-1">
-        <h1 id="producers-heading">Producers</h1>
-        <p className="max-w-[65ch] text-muted-foreground">
+    <section aria-labelledby="producers-heading" className="vstack gap-4">
+      <header className="vstack gap-1">
+        <h1 id="producers-heading" className="mb-0">Producers</h1>
+        <p className="measure text-body-secondary mb-0">
           Meet the farms and makers behind the catalog. Search by name or narrow the
           list by locality.
         </p>
@@ -40,7 +40,7 @@ export function ProducersDirectoryView() {
         onClear={clearFilters}
       />
 
-      <p className="text-sm text-muted-foreground" aria-live="polite">
+      <p className="small text-body-secondary mb-0" aria-live="polite">
         {resultSummary}
       </p>
 
@@ -60,7 +60,7 @@ export function ProducersDirectoryView() {
       </PageState>
 
       {noResults && hasActiveFilters && (
-        <div className="flex justify-center">
+        <div className="d-flex justify-content-center">
           <Button variant="outline" onClick={clearFilters}>
             Clear filters
           </Button>

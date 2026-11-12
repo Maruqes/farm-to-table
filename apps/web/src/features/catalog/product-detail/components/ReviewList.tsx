@@ -10,15 +10,15 @@ export function ReviewList({
   averageRating: number
 }) {
   return (
-    <section aria-labelledby="reviews-title" className="border-t pt-8">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="reviews-title" className="text-2xl">
+    <section aria-labelledby="reviews-title" className="rule pt-4">
+      <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
+        <h2 id="reviews-title">
           Reviews
         </h2>
         {reviews.length > 0 && (
-          <p className="flex items-center gap-2 text-sm text-muted-foreground">
+          <p className="d-flex align-items-center gap-2 small text-body-secondary">
             <RatingStars rating={averageRating} />
-            <span className="tabular font-medium text-foreground">
+            <span className="tabular fw-semibold">
               {averageRating.toFixed(1)}
             </span>
             <span>
@@ -30,24 +30,25 @@ export function ReviewList({
       </div>
 
       {reviews.length === 0 ? (
-        <p className="mt-4 rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">
-          No reviews yet. After your first order you can tell other buyers what you
-          thought.
+        <p className="product-reviews-empty mt-4 small text-body-secondary">
+          No reviews yet. After your first order you can tell other buyers what
+          you thought.
         </p>
       ) : (
-        <ul className="mt-2 list-none divide-y p-0">
+        <ul className="board mt-2">
           {reviews.map((review) => (
-            <li key={review.id} className="py-5">
-              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-                <p className="font-medium">{review.author}</p>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <RatingStars rating={review.rating} />
-                  <span className="tabular">{review.rating.toFixed(1)}</span>
-                  <time dateTime={review.date}>{formatDate(review.date)}</time>
-                </div>
-              </div>
+            <li key={review.id} className="board-row flex-wrap">
+              <p className="fw-semibold">{review.author}</p>
+              <RatingStars rating={review.rating} />
+              <span className="small tabular">{review.rating.toFixed(1)}</span>
+              <time
+                dateTime={review.date}
+                className="ms-auto small text-body-secondary"
+              >
+                {formatDate(review.date)}
+              </time>
               {review.text && (
-                <p className="mt-1.5 max-w-[65ch] text-muted-foreground">
+                <p className="w-100 measure text-body-secondary">
                   {review.text}
                 </p>
               )}

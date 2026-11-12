@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { crateClass } from '@/components/crate'
+import { cn } from '@/components/ui/utils'
 import { formatMoney } from '@/services/format'
 import { CategoryIcon } from '../../home-catalog/components/CategoryIcon'
 import { categoryLabel } from '../../home-catalog/catalog-options'
@@ -10,14 +12,6 @@ import type { ProductDetail } from '../product-detail.types'
 import { QuantitySelector } from './QuantitySelector'
 import { RatingStars } from './RatingStars'
 import { ReviewList } from './ReviewList'
-
-const TILE: Record<string, string> = {
-  fruit: 'bg-tile-fruit',
-  honey: 'bg-tile-honey',
-  wine: 'bg-tile-wine',
-  cheese: 'bg-tile-cheese',
-  bakery: 'bg-tile-bakery',
-}
 
 interface ProductDetailViewProps {
   product: ProductDetail
@@ -34,135 +28,174 @@ export function ProductDetailView({
   const inStock = product.stock > 0
 
   return (
-    <article className="space-y-10">
+    <article className="vstack gap-4">
       <Link
         to="/"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        className="product-back-link small text-body-secondary"
       >
-        <ArrowLeft className="size-4" aria-hidden="true" />
+        <ArrowLeft size={16} aria-hidden="true" />
         Back to catalog
       </Link>
 
-      <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
-        <div
-          className={`aspect-square overflow-hidden rounded-xl border ${
-            TILE[product.category] ?? 'bg-tile-veg'
-          }`}
-        >
-          {product.imageUrl ? (
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="size-full object-cover"
-            />
+      <div className="product-heading">
+        <p className="product-producer small fw-semibold text-uppercase">
+          {product.producer.id ? (
+            <Link
+              to={`/producers/${product.producer.id}`}
+            >
+              {product.producer.name}
+            </Link>
           ) : (
-            <div className="flex size-full items-center justify-center">
-              <CategoryIcon category={product.category} className="size-24" />
-            </div>
+            <span>{product.producer.name}</span>
           )}
+        </p>
+        <h1 className="product-name">
+          {product.name}
+        </h1>
+      </div>
+
+      <div className="row g-4 align-items-start">
+        <div className="col-md-6">
+          <section
+            aria-label={`${product.name} label`}
+            className={cn(
+              'crate-label product-label-single',
+              crateClass(product.category),
+            )}
+          >
+            <div className="product-media">
+              {product.imageUrl ? (
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="product-photo"
+                />
+              ) : (
+                <div
+                  className="product-photo-fallback"
+                  role="img"
+                  aria-label={product.name}
+                >
+                  <CategoryIcon category={product.category} size={96} />
+                </div>
+              )}
+            </div>
+
+            <span className={cn('stamp product-stamp', crateClass(product.category))} aria-hidden="true">
+              <span className="product-stamp-inner">
+                <CategoryIcon category={product.category} size={22} />
+                <span>{categoryLabel(product.category)}</span>
+              </span>
+            </span>
+            <span className="price-tag product-price-tag">
+              <data value={product.price}>{formatMoney(product.price)}</data>
+            </span>
+
+            <div className="double-rule pt-2 small fw-semibold text-uppercase product-origin">
+              <span className="d-block text-truncate">
+                {product.producer.location || categoryLabel(product.category)}
+              </span>
+            </div>
+          </section>
         </div>
 
-        <div className="space-y-5">
-          <div className="space-y-2">
-            <h1 className="text-3xl md:text-4xl">{product.name}</h1>
-            <p className="text-muted-foreground">
-              {product.producer.id ? (
-                <Link
-                  to={`/producers/${product.producer.id}`}
-                  className="font-medium text-foreground underline decoration-border underline-offset-4 hover:text-primary"
-                >
-                  {product.producer.name}
-                </Link>
+        <div className="col-md-6">
+          <div className="vstack gap-4">
+            <div>
+              <p className="label-line">Description</p>
+              {product.description ? (
+                <p className="mt-2 measure">
+                  {product.description}
+                </p>
               ) : (
-                <span className="font-medium text-foreground">
-                  {product.producer.name}
-                </span>
+                <p className="mt-2 measure text-body-secondary">
+                  No description from the producer yet.
+                </p>
               )}
-              {product.producer.location ? ` · ${product.producer.location}` : ''}
-            </p>
-          </div>
+              <div className="mt-4 d-flex flex-wrap align-items-center gap-2 small text-body-secondary">
+                <span>{categoryLabel(product.category)}</span>
+                <span aria-hidden="true">·</span>
+                <span>per {product.unit}</span>
+                {product.reviews.length > 0 && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span className="d-flex align-items-center gap-2">
+                      <RatingStars rating={product.averageRating} />
+                      <span className="tabular fw-semibold">
+                        {product.averageRating.toFixed(1)}
+                      </span>
+                      <span>out of 5</span>
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
 
-          <div className="flex flex-wrap items-baseline gap-2">
-            <data
-              value={product.price}
-              className="font-display text-3xl font-extrabold tabular"
-            >
-              {formatMoney(product.price)}
-            </data>
-            <span className="text-sm text-muted-foreground">per {product.unit}</span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-            <span>{categoryLabel(product.category)}</span>
-            {product.reviews.length > 0 && (
-              <span className="flex items-center gap-2">
-                <RatingStars rating={product.averageRating} />
-                <span className="tabular font-medium text-foreground">
-                  {product.averageRating.toFixed(1)}
-                </span>
-                <span>out of 5</span>
-              </span>
-            )}
-          </div>
-
-          {product.description && (
-            <p className="max-w-[65ch] leading-relaxed text-muted-foreground">
-              {product.description}
-            </p>
-          )}
-
-          {inStock ? (
-            <p className="text-sm text-muted-foreground">
-              In stock ·{' '}
-              <data
-                value={product.stock}
-                className="tabular font-medium text-foreground"
-              >
-                {product.stock} {product.unit}
-                {product.stock === 1 ? '' : 's'}
-              </data>{' '}
-              available
-            </p>
-          ) : (
-            <Badge variant="secondary">Out of stock</Badge>
-          )}
-
-          <div className="space-y-4 border-t pt-5">
-            {!inStock ? (
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  This product is sold out for now. Check the catalog for what else
-                  is in season.
+            <div>
+              <p className="label-line">Availability</p>
+              {inStock ? (
+                <p className="mt-2 small text-body-secondary">
+                  In stock ·{' '}
+                  <data
+                    value={product.stock}
+                    className="tabular fw-semibold"
+                  >
+                    {product.stock} {product.unit}
+                    {product.stock === 1 ? '' : 's'}
+                  </data>{' '}
+                  available
                 </p>
-                <Button disabled className="w-full sm:w-auto">
-                  Add to cart
-                </Button>
-              </div>
-            ) : !isAuthenticated ? (
-              <div className="space-y-2">
-                <Button asChild className="w-full sm:w-auto">
-                  <Link to="/login">Log in to buy</Link>
-                </Button>
-                <p className="text-sm text-muted-foreground">
-                  You need an account to add products to your cart.
+              ) : (
+                <p className="mt-2">
+                  <Badge variant="outline">Out of stock</Badge>
                 </p>
+              )}
+
+              <div className="mt-4 rule pt-4">
+                {!inStock ? (
+                  <div className="vstack gap-3">
+                    <p className="small text-body-secondary">
+                      This product is sold out for now. Check the catalog for what
+                      else is in season.
+                    </p>
+                    <div>
+                      <Button disabled size="lg" className="product-buy-btn">
+                        Add to cart
+                      </Button>
+                    </div>
+                  </div>
+                ) : !isAuthenticated ? (
+                  <div className="vstack gap-3">
+                    <div>
+                      <Button asChild size="lg" className="product-buy-btn">
+                        <Link to="/login">Log in to buy</Link>
+                      </Button>
+                    </div>
+                    <p className="small text-body-secondary">
+                      You need an account to add products to your cart.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="vstack gap-3">
+                    <QuantitySelector
+                      value={quantity}
+                      max={product.stock}
+                      onChange={setQuantity}
+                    />
+                    <div>
+                      <Button
+                        type="button"
+                        size="lg"
+                        className="product-buy-btn"
+                        onClick={() => onAddToCart(product, quantity)}
+                      >
+                        Add to cart
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="space-y-4">
-                <QuantitySelector
-                  value={quantity}
-                  max={product.stock}
-                  onChange={setQuantity}
-                />
-                <Button
-                  type="button"
-                  className="w-full sm:w-auto"
-                  onClick={() => onAddToCart(product, quantity)}
-                >
-                  Add to cart
-                </Button>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

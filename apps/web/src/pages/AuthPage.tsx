@@ -17,27 +17,27 @@ export default function AuthPage({ mode }: AuthPageProps) {
   }
 
   return (
-    <section className="mx-auto w-full max-w-md py-2 md:py-10">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold">{isLogin ? 'Sign in' : 'Create an account'}</h1>
-        <p className="text-muted-foreground">
+    <section className="auth-column py-2 py-md-5">
+      <div className="vstack gap-2">
+        <h1 className="mb-0">{isLogin ? 'Sign in' : 'Create an account'}</h1>
+        <p className="text-body-secondary mb-0">
           {isLogin
             ? 'Shop from local producers and bid in live auctions.'
             : 'Join as a buyer to shop from local farms, or as a producer to sell your produce.'}
         </p>
       </div>
 
-      <div className="mt-6 rounded-lg border bg-card p-5 sm:p-6">
+      <div className="rule mt-4 pt-4">
         {isLogin ? <LoginForm /> : <RegisterForm />}
       </div>
 
-      <p className="mt-4 text-sm text-muted-foreground">
+      <p className="mt-3 small text-body-secondary mb-0">
         {isLogin ? (
           <>
             New to Farm to Table?{' '}
             <Link
               to="/register"
-              className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+              className="fw-semibold"
             >
               Create an account
             </Link>
@@ -48,7 +48,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
             Already have an account?{' '}
             <Link
               to="/login"
-              className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+              className="fw-semibold"
             >
               Sign in
             </Link>

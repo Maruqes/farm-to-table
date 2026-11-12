@@ -12,7 +12,7 @@ function UserStateBadge({ state }: { state: AdminUserState }) {
   if (state === 'active') {
     return (
       <Badge variant="outline">
-        <CircleCheck aria-hidden="true" />
+        <CircleCheck size={16} aria-hidden="true" />
         {label}
       </Badge>
     )
@@ -21,7 +21,7 @@ function UserStateBadge({ state }: { state: AdminUserState }) {
   if (state === 'pending') {
     return (
       <Badge variant="secondary">
-        <Clock3 aria-hidden="true" />
+        <Clock3 size={16} aria-hidden="true" />
         {label}
       </Badge>
     )
@@ -30,7 +30,7 @@ function UserStateBadge({ state }: { state: AdminUserState }) {
   if (state === 'suspended') {
     return (
       <Badge variant="secondary">
-        <Ban aria-hidden="true" />
+        <Ban size={16} aria-hidden="true" />
         {label}
       </Badge>
     )
@@ -38,7 +38,7 @@ function UserStateBadge({ state }: { state: AdminUserState }) {
 
   return (
     <Badge variant="outline">
-      <CircleHelp aria-hidden="true" />
+      <CircleHelp size={16} aria-hidden="true" />
       {label}
     </Badge>
   )
@@ -50,53 +50,46 @@ interface UsersTableProps {
 
 export function UsersTable({ users }: UsersTableProps) {
   return (
-    <div className="overflow-hidden rounded-xl border bg-card">
-      <table className="w-full table-fixed border-collapse text-left">
-        <caption className="sr-only">
-          Users with their name, email, role and account state
-        </caption>
-        <thead className="bg-muted/40 text-sm text-muted-foreground">
-          <tr>
-            <th scope="col" className="px-4 py-3 font-medium">
-              User
-            </th>
-            <th
-              scope="col"
-              className="w-28 px-3 py-3 font-medium md:w-32"
-            >
-              Role
-            </th>
-            <th
-              scope="col"
-              className="w-32 px-3 py-3 font-medium"
-            >
-              State
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y">
-          {users.map((user) => (
-            <tr key={user.id} className="align-top hover:bg-accent/40">
-              <th scope="row" className="px-4 py-3 font-normal">
-                <span className="block font-medium break-words">
-                  {user.name}
-                </span>
-                <span className="block text-sm break-all text-muted-foreground">
-                  {user.email || 'No email on file'}
-                </span>
-              </th>
-              <td className="px-3 py-3">
+    <table className="table admin-table">
+      <caption className="visually-hidden">
+        Users with their name, email, role and account state
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">User</th>
+          <th scope="col" className="d-none d-md-table-cell">
+            Role
+          </th>
+          <th scope="col">State</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user) => (
+          <tr key={user.id}>
+            <th scope="row">
+              <span className="d-block fw-semibold text-break">
+                {user.name}
+              </span>
+              <span className="d-block small text-body-secondary text-break">
+                {user.email || 'No email on file'}
+              </span>
+              <span className="d-block d-md-none mt-1">
                 <Badge variant="outline">
                   {ADMIN_USER_ROLE_LABELS[user.role]}
                 </Badge>
-              </td>
-              <td className="px-3 py-3">
-                <UserStateBadge state={user.state} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+              </span>
+            </th>
+            <td className="d-none d-md-table-cell">
+              <Badge variant="outline">
+                {ADMIN_USER_ROLE_LABELS[user.role]}
+              </Badge>
+            </td>
+            <td>
+              <UserStateBadge state={user.state} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   )
 }

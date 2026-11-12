@@ -24,7 +24,7 @@ function ServiceStateBadge({ state }: { state: AdminServiceState }) {
   if (state === 'down') {
     return (
       <Badge variant="destructive">
-        <Icon aria-hidden="true" />
+        <Icon size={16} aria-hidden="true" />
         {ADMIN_SERVICE_STATE_LABELS[state]}
       </Badge>
     )
@@ -33,7 +33,7 @@ function ServiceStateBadge({ state }: { state: AdminServiceState }) {
   if (state === 'degraded') {
     return (
       <Badge variant="outline">
-        <Icon aria-hidden="true" />
+        <Icon size={16} aria-hidden="true" />
         {ADMIN_SERVICE_STATE_LABELS[state]}
       </Badge>
     )
@@ -41,7 +41,7 @@ function ServiceStateBadge({ state }: { state: AdminServiceState }) {
 
   return (
     <Badge variant="secondary">
-      <Icon aria-hidden="true" />
+      <Icon size={16} aria-hidden="true" />
       {ADMIN_SERVICE_STATE_LABELS[state]}
     </Badge>
   )
@@ -65,27 +65,24 @@ export function ServiceStatusCard({ service }: ServiceStatusCardProps) {
   const headingId = useId()
 
   return (
-    <article
-      aria-labelledby={headingId}
-      className="flex h-full flex-col rounded-xl border bg-card p-4 md:p-5"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <h2 id={headingId} className="min-w-0 break-words text-lg">
+    <article aria-labelledby={headingId}>
+      <div className="d-flex align-items-start justify-content-between gap-3">
+        <h2 id={headingId} className="min-w-0 text-break">
           {service.service}
         </h2>
         <ServiceStateBadge state={service.status} />
       </div>
 
-      <p className="mt-2 flex-1 text-sm text-muted-foreground">
+      <p className="small text-body-secondary mt-1 mb-0">
         {service.detail}
       </p>
 
-      <dl className="mt-4 flex items-baseline justify-between gap-3 border-t pt-3 text-sm">
-        <dt className="text-muted-foreground">Latency</dt>
-        <dd className="font-medium tabular">
+      <p className="d-flex align-items-baseline justify-content-between gap-3 small mt-2 mb-0">
+        <span className="label-line">Latency</span>
+        <span className="fw-semibold tabular">
           <Latency latencyMs={service.latencyMs} />
-        </dd>
-      </dl>
+        </span>
+      </p>
     </article>
   )
 }

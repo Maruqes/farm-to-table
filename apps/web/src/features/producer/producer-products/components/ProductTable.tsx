@@ -2,19 +2,12 @@ import { useState } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { CategoryIcon } from '@/features/catalog/home-catalog/components/CategoryIcon'
+import { CrateChip } from '@/components/board'
+import { lotNumber } from '@/components/crate'
 import { categoryLabel } from '@/features/catalog/home-catalog/catalog-options'
 import { formatMoney } from '@/services/format'
 import { seasonLabel } from '../producer-products-options'
 import type { ProducerProduct } from '../producer-products.types'
-
-const TILE: Record<string, string> = {
-  fruit: 'bg-tile-fruit',
-  honey: 'bg-tile-honey',
-  wine: 'bg-tile-wine',
-  cheese: 'bg-tile-cheese',
-  bakery: 'bg-tile-bakery',
-}
 
 interface ProductTableProps {
   products: ProducerProduct[]
@@ -38,18 +31,15 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
     <div>
       <div
         aria-hidden="true"
-        className="hidden rounded-t-xl border border-b-0 bg-muted/40 px-4 py-2.5 text-sm font-medium text-muted-foreground md:grid md:grid-cols-[minmax(0,1fr)_7rem_6rem_12rem] md:gap-4"
+        className="label-line d-none d-md-grid pa-product-head px-0 py-2"
       >
         <span>Product</span>
         <span>Price</span>
         <span>Stock</span>
-        <span className="text-right">Actions</span>
+        <span className="text-end">Actions</span>
       </div>
 
-      <ul
-        aria-label="Your products"
-        className="divide-y rounded-xl border bg-card md:rounded-t-none"
-      >
+      <ul aria-label="Your products" className="board">
         {products.map((product) => {
           const confirming = confirmingId === product.id
           const deleting = deletingId === product.id
@@ -57,33 +47,16 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
           const descriptionId = `delete-desc-${product.id}`
 
           return (
-            <li
-              key={product.id}
-              className="grid gap-3 p-4 md:grid-cols-[minmax(0,1fr)_7rem_6rem_12rem] md:items-center md:gap-4"
-            >
-              <div className="flex min-w-0 items-center gap-3">
-                <div
-                  className={`size-14 shrink-0 overflow-hidden rounded-lg ${
-                    TILE[product.category] ?? 'bg-tile-veg'
-                  }`}
-                >
-                  {product.imageUrl ? (
-                    <img
-                      src={product.imageUrl}
-                      alt=""
-                      loading="lazy"
-                      className="size-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex size-full items-center justify-center">
-                      <CategoryIcon category={product.category} className="size-7" />
-                    </div>
-                  )}
-                </div>
+            <li key={product.id} className="board-row pa-product-row">
+              <div className="d-flex min-w-0 align-items-center gap-3">
+                <CrateChip category={product.category} />
+                <span aria-hidden="true" className="lot">
+                  {lotNumber(product.id)}
+                </span>
 
                 <div className="min-w-0">
-                  <p className="break-words font-medium">{product.name}</p>
-                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                  <p className="text-break fw-semibold">{product.name}</p>
+                  <div className="d-flex flex-wrap align-items-center gap-2 mt-1 small text-body-secondary">
                     <span>{categoryLabel(product.category)}</span>
                     <span aria-hidden="true">·</span>
                     <span>{seasonLabel(product.season)}</span>
@@ -93,53 +66,50 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                 </div>
               </div>
 
-              <div className="flex items-baseline justify-between gap-2 md:block">
-                <span className="text-sm text-muted-foreground md:sr-only">Price</span>
-                <span className="whitespace-nowrap">
-                  <data
-                    value={product.price}
-                    className="font-display text-base font-extrabold tabular"
-                  >
+              <div className="d-flex align-items-baseline justify-content-between gap-2 pa-md-block">
+                <span className="label-line pa-col-label">Price</span>
+                <span>
+                  <data value={product.price} className="price tabular">
                     {formatMoney(product.price)}
                   </data>{' '}
-                  <span className="text-xs text-muted-foreground">/ {product.unit}</span>
+                  <span className="d-block pa-xs text-body-secondary">
+                    per {product.unit}
+                  </span>
                 </span>
               </div>
 
-              <div className="flex items-baseline justify-between gap-2 md:block">
-                <span className="text-sm text-muted-foreground md:sr-only">Stock</span>
-                <span className="whitespace-nowrap">
-                  <data value={product.stock} className="tabular font-medium">
+              <div className="d-flex align-items-baseline justify-content-between gap-2 pa-md-block">
+                <span className="label-line pa-col-label">Stock</span>
+                <span className="text-nowrap">
+                  <data value={product.stock} className="tabular fw-semibold">
                     {product.stock}
                   </data>{' '}
-                  <span className="text-xs text-muted-foreground">{product.unit}</span>
+                  <span className="pa-xs text-body-secondary">{product.unit}</span>
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:justify-end">
+              <div className="pa-actions">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-10 px-3"
                   onClick={() => {
                     setConfirmingId(null)
                     onEdit(product)
                   }}
                   aria-label={`Edit ${product.name}`}
                 >
-                  <Pencil className="size-4" aria-hidden="true" />
+                  <Pencil size={16} aria-hidden="true" />
                   Edit
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-10 px-3"
                   onClick={() => setConfirmingId(product.id)}
                   aria-label={`Delete ${product.name}`}
                 >
-                  <Trash2 className="size-4" aria-hidden="true" />
+                  <Trash2 size={16} aria-hidden="true" />
                   Delete
                 </Button>
               </div>
@@ -153,21 +123,20 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                   onKeyDown={(event) => {
                     if (event.key === 'Escape') setConfirmingId(null)
                   }}
-                  className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 md:col-span-4"
+                  className="frame-alarm p-3 pa-confirm-span"
                 >
-                  <p id={titleId} className="font-medium">
+                  <p id={titleId} className="fw-semibold">
                     Delete {product.name}?
                   </p>
-                  <p id={descriptionId} className="mt-1 text-sm text-muted-foreground">
+                  <p id={descriptionId} className="mt-1 small text-body-secondary">
                     This removes it from your catalog and the shop. Orders already placed
                     keep their copy.
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="d-flex flex-wrap gap-2 mt-3">
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="h-10"
                       onClick={() => setConfirmingId(null)}
                       disabled={deleting}
                       autoFocus
@@ -178,7 +147,6 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                       type="button"
                       variant="destructive"
                       size="sm"
-                      className="h-10"
                       onClick={() => void confirmDelete(product)}
                       disabled={deleting}
                     >

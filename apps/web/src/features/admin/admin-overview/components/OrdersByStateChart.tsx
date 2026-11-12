@@ -14,39 +14,34 @@ export function OrdersByStateChart({ byStatus }: OrdersByStateChartProps) {
   const total = ADMIN_ORDER_STATUSES.reduce((sum, status) => sum + byStatus[status], 0)
 
   return (
-    <section
-      aria-labelledby={headingId}
-      className="rounded-xl border bg-card p-4 md:p-6"
-    >
-      <div className="space-y-1">
-        <h2 id={headingId} className="text-xl md:text-2xl">
-          Orders by state
-        </h2>
-        <p className="text-sm text-muted-foreground">
+    <section aria-labelledby={headingId} className="admin-chart">
+      <div>
+        <h2 id={headingId}>Orders by state</h2>
+        <p className="small text-body-secondary mb-0">
           Every order on the marketplace, by where it is in the process.
         </p>
       </div>
 
       {total > 0 ? (
-        <ul className="mt-5 space-y-4">
+        <ul className="board mt-4">
           {ADMIN_ORDER_STATUSES.map((status) => {
             const count = byStatus[status]
             const share = total > 0 ? Math.round((count / total) * 100) : 0
 
             return (
-              <li key={status} className="space-y-1.5">
-                <div className="flex items-baseline justify-between gap-3 text-sm">
+              <li key={status} className="py-3 border-bottom">
+                <div className="d-flex align-items-baseline justify-content-between gap-3 small">
                   <span>{ADMIN_ORDER_STATUS_LABELS[status]}</span>
-                  <span className="text-muted-foreground">
-                    <data value={count} className="font-medium text-foreground tabular">
+                  <span className="text-body-secondary">
+                    <data value={count} className="fw-semibold tabular">
                       {count}
                     </data>{' '}
                     <span className="tabular">({share}%)</span>
                   </span>
                 </div>
-                <div aria-hidden="true" className="h-2 overflow-hidden rounded-full bg-muted">
+                <div aria-hidden="true" className="admin-chart-track mt-2">
                   <div
-                    className="h-full rounded-full bg-primary"
+                    className="admin-chart-fill"
                     style={{ width: `${share}%` }}
                   />
                 </div>
@@ -55,7 +50,7 @@ export function OrdersByStateChart({ byStatus }: OrdersByStateChartProps) {
           })}
         </ul>
       ) : (
-        <p className="py-10 text-sm text-muted-foreground">
+        <p className="small text-body-secondary py-5 mb-0">
           No orders yet. New orders will appear here as buyers check out.
         </p>
       )}

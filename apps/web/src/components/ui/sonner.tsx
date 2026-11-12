@@ -1,13 +1,6 @@
 import { Toaster as SonnerToaster, type ToasterProps } from 'sonner'
 
+// Styled in styles/_components.scss ([data-sonner-toast]).
 export function Toaster(props: ToasterProps) {
-  return (
-    <SonnerToaster
-      className="toaster group"
-      position="top-right"
-      closeButton
-      richColors
-      {...props}
-    />
-  )
+  return <SonnerToaster position="top-right" closeButton {...props} />
 }

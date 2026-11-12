@@ -6,9 +6,6 @@ import type {
   AdminOrdersStatusFilter,
 } from '../admin-orders.types'
 
-const selectClassName =
-  'h-10 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-
 interface OrderFiltersProps {
   initial: AdminOrdersFilters
   hasActiveFilters: boolean
@@ -41,20 +38,16 @@ export function OrderFilters({
       role="search"
       aria-label="Filter orders by status"
       onSubmit={handleSubmit}
-      className="rounded-xl border bg-card p-3"
     >
-      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
-        <div>
-          <label
-            htmlFor="admin-orders-status"
-            className="mb-1 block text-sm font-medium"
-          >
+      <div className="row g-3 align-items-end">
+        <div className="col-12 col-md-6">
+          <label htmlFor="admin-orders-status" className="form-label">
             Status
           </label>
           <select
             id="admin-orders-status"
             name="status"
-            className={selectClassName}
+            className="form-select"
             value={draft.status}
             onChange={(event) =>
               setDraft({
@@ -70,14 +63,11 @@ export function OrderFilters({
           </select>
         </div>
 
-        <div className="flex gap-2 sm:justify-end">
-          <Button type="submit" className="h-10 flex-1 sm:flex-none">
-            Apply
-          </Button>
+        <div className="col-12 col-md-6 admin-filter-actions">
+          <Button type="submit">Apply</Button>
           <Button
             type="button"
             variant="outline"
-            className="h-10 flex-1 sm:flex-none"
             onClick={handleClear}
             disabled={!canClear}
           >

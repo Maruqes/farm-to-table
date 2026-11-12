@@ -39,8 +39,8 @@ export function ProfileView() {
   }, [seed, attempt])
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
-      <h1 className="font-display text-3xl">My profile</h1>
+    <div className="profile-column vstack gap-4">
+      <h1 className="mb-0">My profile</h1>
       <PageState
         loading={loading}
         error={error}
@@ -49,18 +49,18 @@ export function ProfileView() {
       >
         {profile && seed && (
           <>
-            <section aria-labelledby="details-heading" className="space-y-4">
-              <h2 id="details-heading" className="font-display text-xl">
+            <section aria-labelledby="details-heading" className="rule vstack gap-3 pt-4">
+              <h2 id="details-heading" className="mb-0">
                 Personal details
               </h2>
               <DetailsForm key={profile.email + profile.name} profile={profile} seed={seed} onSaved={setProfile} />
             </section>
             {role === 'buyer' && (
-              <section aria-labelledby="card-heading" className="space-y-4 border-t pt-8">
-                <h2 id="card-heading" className="font-display text-xl">
+              <section aria-labelledby="card-heading" className="rule vstack gap-3 pt-4">
+                <h2 id="card-heading" className="mb-0">
                   Payment card
                 </h2>
-                <p className="max-w-prose text-sm text-muted-foreground">
+                <p className="measure small text-body-secondary mb-0">
                   If you win an auction, this card is charged. If it is declined, the next
                   highest bidder is tried.
                 </p>

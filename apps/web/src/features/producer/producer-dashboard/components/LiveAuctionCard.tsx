@@ -11,21 +11,22 @@ interface LiveAuctionCardProps {
 
 export function LiveAuctionCard({ auction }: LiveAuctionCardProps) {
   return (
-    <section aria-labelledby="live-auction-heading" className="rounded-xl border bg-card">
-      <div className="flex flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between md:p-6">
-        <div className="space-y-2">
-          <Badge className="bg-live text-live-foreground">
-            <Radio aria-hidden="true" />
+    <section
+      aria-labelledby="live-auction-heading"
+      className="frame-thick p-4 p-md-5"
+    >
+      <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3">
+        <div className="min-w-0 vstack gap-2">
+          <Badge variant="live">
+            <Radio size={16} aria-hidden="true" />
             Live auction
           </Badge>
-          <h2 id="live-auction-heading" className="text-xl md:text-2xl">
-            Your live auction: {auction.product}
-          </h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 id="live-auction-heading">Your live auction: {auction.product}</h2>
+          <p className="small text-body-secondary">
             Price, bids and watchers update as buyers bid.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="flex-shrink-0">
           <Link to={`/auctions/${encodeURIComponent(auction.id)}`}>
             Follow live
             <ArrowRight aria-hidden="true" />
@@ -33,23 +34,29 @@ export function LiveAuctionCard({ auction }: LiveAuctionCardProps) {
         </Button>
       </div>
 
-      <dl className="grid grid-cols-3 gap-4 border-t px-4 py-4 md:px-6">
-        <div>
-          <dt className="text-xs text-muted-foreground">Current price</dt>
-          <dd className="font-display text-lg font-extrabold tabular md:text-xl">
-            <data value={auction.currentPrice}>{formatMoney(auction.currentPrice)}</data>
+      <dl className="board mt-4">
+        <div className="board-row flex-wrap">
+          <dt className="label-line min-w-0 flex-grow-1">Current price</dt>
+          <dd>
+            <data value={auction.currentPrice} className="price-tag tabular">
+              {formatMoney(auction.currentPrice)}
+            </data>
           </dd>
         </div>
-        <div>
-          <dt className="text-xs text-muted-foreground">Bids</dt>
-          <dd className="font-display text-lg font-extrabold tabular md:text-xl">
-            <data value={auction.bidCount}>{auction.bidCount}</data>
+        <div className="board-row flex-wrap">
+          <dt className="label-line min-w-0 flex-grow-1">Bids</dt>
+          <dd className="price">
+            <data value={auction.bidCount} className="tabular">
+              {auction.bidCount}
+            </data>
           </dd>
         </div>
-        <div>
-          <dt className="text-xs text-muted-foreground">Watching</dt>
-          <dd className="font-display text-lg font-extrabold tabular md:text-xl">
-            <data value={auction.viewers}>{auction.viewers}</data>
+        <div className="board-row flex-wrap">
+          <dt className="label-line min-w-0 flex-grow-1">Watching</dt>
+          <dd className="price">
+            <data value={auction.viewers} className="tabular">
+              {auction.viewers}
+            </data>
           </dd>
         </div>
       </dl>

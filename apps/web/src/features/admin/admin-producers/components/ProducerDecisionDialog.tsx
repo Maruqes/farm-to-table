@@ -87,27 +87,24 @@ export function ProducerDecisionDialog({
           type="button"
           variant={rejecting ? 'outline' : 'default'}
           size="sm"
-          className="h-10 flex-1 px-3 sm:flex-none"
           disabled={disabled}
           aria-label={`${rejecting ? 'Reject' : 'Approve'} ${producer.name}`}
         >
           {rejecting ? (
-            <X className="size-4" aria-hidden="true" />
+            <X size={16} aria-hidden="true" />
           ) : (
-            <Check className="size-4" aria-hidden="true" />
+            <Check size={16} aria-hidden="true" />
           )}
           {rejecting ? 'Reject' : 'Approve'}
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-foreground/40 dark:bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border bg-card p-5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 md:p-6">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div className="space-y-1">
-              <Dialog.Title className="text-xl">
-                {copy.title(producer.name)}
-              </Dialog.Title>
-              <Dialog.Description className="text-sm text-muted-foreground">
+        <Dialog.Overlay className="dialog-overlay" />
+        <Dialog.Content className="dialog-panel">
+          <div className="d-flex align-items-start justify-content-between gap-3 mb-4">
+            <div>
+              <Dialog.Title>{copy.title(producer.name)}</Dialog.Title>
+              <Dialog.Description className="small text-body-secondary mb-0">
                 {copy.description}
               </Dialog.Description>
             </div>
@@ -118,22 +115,19 @@ export function ProducerDecisionDialog({
                 aria-label={`Close ${rejecting ? 'rejection' : 'approval'} dialog`}
                 disabled={submitting}
               >
-                <X aria-hidden="true" />
+                <X size={16} aria-hidden="true" />
               </Button>
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="vstack gap-3">
             {rejecting && (
-              <div className="space-y-1.5">
-                <div className="flex items-baseline justify-between gap-3">
-                  <label htmlFor={reasonId} className="text-sm font-medium">
-                    Reason{' '}
-                    <span className="font-normal text-muted-foreground">
-                      (optional)
-                    </span>
+              <div>
+                <div className="d-flex align-items-baseline justify-content-between gap-3">
+                  <label htmlFor={reasonId} className="form-label">
+                    Reason (optional)
                   </label>
-                  <span className="text-xs text-muted-foreground tabular">
+                  <span className="small text-body-secondary tabular">
                     {reason.length} / {REJECT_REASON_MAX_LENGTH}
                   </span>
                 </div>
@@ -144,12 +138,12 @@ export function ProducerDecisionDialog({
                   maxLength={REJECT_REASON_MAX_LENGTH}
                   rows={3}
                   placeholder="Why is this application being rejected?"
-                  className="flex min-h-20 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  className="form-control"
                 />
               </div>
             )}
 
-            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <div className="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-2">
               <Dialog.Close asChild>
                 <Button type="button" variant="outline" disabled={submitting}>
                   Cancel
@@ -161,7 +155,7 @@ export function ProducerDecisionDialog({
                 disabled={submitting}
               >
                 {submitting && (
-                  <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="spin" aria-hidden="true" />
                 )}
                 {submitting ? copy.pending : copy.confirm}
               </Button>

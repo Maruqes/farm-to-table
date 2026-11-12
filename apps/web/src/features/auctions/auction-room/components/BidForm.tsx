@@ -68,17 +68,14 @@ export function BidForm({ auction, bidding, onPlaceBid, onEdit }: BidFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-      <div className="space-y-1.5">
-        <label htmlFor={inputId} className="text-sm font-medium">
+    <form onSubmit={handleSubmit} className="vstack gap-4" noValidate>
+      <div className="vstack gap-2">
+        <label htmlFor={inputId} className="form-label">
           Your bid
         </label>
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <div className="relative min-w-0 flex-1">
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-muted-foreground"
-            >
+        <div className="d-flex flex-column flex-sm-row gap-2">
+          <div className="room-bid-field">
+            <span aria-hidden="true" className="room-bid-prefix">
               €
             </span>
             <Input
@@ -95,27 +92,27 @@ export function BidForm({ auction, bidding, onPlaceBid, onEdit }: BidFormProps) 
               aria-describedby={`${hintId}${localError ? ` ${errorId}` : ''}`}
               aria-invalid={localError ? true : undefined}
               disabled={bidding}
-              className="h-11 pl-7 text-base"
+              className="room-bid-input"
             />
           </div>
-          <Button type="submit" disabled={bidding} className="h-11 shrink-0">
+          <Button type="submit" variant="amber" size="lg" disabled={bidding}>
             {bidding ? 'Placing bid…' : 'Place bid'}
           </Button>
         </div>
-        <p id={hintId} className="text-xs text-muted-foreground">
+        <p id={hintId} className="small opacity-75 mb-0">
           Minimum {formatMoney(minimum)} — current price {formatMoney(auction.currentPrice)} plus{' '}
           {formatMoney(auction.increment)} increment.
         </p>
         {localError && (
-          <p id={errorId} role="alert" className="text-sm text-destructive">
+          <p id={errorId} role="alert" className="small mb-0">
             {localError}
           </p>
         )}
       </div>
 
-      <div className="space-y-1.5">
-        <p className="text-sm font-medium">Quick bids</p>
-        <div className="flex flex-wrap gap-2">
+      <div className="vstack gap-2">
+        <p className="form-label mb-0">Quick bids</p>
+        <div className="d-flex flex-wrap gap-2">
           {[5, 10, 25].map((delta) => {
             const value = roundMoney(Math.max(minimum, auction.currentPrice + delta))
             return (
@@ -126,14 +123,13 @@ export function BidForm({ auction, bidding, onPlaceBid, onEdit }: BidFormProps) 
                 onClick={() => quickBid(delta)}
                 disabled={bidding}
                 aria-label={`Bid ${formatMoney(value)}`}
-                className="h-10"
               >
                 +€{delta}
               </Button>
             )
           })}
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="small opacity-75 mb-0">
           Quick bids add to the current price. Your bid must reach the minimum.
         </p>
       </div>

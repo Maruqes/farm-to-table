@@ -18,8 +18,8 @@ export function CheckoutField({
   const errorId = `${id}-error`
 
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-sm font-medium">
+    <div className="vstack gap-2">
+      <label htmlFor={id} className="label-line d-block mb-0">
         {label}
       </label>
       <Input
@@ -27,14 +27,13 @@ export function CheckoutField({
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
         className={cn(
-          'h-10',
-          error && 'border-destructive focus-visible:ring-destructive',
+          error && 'is-invalid',
           className,
         )}
         {...props}
       />
       {error && (
-        <p id={errorId} className="text-sm text-destructive">
+        <p id={errorId} className="small text-danger mb-0">
           {error}
         </p>
       )}

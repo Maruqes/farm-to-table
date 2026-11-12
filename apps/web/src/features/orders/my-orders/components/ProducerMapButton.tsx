@@ -23,12 +23,12 @@ export function ProducerMapButton({ producer }: { producer: OrderProducer }) {
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-foreground/40 dark:bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border bg-card p-5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 md:p-6">
-          <div className="mb-4 flex items-start justify-between gap-4">
-            <div className="space-y-1">
-              <Dialog.Title className="text-xl">{producer.name}</Dialog.Title>
-              <Dialog.Description className="text-sm text-muted-foreground">
+        <Dialog.Overlay className="dialog-overlay" />
+        <Dialog.Content className="dialog-panel">
+          <div className="mb-4 d-flex align-items-start justify-content-between gap-3">
+            <div className="vstack gap-1">
+              <Dialog.Title className="mb-0">{producer.name}</Dialog.Title>
+              <Dialog.Description className="small text-body-secondary">
                 {producer.location || 'Approximate location on the map.'}
               </Dialog.Description>
             </div>
@@ -43,9 +43,9 @@ export function ProducerMapButton({ producer }: { producer: OrderProducer }) {
             fallback={
               <div
                 role="status"
-                className="h-64 w-full animate-pulse rounded-xl border bg-muted md:h-80"
+                className="orders-map-fallback"
               >
-                <span className="sr-only">Loading map…</span>
+                <span className="visually-hidden">Loading map…</span>
               </div>
             }
           >

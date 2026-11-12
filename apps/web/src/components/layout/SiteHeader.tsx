@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import { LogOut, Sprout } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
 import { Notifications } from '@/components/Notifications'
 import { useSession, type Role } from '@/context/session'
@@ -38,10 +38,7 @@ const ROLE_LINKS: Record<Role, NavItem[]> = {
 }
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
-  return cn(
-    'relative inline-flex min-h-10 items-center px-3 text-sm font-medium transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:transition-colors',
-    isActive ? 'text-foreground after:bg-primary' : 'text-muted-foreground after:bg-transparent hover:text-foreground',
-  )
+  return cn('site-nav-link', isActive && 'active')
 }
 
 export function SiteHeader() {
@@ -50,30 +47,27 @@ export function SiteHeader() {
   const links = [...PUBLIC_LINKS, ...ROLE_LINKS[role], ...(isAuthenticated ? [{ to: '/account', label: 'Account' }] : [])]
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="flex flex-wrap items-center gap-3 py-3">
-          <Link to="/" className="flex items-center gap-2.5 rounded-md font-display text-xl font-extrabold tracking-tight">
-            <span className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground">
-              <Sprout className="size-4.5" aria-hidden="true" />
-            </span>
-            Farm to Table
+    <header className="site-header sticky-top">
+      <div className="container">
+        <div className="d-flex flex-wrap align-items-center gap-3 py-3">
+          <Link to="/" className="wordmark">
+            Farm to table
           </Link>
 
-          <div className="order-3 min-w-0 basis-full sm:order-none sm:flex-1 sm:basis-auto sm:px-4">
+          <div className="site-search">
             <SearchBox />
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ms-auto d-flex align-items-center gap-2">
             <ThemeToggle />
             <Notifications />
             {isAuthenticated && user ? (
               <>
-                <span className="hidden text-sm text-muted-foreground md:inline">
+                <span className="d-none d-md-inline small text-body-secondary">
                   {user.name} · {ROLE_LABELS[role]}
                 </span>
                 <Button variant="outline" size="sm" onClick={logout}>
-                  <LogOut className="size-4" aria-hidden="true" />
+                  <LogOut size={16} aria-hidden="true" />
                   Log out
                 </Button>
               </>
@@ -85,7 +79,7 @@ export function SiteHeader() {
           </div>
         </div>
 
-        <nav aria-label="Main navigation" className="-mx-3 -mb-px flex gap-1 overflow-x-auto">
+        <nav aria-label="Main navigation" className="d-flex gap-1 overflow-x-auto">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -100,10 +94,7 @@ export function SiteHeader() {
             >
               {link.label}
               {link.to === '/auctions' && liveAuctionCount > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-live px-1.5 text-[11px] leading-none font-semibold text-live-foreground tabular"
-                >
+                <span aria-hidden="true" className="live-count">
                   {liveAuctionCount}
                 </span>
               )}

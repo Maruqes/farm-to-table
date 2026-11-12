@@ -3,9 +3,10 @@ import { Button } from '@/components/ui/button'
 
 export default function NotFoundPage() {
   return (
-    <section className="flex flex-col items-center gap-4 py-20 text-center">
-      <h1 className="text-3xl font-semibold">This page doesn’t exist</h1>
-      <p className="max-w-md text-muted-foreground">
+    <section className="auth-column-wide d-flex flex-column align-items-start gap-3 py-5">
+      <p className="label-line mb-0">Error 404</p>
+      <h1 className="mb-0">This page doesn’t exist</h1>
+      <p className="measure text-body-secondary mb-0">
         The address you followed is wrong or the page has been removed.
       </p>
       <Button asChild>

@@ -1,22 +1,14 @@
-Farm to Table - demo accounts (created by `make seed`)
 
-Passwords are NOT stored here. They live in the local .env:
-  SEED_ADMIN_PASSWORD  -> admin
-  SEED_USER_PASSWORD   -> every other account
-
-URLs (make dev)
-  Web         http://localhost:5173
-  Backoffice  http://localhost:8081/backoffice
-  Swagger     http://localhost:8080/api-docs (production-like stack: make up)
+  Swagger     http://localhost:8080/api-docs
 
 ADMIN
   admin@farmtotable.test
 
-BUYERS (both have a valid mock card)
+BUYERS
   buyer@farmtotable.test    Maria Silva
   buyer2@farmtotable.test   Rui Santos
 
-PRODUCERS (approved)
+PRODUCERS
   approved-producer@farmtotable.test   has the walnut auction
   apiario-serra@farmtotable.test       honey
   laranjeiras@farmtotable.test         oranges
@@ -26,12 +18,3 @@ PRODUCERS (approved)
 
 PRODUCER (pending approval)
   pending-producer@farmtotable.test    only sees the "waiting for approval" page
-
-Seeded auctions: one active (3 bids: 35, 40, 45 EUR) and one scheduled.
-
-Quick demo
-  1. Two windows (buyer@ and buyer2@): bid on the active auction, both update live.
-  2. buyer@ checks out; the producer moves the order state; buyer gets a live toast.
-  3. Admin approves pending-producer@ in /admin/producers.
-  4. Admin hides a product in /admin/moderation; it leaves the catalog.
-  5. Tick "simulate invalid card" in /profile to see the auction payment cascade.

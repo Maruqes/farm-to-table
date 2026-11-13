@@ -19,7 +19,7 @@ export function CartLine({ item, onQuantityChange, onRemove }: CartLineProps) {
 
   return (
     <li className="board-row flex-wrap">
-      <CrateChip category={item.category} />
+      <CrateChip category={item.category} imageUrl={item.imageUrl} />
       <span className="lot tabular" aria-hidden="true">
         {lotNumber(item.productId)}
       </span>

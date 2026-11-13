@@ -35,7 +35,7 @@ function ProducerProductRow({ product }: { product: ProducerProduct }) {
 
   return (
     <li className="board-row flex-wrap">
-      <CrateChip category={product.category} />
+      <CrateChip category={product.category} imageUrl={product.imageUrl} />
       <span className="lot tabular">{lotNumber(product.id)}</span>
 
       <div className="min-w-0 grow">

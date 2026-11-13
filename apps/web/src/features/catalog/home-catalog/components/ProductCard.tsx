@@ -7,14 +7,14 @@ import type { Product } from '../catalog.types'
 
 // One row of the painted price board (RULES.md): crate chip, lot number,
 // name with producer and place underneath, price with "per unit", one action.
-// Product photos are not shown in rows. Secondary info stays out so the row
+// The chip shows a small product photo. Secondary info stays out so the row
 // fits at 375px: chip, lot, name, price and action only.
 export function ProductCard({ product }: { product: Product }) {
   const productHref = `/products/${product.id}`
 
   return (
     <li className="board-row">
-      <CrateChip category={product.category} />
+      <CrateChip category={product.category} imageUrl={product.imageUrl} />
       <span className="lot tabular">{lotNumber(product.id)}</span>
       <div className="min-w-0 grow">
         <h3>

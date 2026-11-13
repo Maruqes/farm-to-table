@@ -49,7 +49,7 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
           return (
             <li key={product.id} className="board-row grid gap-4 md:grid-cols-[minmax(0,1fr)_7rem_6rem_12rem] md:items-center">
               <div className="flex min-w-0 items-center gap-3">
-                <CrateChip category={product.category} />
+                <CrateChip category={product.category} imageUrl={product.imageUrl} />
                 <span aria-hidden="true" className="lot">
                   {lotNumber(product.id)}
                 </span>

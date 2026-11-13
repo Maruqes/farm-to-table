@@ -292,7 +292,8 @@ async function seedAuctions(): Promise<void> {
   const honey = await ProductModel.findOne({ producer: apiario._id, name: 'Wildflower honey' }).lean()
   if (!walnuts || !honey) throw new Error('Seed products missing for auctions')
 
-  if (!(await AuctionModel.exists({ status: 'scheduled' }))) {
+  // Check for these lots only: other producers' live auctions must not block the demo ones.
+  if (!(await AuctionModel.exists({ status: 'scheduled', product: walnuts._id }))) {
     const startsAt = new Date(Date.now() + 2 * 60 * 60 * 1000)
     await AuctionModel.create({
       producer: vale._id,
@@ -319,7 +320,7 @@ async function seedAuctions(): Promise<void> {
     console.log('auctions: scheduled demo auction already exists')
   }
 
-  if (!(await AuctionModel.exists({ status: 'active' }))) {
+  if (!(await AuctionModel.exists({ status: 'active', product: honey._id }))) {
     const startsAt = new Date(Date.now() - 10 * 60 * 1000)
     const auction = await AuctionModel.create({
       producer: apiario._id,
@@ -330,9 +331,9 @@ async function seedAuctions(): Promise<void> {
       quantity: 4,
       basePrice: 30,
       increment: 5,
-      durationMinutes: 15,
+      durationMinutes: 190,
       startsAt,
-      endsAt: new Date(startsAt.getTime() + 15 * 60 * 1000),
+      endsAt: new Date(startsAt.getTime() + 190 * 60 * 1000),
       status: 'active',
       cancelled: false,
       currentPrice: 45,

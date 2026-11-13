@@ -36,11 +36,11 @@ export function AuctionRoomView({
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-amber pb-3 text-sm">
         <Link
-          to="/"
+          to="/auctions"
           className="inline-flex items-center gap-1"
         >
           <ArrowLeft size={16} aria-hidden="true" />
-          Back to catalog
+          Back to auctions
         </Link>
         <p className="mb-0 text-sm tabular opacity-75">
           lot {lotNumber(auction.id)} · {auction.viewerCount}{' '}

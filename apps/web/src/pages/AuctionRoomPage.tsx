@@ -29,7 +29,7 @@ export default function AuctionRoomPage() {
         />
         <div className="flex justify-center">
           <Button asChild variant="outline">
-            <Link to="/">Back to catalog</Link>
+            <Link to="/auctions">Back to auctions</Link>
           </Button>
         </div>
       </div>
